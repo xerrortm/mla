@@ -466,7 +466,19 @@
         function saveToDisk() { localStorage.setItem('citeflow_projects', JSON.stringify(projects)); }
         function showToast(m) { const t = document.getElementById('toast'); t.innerText = m; t.classList.add('opacity-100'); setTimeout(() => t.classList.remove('opacity-100'), 2000); }
         function cancelCitation() { openProject(currentProjectId); }
+        function copyProjectToClipboard() {
+            const citations = document.querySelectorAll("#citation-list .mla-preview");
 
+            let text = "";
+
+            citations.forEach(c => {
+                text += c.innerText + "\n\n";
+            });
+
+            navigator.clipboard.writeText(text);
+
+            showToast("Citations copied!");
+        }
         window.onload = showDashboard;
     </script>
 </body>
