@@ -61,6 +61,8 @@
             <div>
                 <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">MLA Referencing. Better than NoodleTools</h2>
                 <p class="text-slate-500 mt-1">Reference like a pro with a cleaner and better design.</p>
+                <button onclick="openComparison()" class="bg-blue-600 text-white px-5 py-2 rounded-xl font-semibold hover:bg-blue-700 transition">Why use GoggleTools
+                </button>
             </div>
             <button onclick="openNewProjectModal()" class="bg-blue-600 text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 hover:bg-blue-700 transition-all"><i class="fas fa-plus"></i> New Project</button>
         </div>
@@ -142,6 +144,85 @@
             </div>
         </div>
     </div>
+    <div id="comparison-popup" class="fixed inset-0 bg-black/40 hidden items-center justify-center z-50">
+
+  <div class="bg-white rounded-2xl shadow-2xl max-w-3xl w-full p-6 relative">
+
+    <button onclick="closeComparison()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-xl">
+      ✕
+    </button>
+
+    <h2 class="text-2xl font-bold mb-6 text-gray-800">
+      NoodleTools vs GoggleTools
+    </h2>
+
+    <div class="overflow-x-auto">
+      <table class="w-full border-collapse text-left">
+
+        <thead>
+          <tr class="border-b">
+            <th class="py-3 font-semibold text-gray-600">Feature</th>
+            <th class="py-3 font-semibold text-gray-600">NoodleTools</th>
+            <th class="py-3 font-semibold text-blue-600">GoggleTools</th>
+          </tr>
+        </thead>
+
+        <tbody class="divide-y">
+
+          <tr>
+            <td class="py-3">Price</td>
+            <td>~$15/year</td>
+            <td class="font-semibold text-green-600">FREE</td>
+          </tr>
+
+          <tr>
+            <td class="py-3">Signup</td>
+            <td>Required</td>
+            <td>No signup</td>
+          </tr>
+
+          <tr>
+            <td class="py-3">Speed</td>
+            <td>Slower</td>
+            <td>Fast</td>
+          </tr>
+
+          <tr>
+            <td class="py-3">Design</td>
+            <td>Old UI</td>
+            <td>Modern UI</td>
+          </tr>
+          <tr>
+            <td class="py-3">User-friedly</td>
+            <td>No</td>
+            <td>Yes</td>
+          </tr>
+
+          <tr>
+            <td class="py-3">Offline use</td>
+            <td>No</td>
+            <td>Yes</td>
+          </tr>
+
+          <tr>
+            <td class="py-3">Offline saving</td>
+            <td>No</td>
+            <td>Yes</td>
+          </tr>
+
+          <tr>
+            <td class="py-3">MLA output</td>
+            <td>Correct</td>
+            <td>Correct</td>
+          </tr>
+
+        </tbody>
+
+      </table>
+    </div>
+
+  </div>
+</div>
 
     <div id="toast" class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-6 py-3 rounded-full shadow-2xl opacity-0 pointer-events-none transition-all duration-300 z-[200]">Action successful!</div>
 
@@ -478,6 +559,14 @@
             navigator.clipboard.writeText(text);
 
             showToast("Citations copied!");
+        }
+        function openComparison() {
+            document.getElementById("comparison-popup").classList.remove("hidden");
+            document.getElementById("comparison-popup").classList.add("flex");
+        }
+
+        function closeComparison() {
+            document.getElementById("comparison-popup").classList.add("hidden");
         }
         window.onload = showDashboard;
     </script>
