@@ -30,7 +30,14 @@
             <h1 class="text-xl font-bold tracking-tight text-slate-900">GoggleTools</h1>
         </div>	
         <div class="flex items-center gap-4">
-            <button onclick="showDashboard()" class="text-sm font-semibold text-slate-600 hover:text-blue-600 px-3 py-2">My Projects</button>
+            <button onclick="openUpdates()" class="text-sm font-semibold text-slate-600 hover:text-orange-700 px-3 py-2 flex items-center gap-2">
+                <i class="fas fa-clock-rotate-left"></i>
+                Updates
+            </button>
+
+            <button onclick="showDashboard()" class="text-sm font-semibold text-slate-600 hover:text-blue-600 px-3 py-2">
+                My Projects
+            </button>
         </div>
     </nav>
 
@@ -233,7 +240,35 @@
 
   </div>
 </div>
+<div id="updates-popup" class="fixed inset-0 bg-black/40 items-center justify-center z-50 flex hidden">
 
+  <div id="updates-box" class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full p-6 relative transform scale-95 opacity-0 transition-all duration-200">
+
+    <button onclick="closeUpdates()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-xl">
+      ✕
+    </button>
+
+    <h2 class="text-2xl font-bold mb-6 text-orange-600">
+      Update Log
+    </h2>
+
+    <div class="space-y-4 max-h-[400px] overflow-y-auto">
+
+      <!-- Update Item -->
+      <div class="bg-orange-50 border border-orange-100 rounded-xl p-4">
+        <p class="text-xs text-orange-500 font-bold mb-1">LATEST</p>
+        <h3 class="font-semibold text-gray-800">Version 1.2</h3>
+        <ul class="text-sm text-gray-600 mt-2 list-disc list-inside space-y-1">
+          <li>Projects now save automatically (even offline!)</li>
+          <li>Supports multiple reference types</li>
+          <li>Bug and performance fixes</li>
+        </ul>
+      </div>
+
+    </div>
+
+  </div>
+</div>
     <div id="toast" class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-6 py-3 rounded-full shadow-2xl opacity-0 pointer-events-none transition-all duration-300 z-[200]">Action successful!</div>
 
     <script>
@@ -578,6 +613,28 @@
         function closeComparison() {
             document.getElementById("comparison-popup").classList.add("hidden");
         }
+        function openUpdates() {
+    const popup = document.getElementById("updates-popup");
+    const box = document.getElementById("updates-box");
+
+    popup.classList.remove("hidden");
+
+    setTimeout(() => {
+        box.classList.remove("scale-95", "opacity-0");
+        box.classList.add("scale-100", "opacity-100");
+    }, 10);
+}
+
+function closeUpdates() {
+    const popup = document.getElementById("updates-popup");
+    const box = document.getElementById("updates-box");
+
+    box.classList.add("scale-95", "opacity-0");
+
+    setTimeout(() => {
+        popup.classList.add("hidden");
+    }, 200);
+}
         window.onload = showDashboard;
     </script>
 </body>
