@@ -640,7 +640,7 @@
 
     // Google Docs create URL using a template doc
     // This method opens a new blank doc with your text prefilled
-    const url = `https://docs.google.com/document/create?usp=docs_home&title=MLA%20Citations&body=${encodedContent}`;
+    const url = `https://docs.google.com/document/create?text=${encodedContent}`;
 
     // Open in a new tab
     window.open(url, "_blank");
