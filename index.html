@@ -626,27 +626,38 @@
             showToast("Citations copied!");
         }
         function exportToGoogleDocs() {
-    const citations = document.querySelectorAll("#citation-list .mla-preview");
-    if (citations.length === 0) {
-        showToast("No citations to export!");
-        return;
-    }
+    		const citations = document.querySelectorAll("#citation-list .mla-preview");
+    		if (citations.length === 0) {
+        		showToast("No citations to export!");
+        		return;
+    		}
+			let text = "";
 
-    // Combine all citations with double line breaks
-    let content = Array.from(citations).map(c => c.innerText).join("\n\n");
+            citations.forEach(c => {
+                text += c.innerText + "\n\n";
+            });
 
-    // Encode content for URL
-    const encodedContent = encodeURIComponent(content);
+            navigator.clipboard.writeText(text);
+            
+    		// Combine all citations with double line breaks
+    		let content = Array.from(citations).map(c => c.innerText).join("\n\n");
 
-    // Google Docs create URL using a template doc
-    // This method opens a new blank doc with your text prefilled
-    const url = `https://docs.google.com/document/create?text=${encodedContent}`;
+    		// Encode content for URL
+    		const encodedContent = encodeURIComponent(content);
 
-    // Open in a new tab
-    window.open(url, "_blank");
+    		// Google Docs create URL using a template doc
+    		// This method opens a new blank doc with your text prefilled
+    		const project = projects.find(p => p.id === currentProjectId);
+			const url = `https://docs.google.com/document/create?usp=docs_home&title=${encodeURIComponent(project.name)}&body=${encodedContent}`;
+			showToast("Opening Google Docs, press paste after opening.");
+            
+            setTimeout(() => {
+            	const project = projects.find(p => p.id === currentProjectId);
+            	const url = `https://docs.google.com/document/create?usp=docs_home&title=${encodeURIComponent(project.name)}&body=${encodeURIComponent(content)}`;
+            	window.open(url, "_blank");
+        	}, 4000); // 2000ms = 2 seconds
 
-    showToast("Opening Google Docs...");
-}
+		}
         function openComparison() {
             document.getElementById("comparison-popup").classList.remove("hidden");
             document.getElementById("comparison-popup").classList.add("flex");
