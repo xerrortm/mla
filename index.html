@@ -108,6 +108,9 @@
                     <button onclick="copyProjectToClipboard()" class="w-full py-3 px-4 bg-slate-800 border border-slate-700 rounded-xl text-left hover:bg-slate-700 flex items-center justify-between">
                         <span class="text-sm">Copy All</span><i class="fas fa-copy text-slate-500"></i>
                     </button>
+                    <button onclick="exportToGoogleDocs()" class="w-full py-3 px-4 bg-slate-800 border border-slate-700 rounded-xl text-left hover:bg-slate-700 flex items-center justify-between">
+                        <span class="text-sm">Export to Google Docs</span><i class="fas fa-share-from-square text-white"></i>
+                    </button>
                 </div>
             </div>
         </div>
@@ -621,6 +624,29 @@
             navigator.clipboard.writeText(text);
 
             showToast("Citations copied!");
+        }
+        function exportToGoogleDocs() {
+            const citations = document.querySelectorAll("#citation-list .mla-preview");
+            if (citations.length === 0) {
+                showToast("No citations to export!");
+                return;
+            }
+
+            // Combine all citations with double line breaks
+            let content = Array.from(citations).map(c => c.innerText).join("\n\n");
+
+            // Encode content for URL
+            const encodedContent = encodeURIComponent(content);
+
+            // Google Docs create URL using a template doc
+            // This method opens a new blank doc with your text prefilled
+            const project = projects.find(p => p.id === currentProjectId);
+            const url = `https://docs.google.com/document/create?usp=docs_home&title=${encodeURIComponent(project.name)}&body=${encodedContent}`;
+
+            // Open in a new tab
+            window.open(url, "_blank");
+
+            showToast("Opening Google Docs...");
         }
         function openComparison() {
             document.getElementById("comparison-popup").classList.remove("hidden");
