@@ -325,12 +325,14 @@
     		const project = projects.find(p => p.id === id);
     		document.getElementById('current-project-name').innerText = project.name;
 
-    		hideAllViews();
+   			hideAllViews();
+    		document.getElementById('view-project-details').classList.remove('view-hidden');
 
     		if (project.name.toLowerCase() === "google") {
         		showGoogleEasterEgg();
     		} else {
-        		document.getElementById('view-project-details').classList.remove('view-hidden');
+        		const easter = document.getElementById('google-easter-egg');
+        		if (easter) easter.remove();
         		renderCitations();
     		}
 		}
