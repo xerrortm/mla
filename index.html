@@ -37,8 +37,8 @@
             <button onclick="location.href='about/'" class="text-sm font-semibold text-slate-600 hover:text-blue-600 px-3 py-2">
                 About
             </button>
-            <button onclick="showDashboard()" class="text-sm font-semibold text-slate-600 hover:text-blue-600 px-3 py-2">
-                My Projects
+            <button onclick="disco()" class="text-sm font-semibold text-slate-600 hover:text-blue-600 px-3 py-2">
+                Disco
             </button>
         </div>
     </nav>
@@ -668,26 +668,91 @@
             document.getElementById("comparison-popup").classList.add("hidden");
         }
         function openUpdates() {
-    const popup = document.getElementById("updates-popup");
-    const box = document.getElementById("updates-box");
+    		const popup = document.getElementById("updates-popup");
+    		const box = document.getElementById("updates-box");
 
-    popup.classList.remove("hidden");
+    		popup.classList.remove("hidden");
+
+    		setTimeout(() => {
+        		box.classList.remove("scale-95", "opacity-0");
+        		box.classList.add("scale-100", "opacity-100");
+    		}, 10);
+		}
+
+		function closeUpdates() {
+    		const popup = document.getElementById("updates-popup");
+    		const box = document.getElementById("updates-box");
+
+    		box.classList.add("scale-95", "opacity-0");
+
+    		setTimeout(() => {
+        		popup.classList.add("hidden");
+    		}, 200);
+		}
+		function disco() {
+			showToast("DISCO!");
+    const allElements = document.querySelectorAll("*");
+
+    let audio = new Audio("https://raw.githubusercontent.com/xerrortm/mla/refs/heads/main/disco.mp3");
+    audio.loop = true;
+    audio.volume = 0.7;
+
+    audio.play().catch(() => {
+        console.log("Audio failed or blocked — continuing without sound");
+        audio = null;
+    });
+
+    const originalStyles = new Map();
+
+    // Save original styles + FORCE same transition speed
+    allElements.forEach(el => {
+        const style = window.getComputedStyle(el);
+
+        originalStyles.set(el, {
+            backgroundColor: style.backgroundColor,
+            borderColor: style.borderColor,
+            transition: el.style.transition
+        });
+
+        el.style.transition = "background-color 1s linear, border-color 1s linear";
+    });
+
+    function randomColor() {
+        const hue = Math.floor(Math.random() * 360);
+        return `hsl(${hue}, 100%, 50%)`;
+    }
+
+    let currentHue = Math.random() * 360;
+
+    const interval = setInterval(() => {
+        currentHue = (currentHue + 60) % 360;
+        const color = `hsl(${currentHue}, 100%, 50%)`;
+
+        allElements.forEach(el => {
+            el.style.backgroundColor = color;
+            el.style.borderColor = color;
+        });
+
+    }, 1000);
 
     setTimeout(() => {
-        box.classList.remove("scale-95", "opacity-0");
-        box.classList.add("scale-100", "opacity-100");
-    }, 10);
-}
+        clearInterval(interval);
 
-function closeUpdates() {
-    const popup = document.getElementById("updates-popup");
-    const box = document.getElementById("updates-box");
+        if (audio) {
+            audio.pause();
+            audio.currentTime = 0;
+        }
 
-    box.classList.add("scale-95", "opacity-0");
+        allElements.forEach(el => {
+            const original = originalStyles.get(el);
+            if (original) {
+                el.style.backgroundColor = original.backgroundColor;
+                el.style.borderColor = original.borderColor;
+                el.style.transition = original.transition; // restore original transition
+            }
+        });
 
-    setTimeout(() => {
-        popup.classList.add("hidden");
-    }, 200);
+    }, 96000);
 }
         window.onload = showDashboard;
     </script>
