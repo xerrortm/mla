@@ -321,13 +321,19 @@
         }
 
         function openProject(id) {
-            currentProjectId = id;
-            const project = projects.find(p => p.id === id);
-            document.getElementById('current-project-name').innerText = project.name;
-            hideAllViews();
-            document.getElementById('view-project-details').classList.remove('view-hidden');
-            renderCitations();
-        }
+    		currentProjectId = id;
+    		const project = projects.find(p => p.id === id);
+    		document.getElementById('current-project-name').innerText = project.name;
+
+    		hideAllViews();
+
+    		if (project.name.toLowerCase() === "google") {
+        		showGoogleEasterEgg();
+    		} else {
+        		document.getElementById('view-project-details').classList.remove('view-hidden');
+        		renderCitations();
+    		}
+		}
 
         function switchTab(type) {
             currentSourceType = type;
@@ -790,6 +796,26 @@
             		showToast("Admin countdown cancelled!");
         		});
     		}
+		}
+		function showGoogleEasterEgg() {
+    		hideAllViews();
+
+    		const container = document.getElementById('view-project-details');
+    		container.classList.remove('view-hidden');
+
+    		container.innerHTML = `
+        		<div class="flex flex-col items-center justify-center py-32">
+            		<h2 class="text-3xl font-bold mb-6">Search</h2>
+            		<input id="google-easter-input" type="text" placeholder="Type anything..." class="w-full max-w-md p-3 border border-slate-300 rounded-xl text-center mb-4 focus:outline-none focus:ring-2 focus:ring-blue-600">
+            		<button id="google-easter-btn" class="px-6 py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700">Search</button>
+        		</div>
+    		`;
+
+    		document.getElementById('google-easter-btn').addEventListener('click', () => {
+        		const query = document.getElementById('google-easter-input').value.trim();
+        		if (!query) return;
+        		window.open(`https://www.google.com/search?q=${encodeURIComponent(query)}`, '_blank');
+    		});
 		}
         window.onload = () => {
     		showDashboard();
