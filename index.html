@@ -48,6 +48,7 @@
             <div class="text-center">
                 <h3 class="font-bold text-sm mb-2">Admin abuse starts in</h3>
                 <div id="admin-countdown" class="text-5xl font-extrabold text-red-600">10</div>
+				<button id="cancel-admin-btn" class="mt-4 px-4 py-2 bg-red-600 text-white rounded-xl hover:bg-red-700">Cancel</button>
             </div>
         </div>
 
@@ -758,31 +759,37 @@
 
     		}, 96000);
 		}
+		let adminCountdownInterval = null; // Store interval so we can clear it
+
 		function startAdminCountdown() {
     		let timeLeft = 10;
     		const countdownEl = document.getElementById("admin-countdown");
+    		const cancelBtn = document.getElementById("cancel-admin-btn");
 
-    		const interval = setInterval(() => {
+    		adminCountdownInterval = setInterval(() => {
         		timeLeft--;
-
-        		if (countdownEl) {
-            		countdownEl.innerText = timeLeft;
-        		}
+        		if (countdownEl) countdownEl.innerText = timeLeft;
 
         		if (timeLeft <= 0) {
-            		clearInterval(interval);
-
+            		clearInterval(adminCountdownInterval);
             		countdownEl.innerText = "0";
 
             		setTimeout(() => {
                 		const banner = document.getElementById("admin-banner");
                 		if (banner) banner.remove();
-
                 		disco();
             		}, 400);
         		}
-
     		}, 1000);
+
+    		if (cancelBtn) {
+        		cancelBtn.addEventListener("click", () => {
+            		clearInterval(adminCountdownInterval);
+            		const banner = document.getElementById("admin-banner");
+            		if (banner) banner.remove();
+            		showToast("Admin countdown cancelled!");
+        		});
+    		}
 		}
         window.onload = () => {
     		showDashboard();
