@@ -28,7 +28,7 @@
         <div class="flex items-center gap-2 cursor-pointer" onclick="showDashboard()">
             <div class="bg-blue-600 p-2 rounded-lg"><i class="fas fa-quote-right text-white text-lg"></i></div>
             <h1 class="text-xl font-bold tracking-tight text-slate-900">GoggleTools</h1>
-        </div>	
+        </div>  
         <div class="flex items-center gap-4">
             <button onclick="openUpdates()" class="text-sm font-semibold text-slate-600 hover:text-orange-700 px-3 py-2 flex items-center gap-2">
                 <i class="fas fa-clock-rotate-left"></i>
@@ -37,55 +37,65 @@
             <button onclick="location.href='about/'" class="text-sm font-semibold text-slate-600 hover:text-blue-600 px-3 py-2">
                 About
             </button>
-            <button onclick="disco()" class="text-sm font-semibold text-slate-600 hover:text-blue-600 px-3 py-2">
-                Disco
-            </button>
         </div>
     </nav>
 
     <!-- DASHBOARD -->
     <section id="view-dashboard" class="max-w-6xl mx-auto px-6 py-12">
-<!-- Updates Banner -->
-<div class="mb-8 bg-blue-50 border border-blue-100 text-blue-800 px-6 py-4 rounded-2xl flex items-center justify-between shadow-sm">
-    
-    <div class="flex items-center gap-3">
-        <div class="bg-blue-600 text-white w-10 h-10 flex items-center justify-center rounded-xl">
-            <i class="fas fa-exclamation"></i>
+
+        <!-- Admin Countdown Banner -->
+        <div id="admin-banner" class="mb-8 bg-red-50 border border-red-100 text-red-800 px-6 py-6 rounded-2xl flex items-center justify-center shadow-sm">
+            <div class="text-center">
+                <h3 class="font-bold text-sm mb-2">Admin abuse starts in</h3>
+                <div id="admin-countdown" class="text-5xl font-extrabold text-red-600">10</div>
+            </div>
         </div>
 
-        <div>
-            <h3 class="font-bold text-sm">New Feature</h3>
-            <p class="text-sm text-blue-700">
-                You can now export your citations to Google Docs!
-            </p>
+        <!-- Updates Banner -->
+        <div class="mb-8 bg-blue-50 border border-blue-100 text-blue-800 px-6 py-4 rounded-2xl flex items-center justify-between shadow-sm">
+            <div class="flex items-center gap-3">
+                <div class="bg-blue-600 text-white w-10 h-10 flex items-center justify-center rounded-xl">
+                    <i class="fas fa-exclamation"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-sm">New Feature</h3>
+                    <p class="text-sm text-blue-700">
+                        You can now export your citations to Google Docs!
+                    </p>
+                </div>
+            </div>
+            <button onclick="this.parentElement.remove()" class="text-blue-400 hover:text-blue-700">
+                <i class="fas fa-xmark"></i>
+            </button>
         </div>
-    </div>
 
-    <button onclick="this.parentElement.remove()" class="text-blue-400 hover:text-blue-700">
-        <i class="fas fa-xmark"></i>
-    </button>
-
-</div>
+        <!-- Dashboard Header -->
         <div class="flex justify-between items-end mb-10">
             <div>
                 <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">MLA Referencing. Better than NoodleTools</h2>
                 <p class="text-slate-500 mt-1">Reference like a pro with a cleaner and better design.</p>
                 <br>
-                <button onclick="openComparison()" class="bg-blue-600 text-white px-5 py-2 rounded-xl font-semibold hover:bg-blue-700 transition">Why use GoggleTools
+                <button onclick="openComparison()" class="bg-blue-600 text-white px-5 py-2 rounded-xl font-semibold hover:bg-blue-700 transition">
+                    Why use GoggleTools
                 </button>
             </div>
-            <button onclick="openNewProjectModal()" class="bg-blue-600 text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 hover:bg-blue-700 transition-all"><i class="fas fa-plus"></i> New Project</button>
+            <button onclick="openNewProjectModal()" class="bg-blue-600 text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 hover:bg-blue-700 transition-all">
+                <i class="fas fa-plus"></i> New Project
+            </button>
         </div>
+
+        <!-- Projects Grid -->
         <div id="project-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div onclick="openProject(1773656135194)" class="project-card group bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:shadow-xl cursor-pointer relative transition-all">
-                    <div class="flex items-start justify-between mb-8">
-                        <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl"><i class="fas fa-folder"></i></div>
-                        <button onclick="deleteProject(event, 1773656135194)" class="project-actions opacity-0 p-2 text-slate-300 hover:text-red-500 transition-all"><i class="fas fa-trash-can"></i></button>
-                    </div>
-                    <h4 class="font-bold text-lg text-slate-900 mb-1">Random Stuff</h4>
-                    <p class="text-slate-500 text-sm">1 Citations</p>
+            <div onclick="openProject(1773656135194)" class="project-card group bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:shadow-xl cursor-pointer relative transition-all">
+                <div class="flex items-start justify-between mb-8">
+                    <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl"><i class="fas fa-folder"></i></div>
+                    <button onclick="deleteProject(event, 1773656135194)" class="project-actions opacity-0 p-2 text-slate-300 hover:text-red-500 transition-all"><i class="fas fa-trash-can"></i></button>
                 </div>
+                <h4 class="font-bold text-lg text-slate-900 mb-1">Random Stuff</h4>
+                <p class="text-slate-500 text-sm">1 Citations</p>
             </div>
+        </div>
+
     </section>
 
     <!-- PROJECT DETAILS -->
@@ -545,7 +555,6 @@
             }
         }
 
-        // Logic for Projects
         function renderProjects() {
             const grid = document.getElementById('project-grid');
             grid.innerHTML = projects.map(p => `
@@ -639,15 +648,11 @@
             });
 
             navigator.clipboard.writeText(text);
-            
-    		// Combine all citations with double line breaks
+
     		let content = Array.from(citations).map(c => c.innerText).join("\n\n");
 
-    		// Encode content for URL
     		const encodedContent = encodeURIComponent(content);
 
-    		// Google Docs create URL using a template doc
-    		// This method opens a new blank doc with your text prefilled
     		const project = projects.find(p => p.id === currentProjectId);
 			const url = `https://docs.google.com/document/create?usp=docs_home&title=${encodeURIComponent(project.name)}&body=${encodedContent}`;
 			showToast("Opening Google Docs, press paste after opening.");
@@ -656,7 +661,7 @@
             	const project = projects.find(p => p.id === currentProjectId);
             	const url = `https://docs.google.com/document/create?usp=docs_home&title=${encodeURIComponent(project.name)}&body=${encodeURIComponent(content)}`;
             	window.open(url, "_blank");
-        	}, 4000); // 2000ms = 2 seconds
+        	}, 4000);
 
 		}
         function openComparison() {
@@ -691,70 +696,98 @@
 		}
 		function disco() {
 			showToast("DISCO!");
-    const allElements = document.querySelectorAll("*");
+    		const allElements = document.querySelectorAll("*");
 
-    let audio = new Audio("https://raw.githubusercontent.com/xerrortm/mla/refs/heads/main/disco.mp3");
-    audio.loop = true;
-    audio.volume = 0.7;
+    		let audio = new Audio("https://raw.githubusercontent.com/xerrortm/mla/refs/heads/main/disco.mp3");
+    		audio.loop = true;
+    		audio.volume = 0.7;
 
-    audio.play().catch(() => {
-        console.log("Audio failed or blocked — continuing without sound");
-        audio = null;
-    });
+    		audio.play().catch(() => {
+        		console.log("Audio failed or blocked — continuing without sound");
+        		audio = null;
+    		});
 
-    const originalStyles = new Map();
+    		const originalStyles = new Map();
 
-    // Save original styles + FORCE same transition speed
-    allElements.forEach(el => {
-        const style = window.getComputedStyle(el);
+    		allElements.forEach(el => {
+        		const style = window.getComputedStyle(el);
 
-        originalStyles.set(el, {
-            backgroundColor: style.backgroundColor,
-            borderColor: style.borderColor,
-            transition: el.style.transition
-        });
+        		originalStyles.set(el, {
+            		backgroundColor: style.backgroundColor,
+            		borderColor: style.borderColor,
+            		transition: el.style.transition
+        		});
 
-        el.style.transition = "background-color 1s linear, border-color 1s linear";
-    });
+        		el.style.transition = "background-color 1s linear, border-color 1s linear";
+    		});
 
-    function randomColor() {
-        const hue = Math.floor(Math.random() * 360);
-        return `hsl(${hue}, 100%, 50%)`;
-    }
+    		function randomColor() {
+        		const hue = Math.floor(Math.random() * 360);
+        		return `hsl(${hue}, 100%, 50%)`;
+    		}
 
-    let currentHue = Math.random() * 360;
+    		let currentHue = Math.random() * 360;
 
-    const interval = setInterval(() => {
-        currentHue = (currentHue + 60) % 360;
-        const color = `hsl(${currentHue}, 100%, 50%)`;
+    		const interval = setInterval(() => {
+        		currentHue = (currentHue + 60) % 360;
+        		const color = `hsl(${currentHue}, 100%, 50%)`;
 
-        allElements.forEach(el => {
-            el.style.backgroundColor = color;
-            el.style.borderColor = color;
-        });
+        		allElements.forEach(el => {
+            		el.style.backgroundColor = color;
+            		el.style.borderColor = color;
+        		});
 
-    }, 1000);
+    		}, 1000);
 
-    setTimeout(() => {
-        clearInterval(interval);
+    		setTimeout(() => {
+        		clearInterval(interval);
 
-        if (audio) {
-            audio.pause();
-            audio.currentTime = 0;
-        }
+        		if (audio) {
+            		audio.pause();
+            		audio.currentTime = 0;
+        		}
 
-        allElements.forEach(el => {
-            const original = originalStyles.get(el);
-            if (original) {
-                el.style.backgroundColor = original.backgroundColor;
-                el.style.borderColor = original.borderColor;
-                el.style.transition = original.transition; // restore original transition
-            }
-        });
+        		allElements.forEach(el => {
+            		const original = originalStyles.get(el);
+            		if (original) {
+                		el.style.backgroundColor = original.backgroundColor;
+                		el.style.borderColor = original.borderColor;
+                		el.style.transition = original.transition;
+            		}
+        		});
 
-    }, 96000);
-}
-        window.onload = showDashboard;
+    		}, 96000);
+		}
+		function startAdminCountdown() {
+    		let timeLeft = 10;
+    		const countdownEl = document.getElementById("admin-countdown");
+
+    		const interval = setInterval(() => {
+        		timeLeft--;
+
+        		if (countdownEl) {
+            		countdownEl.innerText = timeLeft;
+        		}
+
+        		if (timeLeft <= 0) {
+            		clearInterval(interval);
+
+            		countdownEl.innerText = "0";
+
+            		setTimeout(() => {
+                		const banner = document.getElementById("admin-banner");
+                		if (banner) banner.remove();
+
+                		disco();
+            		}, 400);
+        		}
+
+    		}, 1000);
+		}
+        window.onload = () => {
+    		showDashboard();
+    		startAdminCountdown();
+		};
     </script>
 </body>
 </html>
