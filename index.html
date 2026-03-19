@@ -800,18 +800,19 @@
     		}
 		}
 		function showGoogleEasterEgg() {
-    		hideAllViews();
+    		const old = document.getElementById('google-easter-egg');
+    		if (old) old.remove();
 
-    		const container = document.getElementById('view-project-details');
-    		container.classList.remove('view-hidden');
-
-    		container.innerHTML = `
-        		<div class="flex flex-col items-center justify-center py-32">
-            		<h2 class="text-3xl font-bold mb-6">Search</h2>
-            		<input id="google-easter-input" type="text" placeholder="Type anything..." class="w-full max-w-md p-3 border border-slate-300 rounded-xl text-center mb-4 focus:outline-none focus:ring-2 focus:ring-blue-600">
-            		<button id="google-easter-btn" class="px-6 py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700">Search</button>
-        		</div>
+    		// Create Easter egg div
+    		const easterDiv = document.createElement('div');
+    		easterDiv.id = 'google-easter-egg';
+    		easterDiv.className = 'flex flex-col items-center justify-center py-16';
+    		easterDiv.innerHTML = `
+        		<h2 class="text-3xl font-bold mb-6">Google Search</h2>
+        		<input id="google-easter-input" type="text" placeholder="Type anything..." class="w-full max-w-md p-3 border border-slate-300 rounded-xl text-center mb-4 focus:outline-none focus:ring-2 focus:ring-blue-600">
+        		<button id="google-easter-btn" class="px-6 py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700">Search</button>
     		`;
+    		document.getElementById('view-project-details').prepend(easterDiv);
 
     		document.getElementById('google-easter-btn').addEventListener('click', () => {
         		const query = document.getElementById('google-easter-input').value.trim();
