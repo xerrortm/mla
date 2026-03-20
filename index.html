@@ -53,15 +53,15 @@
         </div>
 
         <!-- Updates Banner -->
-        <div class="mb-8 bg-blue-50 border border-blue-100 text-blue-800 px-6 py-4 rounded-2xl flex items-center justify-between shadow-sm">
+        <div onclick="addToCalendar()" class="mb-8 bg-blue-50 border border-blue-100 text-blue-800 px-6 py-4 rounded-2xl flex items-center justify-between shadow-sm">
             <div class="flex items-center gap-3">
                 <div class="bg-blue-600 text-white w-10 h-10 flex items-center justify-center rounded-xl">
                     <i class="fas fa-exclamation"></i>
                 </div>
                 <div>
-                    <h3 class="font-bold text-sm">New Feature</h3>
+                    <h3 class="font-bold text-sm">MAJOR UPDATE</h3>
                     <p class="text-sm text-blue-700">
-                        You can now export your citations to Google Docs!
+                        GoggleTools will be making a MAJOR update soon! Click here to be notified.
                     </p>
                 </div>
             </div>
@@ -819,6 +819,41 @@
         		if (!query) return;
         		window.open(`https://www.google.com/search?q=${encodeURIComponent(query)}`, '_blank');
     		});
+		}
+		function addToCalendar() {
+    		if (!confirm("Add this event to your calendar?")) return;
+
+   			// Full-day event (March 27, 2026)
+    		const start = "20260327T000000Z";
+    		const end = "20260327T235900Z";
+
+    		const ics = `BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VEVENT
+SUMMARY:GoggleTools Major Update 🚀
+DESCRIPTION:A major update is coming to GoggleTools!
+LOCATION:Online
+DTSTART:${start}
+DTEND:${end}
+BEGIN:VALARM
+TRIGGER:-PT1H
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+END:VALARM
+END:VEVENT
+END:VCALENDAR`;
+
+    		const blob = new Blob([ics], { type: "text/calendar;charset=utf-8;" });
+    		const url = URL.createObjectURL(blob);
+
+    		const a = document.createElement("a");
+    		a.href = url;
+    		a.download = "goggletools-update.ics";
+    		document.body.appendChild(a);
+    		a.click();
+    		document.body.removeChild(a);
+
+    		URL.revokeObjectURL(url);
 		}
         window.onload = () => {
     		showDashboard();
