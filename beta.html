@@ -903,15 +903,8 @@ END:VCALENDAR`;
      		}
     	});
 		function filterCitations() {
-    		const query = document.getElementById('citation-search').value.toLowerCase();
-
-    		// Flatten all citations across all projects
-    		const allCitations = projects.flatMap(p => p.citations.map(c => ({
-        		projectName: p.name,
-        		formatted: c.formatted
-   			})));
-
-    		const results = allCitations.filter(c => c.formatted.toLowerCase().includes(query));
+    		const input = document.getElementById("citation-search").value.trim();
+   			const query = input.toLowerCase();
 
     		// Get or create the results container
     		let container = document.getElementById('search-results-container');
@@ -921,6 +914,20 @@ END:VCALENDAR`;
         		container.className = 'mt-4 space-y-2';
         		document.getElementById('dashboard-search').after(container);
     		}
+
+    		// If input is empty, clear results and exit
+    		if (!input) {
+        		container.innerHTML = "";
+        			return;
+    		}
+
+    		// Flatten all citations across all projects
+    		const allCitations = projects.flatMap(p => p.citations.map(c => ({
+        		projectName: p.name,
+        		formatted: c.formatted
+    		})));
+
+   			const results = allCitations.filter(c => c.formatted.toLowerCase().includes(query));
 
     		if (results.length === 0) {
         		container.innerHTML = `<div class="p-4 text-center text-slate-400 italic">No citations found.</div>`;
@@ -934,6 +941,7 @@ END:VCALENDAR`;
         		</div>
     		`).join('') + "<br>";
 		}
+
         window.onload = () => {
     		showDashboard();
     		startAdminCountdown();
