@@ -313,6 +313,12 @@
         const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
         const MLA_MONTHS = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "June", "July", "Aug.", "Sept.", "Oct.", "Nov.", "Dec."];
 
+		function encodeProject(project) {
+    		return btoa(encodeURIComponent(JSON.stringify(project)));
+		}
+		function decodeProject(encoded) {
+    		return JSON.parse(decodeURIComponent(atob(encoded)));
+		}
         function hideAllViews() {
             document.querySelectorAll('section').forEach(s => s.classList.add('view-hidden'));
         }
