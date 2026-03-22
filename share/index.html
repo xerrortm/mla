@@ -1,1 +1,949 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shared Project | GoggleTools</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital@0;1&family=JetBrains+Mono&display=swap');
+        
+        :root { --mla-font: 'Playfair Display', serif; }
+        body { font-family: 'Inter', sans-serif; }
+        .mla-preview { font-family: var(--mla-font); line-height: 2; padding-left: 2rem; text-indent: -2rem; }
+        .glass-panel { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(229, 231, 235, 0.5); }
+        .view-hidden { display: none !important; }
+        .grid-select-btn { border: 1px solid #e2e8f0; padding: 4px; border-radius: 4px; font-size: 11px; text-align: center; transition: all 0.2s; background: white; }
+        .grid-select-btn:hover { background: #eff6ff; border-color: #3b82f6; }
+        .grid-select-btn.active { background: #3b82f6; color: white; border-color: #2563eb; }
+        .project-card:hover .project-actions { opacity: 1; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen text-slate-800">
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 glass-panel border-b border-slate-200 px-6 py-3 flex justify-between items-center">
+        <div class="flex items-center gap-2 cursor-pointer" onclick="showDashboard()">
+            <div class="bg-blue-600 p-2 rounded-lg"><i class="fas fa-flask text-white text-lg"></i></div>
+            <h1 class="text-xl font-bold tracking-tight text-slate-900">GoggleTools</h1>
+        </div>  
+        <div class="flex items-center gap-4">
+            <button onclick="openUpdates()" class="text-sm font-semibold text-slate-600 hover:text-orange-700 px-3 py-2 flex items-center gap-2">
+                <i class="fas fa-clock-rotate-left"></i>
+                Updates
+            </button>
+            <button onclick="location.href='about/'" class="text-sm font-semibold text-slate-600 hover:text-blue-600 px-3 py-2">
+                About
+            </button>
+        </div>
+    </nav>
+
+    <!-- DASHBOARD -->
+    <section id="view-dashboard" class="max-w-6xl mx-auto px-6 py-12">
+		<div id="dashboard-search" class="mb-4">
+    		<input type="text" id="citation-search" placeholder="Search citations by MLA output..." 
+        	class="w-full p-3 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" 
+        	oninput="filterCitations()">
+		</div>
+
+        <!-- Admin Countdown Banner -->
+        <div id="admin-banner" class="mb-8 bg-red-50 border border-red-100 text-red-800 px-6 py-6 rounded-2xl flex items-center justify-center shadow-sm">
+            <div class="text-center">
+                <h3 class="font-bold text-sm mb-2">Admin abuse starts in</h3>
+                <div id="admin-countdown" class="text-5xl font-extrabold text-red-600">10</div>
+				<button id="cancel-admin-btn" class="mt-4 px-4 py-2 bg-red-600 text-white rounded-xl hover:bg-red-700">Cancel</button>
+            </div>
+        </div>
+
+        <!-- Updates Banner -->
+        <div class="mb-8 bg-blue-50 border border-blue-100 text-blue-800 px-6 py-4 rounded-2xl flex items-center justify-between shadow-sm">
+            <div class="flex items-center gap-3">
+                <div class="bg-blue-600 text-white w-10 h-10 flex items-center justify-center rounded-xl">
+                    <i class="fas fa-flask"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-sm">Welcome to GoggleTools BETA</h3>
+                    <p class="text-sm text-blue-700">
+                        This is where you test out the new features.
+                    </p>
+                </div>
+            </div>
+            <button onclick="this.parentElement.remove()" class="text-blue-400 hover:text-blue-700">
+                <i class="fas fa-xmark"></i>
+            </button>
+        </div>
+
+        <!-- Dashboard Header -->
+        <div class="flex justify-between items-end mb-10">
+            <div>
+                <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">MLA Referencing. Better than NoodleTools</h2>
+                <p class="text-slate-500 mt-1">Reference like a pro with a cleaner and better design.</p>
+                <br>
+                <button onclick="openComparison()" class="bg-blue-600 text-white px-5 py-2 rounded-xl font-semibold hover:bg-blue-700 transition">
+                    Why use GoggleTools
+                </button>
+            </div>
+            <button onclick="openNewProjectModal()" class="bg-blue-600 text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 hover:bg-blue-700 transition-all">
+                <i class="fas fa-plus"></i> New Project
+            </button>
+        </div>
+
+        <!-- Projects Grid -->
+        <div id="project-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div onclick="openProject(1773656135194)" class="project-card group bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:shadow-xl cursor-pointer relative transition-all">
+                <div class="flex items-start justify-between mb-8">
+                    <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl"><i class="fas fa-folder"></i></div>
+                    <button onclick="deleteProject(event, 1773656135194)" class="project-actions opacity-0 p-2 text-slate-300 hover:text-red-500 transition-all"><i class="fas fa-trash-can"></i></button>
+                </div>
+                <h4 class="font-bold text-lg text-slate-900 mb-1">Random Stuff</h4>
+                <p class="text-slate-500 text-sm">1 Citations</p>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- PROJECT DETAILS -->
+    <section id="view-project-details" class="view-hidden max-w-7xl mx-auto px-6 py-8">
+        <div class="mb-8 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <button onclick="showDashboard()" class="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-500 hover:text-blue-600"><i class="fas fa-arrow-left"></i></button>
+                <div>
+                    <h2 id="current-project-name" class="text-2xl font-bold text-slate-900">Project Name</h2>
+                    <p class="text-sm text-slate-500">Citations</p>
+                </div>
+            </div>
+            <button onclick="showCitationForm()" class="bg-blue-600 text-white px-6 py-3 rounded-xl font-bold shadow-lg hover:bg-blue-700 transition-all"><i class="fas fa-plus"></i> Add Citation</button>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <div class="lg:col-span-8 bg-white rounded-2xl shadow-sm border border-slate-200 min-h-[400px]" id="citation-list"></div>
+            <div class="lg:col-span-4">
+                <div class="bg-slate-900 rounded-2xl p-6 text-white shadow-xl">
+                    <h3 class="text-xs font-bold text-blue-400 uppercase tracking-widest mb-4">Quick Export</h3>
+                    <button onclick="shareProjectLink()" class="w-full py-3 px-4 bg-yellow-500 border border-yellow-600 rounded-xl text-left hover:bg-yellow-600 flex items-center justify-between">
+                        <span class="text-sm">[NEW] Share Project Link</span><i class="fas fa-share-alt text-yellow-700"></i>
+                    </button>
+					<br>
+                    <button onclick="copyProjectToClipboard()" class="w-full py-3 px-4 bg-slate-800 border border-slate-700 rounded-xl text-left hover:bg-slate-700 flex items-center justify-between">
+                        <span class="text-sm">Copy All</span><i class="fas fa-copy text-slate-500"></i>
+                    </button>
+                    <br>
+                    <button onclick="exportToGoogleDocs()" class="w-full py-3 px-4 bg-slate-800 border border-slate-700 rounded-xl text-left hover:bg-slate-700 flex items-center justify-between">
+                        <span class="text-sm">Export to Google Docs</span><i class="fas fa-share-from-square text-slate-500"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CITATION FORM -->
+    <section id="view-add-citation" class="view-hidden max-w-5xl mx-auto px-6 py-8 pb-32">
+        <div class="mb-8 flex items-center gap-4">
+            <button onclick="cancelCitation()" class="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-500"><i class="fas fa-times"></i></button>
+            <h2 class="text-2xl font-bold">New Citation</h2>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <div class="lg:col-span-7 space-y-6">
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+                    <!-- Type Selector -->
+                    <div class="flex gap-2 mb-8 overflow-x-auto pb-2">
+                        <button onclick="switchTab('website')" id="btn-website" class="tab-btn px-4 py-2 bg-blue-50 text-blue-700 rounded-lg text-sm font-bold border border-blue-100 transition-all">Website</button>
+                        <button onclick="switchTab('book')" id="btn-book" class="tab-btn px-4 py-2 bg-slate-100 text-slate-600 rounded-lg text-sm font-bold hover:bg-slate-200 transition-all">Book</button>
+                        <button onclick="switchTab('media')" id="btn-media" class="tab-btn px-4 py-2 bg-slate-100 text-slate-600 rounded-lg text-sm font-bold hover:bg-slate-200 transition-all">Digital File</button>
+                    </div>
+
+                    <div id="form-container" class="space-y-8">
+                        <!-- Dynamic Content Loaded Here via JS -->
+                    </div>
+
+                    <div class="mt-8 flex gap-4">
+                        <button onclick="saveCitation()" class="flex-1 bg-blue-600 text-white py-4 rounded-xl font-bold shadow-lg hover:bg-blue-700">Save Citation</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Preview Sidebar -->
+            <div class="lg:col-span-5">
+                <div class="bg-slate-900 rounded-2xl p-6 text-white shadow-xl sticky top-24">
+                    <span class="text-xs font-bold text-blue-400 uppercase tracking-widest">MLA 9 Preview</span>
+                    <div class="bg-white text-slate-900 p-6 rounded-xl mt-4 min-h-[100px]">
+                        <div id="mla-render" class="mla-preview text-sm italic text-slate-400">Preview will appear here...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MODAL -->
+    <div id="modal-project" class="fixed inset-0 z-[100] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center opacity-0 pointer-events-none transition-all">
+        <div class="bg-white w-full max-w-md rounded-2xl p-8 shadow-2xl transform scale-95 transition-transform">
+            <h3 class="text-xl font-bold mb-2">Create New Project</h3>
+            <input type="text" id="project-name-input" placeholder="Project Name" class="w-full px-4 py-4 bg-slate-50 border border-slate-200 rounded-xl mb-6 outline-none">
+            <div class="flex gap-3">
+                <button onclick="closeProjectModal()" class="flex-1 py-3 font-bold text-slate-500">Cancel</button>
+                <button onclick="createNewProject()" class="flex-1 py-3 font-bold bg-blue-600 text-white rounded-xl">Create</button>
+            </div>
+        </div>
+    </div>
+    <div id="comparison-popup" class="fixed inset-0 bg-black/40 items-center justify-center z-50 flex hidden">
+
+  <div class="bg-white rounded-2xl shadow-2xl max-w-3xl w-full p-6 relative">
+
+    <button onclick="closeComparison()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-xl">
+      ✕
+    </button>
+
+    <h2 class="text-2xl font-bold mb-6 text-gray-800">
+      NoodleTools vs GoggleTools
+    </h2>
+
+    <div class="overflow-x-auto">
+      <table class="w-full border-collapse text-left">
+
+        <thead>
+          <tr class="border-b">
+            <th class="py-3 font-semibold text-gray-600">Feature</th>
+            <th class="py-3 font-semibold text-gray-600">NoodleTools</th>
+            <th class="py-3 font-semibold text-blue-600">GoggleTools</th>
+          </tr>
+        </thead>
+
+        <tbody class="divide-y">
+
+          <tr>
+            <td class="py-3">Price</td>
+            <td>~$15/year</td>
+            <td class="font-semibold text-blue-600">FREE</td>
+          </tr>
+
+          <tr>
+            <td class="py-3">Signup</td>
+            <td>Required</td>
+            <td class="font-semibold text-blue-600">No signup</td>
+          </tr>
+
+          <tr>
+            <td class="py-3">Speed</td>
+            <td>Slower</td>
+            <td class="font-semibold text-blue-600">Fast</td>
+          </tr>
+
+          <tr>
+            <td class="py-3">Design</td>
+            <td>Old UI</td>
+            <td class="font-semibold text-blue-600">Modern UI</td>
+          </tr>
+          <tr>
+            <td class="py-3">User-friendly</td>
+            <td>No</td>
+            <td class="font-semibold text-blue-600">Yes</td>
+          </tr>
+
+          <tr>
+            <td class="py-3">Offline use</td>
+            <td>No</td>
+            <td class="font-semibold text-blue-600">Yes</td>
+          </tr>
+
+          <tr>
+            <td class="py-3">Offline saving</td>
+            <td>No</td>
+            <td class="font-semibold text-blue-600">Yes</td>
+          </tr>
+
+          <tr>
+            <td class="py-3">MLA output</td>
+            <td>Correct</td>
+            <td class="font-semibold text-blue-600">Correct</td>
+          </tr>
+
+        </tbody>
+
+      </table>
+    </div>
+
+  </div>
+</div>
+<div id="updates-popup" class="fixed inset-0 bg-black/40 items-center justify-center z-50 flex hidden">
+
+  <div id="updates-box" class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full p-6 relative transform scale-95 opacity-0 transition-all duration-200">
+
+    <button onclick="closeUpdates()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-xl">
+      ✕
+    </button>
+
+    <h2 class="text-2xl font-bold mb-6 text-orange-600">
+      Update Log
+    </h2>
+
+    <div class="space-y-4 max-h-[400px] overflow-y-auto">
+
+      <!-- Update Item -->
+      <div class="bg-orange-50 border border-orange-100 rounded-xl p-4">
+        <p class="text-xs text-orange-500 font-bold mb-1">LATEST</p>
+        <h3 class="font-semibold text-gray-800">Version 1.2</h3>
+        <ul class="text-sm text-gray-600 mt-2 list-disc list-inside space-y-1">
+          <li>Projects now save automatically (even offline!)</li>
+          <li>Supports multiple reference types</li>
+          <li>Bug and performance fixes</li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="font-semibold text-gray-800">Version 1.1</h3>
+        <ul class="text-sm text-gray-600 mt-2 list-disc list-inside space-y-1">
+          <li>Improved MLA output</li>
+          <li>Added feature comparing section</li>
+          <li>Improved date choosing system</li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="font-semibold text-gray-800">Version 1.0</h3>
+        <ul class="text-sm text-gray-600 mt-2 list-disc list-inside space-y-1">
+          <li>Created the MLA referencing system</li>
+          <li>Added modern styles</li>
+        </ul>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+    <div id="toast" class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-6 py-3 rounded-full shadow-2xl opacity-0 pointer-events-none transition-all duration-300 z-[200]">Action successful!</div>
+
+    <script>
+        let projects = JSON.parse(localStorage.getItem('citeflow_projects')) || [{ id: 1, name: 'Main Bibliography', citations: [], createdAt: Date.now() }];
+        let currentProjectId = null;
+        let currentSourceType = 'website';
+        const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        const MLA_MONTHS = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "June", "July", "Aug.", "Sept.", "Oct.", "Nov.", "Dec."];
+
+		function encodeProject(project) {
+    		return btoa(encodeURIComponent(JSON.stringify(project)));
+		}
+		function decodeProject(encoded) {
+    		return JSON.parse(decodeURIComponent(atob(encoded)));
+		}
+        function hideAllViews() {
+            document.querySelectorAll('section').forEach(s => s.classList.add('view-hidden'));
+        }
+
+        function showDashboard() {
+            hideAllViews();
+            document.getElementById('view-dashboard').classList.remove('view-hidden');
+            renderProjects();
+        }
+
+        function openProject(id) {
+    		currentProjectId = id;
+    		const project = projects.find(p => p.id === id);
+    		document.getElementById('current-project-name').innerText = project.name;
+
+   			hideAllViews();
+    		document.getElementById('view-project-details').classList.remove('view-hidden');
+
+    		if (project.name.toLowerCase() === "google") {
+        		showGoogleEasterEgg();
+    		} else {
+        		const easter = document.getElementById('google-easter-egg');
+        		if (easter) easter.remove();
+        		renderCitations();
+    		}
+		}
+
+        function switchTab(type) {
+            currentSourceType = type;
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.className = "tab-btn px-4 py-2 bg-slate-100 text-slate-600 rounded-lg text-sm font-bold hover:bg-slate-200 transition-all");
+            document.getElementById(`btn-${type}`).className = "tab-btn px-4 py-2 bg-blue-50 text-blue-700 rounded-lg text-sm font-bold border border-blue-100 transition-all";
+            renderForm(type);
+        }
+
+        function renderForm(type) {
+            const container = document.getElementById('form-container');
+            let html = '';
+
+            if (type === 'website') {
+                html = `
+                    <div class="space-y-4">
+                        <label class="text-xs font-bold text-slate-400 uppercase">Website URL</label>
+                        <input type="text" id="url" oninput="updatePreview()" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg" placeholder="https://...">
+                        
+                        <div class="space-y-2">
+                            <label class="text-xs font-bold text-slate-400 uppercase">Date of publication</label>
+                            <div class="text-[10px] text-slate-400 mb-1">Month</div>
+                            <div class="grid grid-cols-6 gap-1 mb-3">${MONTHS.map(m => `<button onclick="setDateValue('pub-month', '${m}')" class="grid-select-btn pub-month-btn">${m.substring(0,3)}</button>`).join('')}</div>
+                            <input type="hidden" id="pub-month">
+                            <div class="text-[10px] text-slate-400 mb-1">Day</div>
+                            <div class="grid grid-cols-10 gap-1">${Array.from({length: 31}, (_, i) => `<button onclick="setDateValue('pub-day', ${i+1})" class="grid-select-btn pub-day-btn">${i+1}</button>`).join('')}</div>
+                            <input type="hidden" id="pub-day">
+                            <input type="text" id="pub-year" oninput="updatePreview()" placeholder="Year" class="w-full p-2 text-sm border-b mt-2 outline-none">
+                        </div>
+
+                        <div class="space-y-2 pt-4">
+                            <div class="flex justify-between items-center">
+                                <label class="text-xs font-bold text-slate-400 uppercase">Most recent date of access</label>
+                                <button onclick="setToday()" class="text-[10px] font-bold text-blue-600">[ today? ]</button>
+                            </div>
+                            <div class="text-[10px] text-slate-400 mb-1">Month</div>
+                            <div class="grid grid-cols-6 gap-1 mb-3">${MONTHS.map(m => `<button onclick="setDateValue('acc-month', '${m}')" class="grid-select-btn acc-month-btn">${m.substring(0,3)}</button>`).join('')}</div>
+                            <input type="hidden" id="acc-month">
+                            <div class="text-[10px] text-slate-400 mb-1">Day</div>
+                            <div class="grid grid-cols-10 gap-1">${Array.from({length: 31}, (_, i) => `<button onclick="setDateValue('acc-day', ${i+1})" class="grid-select-btn acc-day-btn">${i+1}</button>`).join('')}</div>
+                            <input type="hidden" id="acc-day">
+                            <input type="text" id="acc-year" oninput="updatePreview()" placeholder="Year" class="w-full p-2 text-sm border-b mt-2 outline-none">
+                        </div>
+
+                        <div class="pt-6 border-t">
+                            <h4 class="text-sm font-bold mb-4">Web Page Contributors</h4>
+                            <div class="flex gap-4 mb-4">
+                                <label class="text-xs font-medium"><input type="radio" name="role" value="Author" checked onchange="updatePreview()"> Author</label>
+                                <label class="text-xs font-medium"><input type="radio" name="role" value="Editor" onchange="updatePreview()"> Editor</label>
+                                <label class="text-xs font-medium"><input type="radio" name="role" value="Translator" onchange="updatePreview()"> Translator</label>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <input type="text" id="first" oninput="updatePreview()" placeholder="First name" class="p-3 bg-slate-50 rounded-lg text-sm">
+                                <input type="text" id="middle" oninput="updatePreview()" placeholder="Middle name" class="p-3 bg-slate-50 rounded-lg text-sm">
+                                <input type="text" id="last" oninput="updatePreview()" placeholder="Last name or group" class="p-3 bg-slate-50 rounded-lg text-sm">
+                                <input type="text" id="suffix" oninput="updatePreview()" placeholder="Suffix" class="p-3 bg-slate-50 rounded-lg text-sm">
+                            </div>
+                        </div>
+
+                        <div class="space-y-1">
+                            <label class="text-xs font-bold text-slate-400 uppercase">Web page or document/article title</label>
+                            <input type="text" id="title" oninput="updatePreview()" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg">
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="space-y-1">
+                                <label class="text-xs font-bold text-slate-400 uppercase">Name of the website</label>
+                                <input type="text" id="website-name" oninput="updatePreview()" class="p-3 bg-slate-50 border border-slate-200 rounded-lg w-full">
+                            </div>
+                            <div class="space-y-1">
+                                <label class="text-xs font-bold text-slate-400 uppercase">Publisher of the site</label>
+                                <input type="text" id="publisher" oninput="updatePreview()" class="p-3 bg-slate-50 border border-slate-200 rounded-lg w-full">
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else if (type === 'book') {
+                html = `
+                    <div class="space-y-6">
+                        <h4 class="text-sm font-bold">Contributors</h4>
+                        <div class="grid grid-cols-3 gap-2 mb-4">
+                            ${['Author', 'Compiler', 'Editor', 'Illustrator', 'Narrator', 'Translator'].map(r => `
+                                <label class="text-[11px] font-medium"><input type="radio" name="role" value="${r}" onchange="updatePreview()"> ${r}</label>
+                            `).join('')}
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <input type="text" id="first" oninput="updatePreview()" placeholder="First name" class="p-3 bg-slate-50 rounded-lg text-sm">
+                            <input type="text" id="middle" oninput="updatePreview()" placeholder="Middle name" class="p-3 bg-slate-50 rounded-lg text-sm">
+                            <input type="text" id="last" oninput="updatePreview()" placeholder="Last name or group" class="p-3 bg-slate-50 rounded-lg text-sm">
+                            <input type="text" id="suffix" oninput="updatePreview()" placeholder="Suffix" class="p-3 bg-slate-50 rounded-lg text-sm">
+                        </div>
+
+                        <div class="space-y-4 pt-4 border-t">
+                            <div class="space-y-1">
+                                <label class="text-xs font-bold text-slate-400 uppercase">Title of book</label>
+                                <input type="text" id="title" oninput="updatePreview()" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg">
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <input type="text" id="publisher" oninput="updatePreview()" placeholder="Publisher" class="p-3 bg-slate-50 rounded-lg text-sm">
+                                <input type="text" id="pub-year" oninput="updatePreview()" placeholder="Year" class="p-3 bg-slate-50 rounded-lg text-sm">
+                            </div>
+                            <input type="text" id="city" oninput="updatePreview()" placeholder="Publication city (if needed)" class="w-full p-3 bg-slate-50 rounded-lg text-sm">
+                        </div>
+                    </div>
+                `;
+            } else if (type === 'media') {
+                html = `
+                    <div class="space-y-6">
+                        <div class="space-y-1">
+                            <label class="text-xs font-bold text-slate-400 uppercase">Type of file/software/app</label>
+                            <input type="text" id="file-type" oninput="updatePreview()" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg">
+                        </div>
+
+                        <div class="pt-4 border-t">
+                            <h4 class="text-sm font-bold mb-4">Artists</h4>
+                            <div class="grid grid-cols-2 gap-4">
+                                <input type="text" id="first" oninput="updatePreview()" placeholder="First name" class="p-3 bg-slate-50 rounded-lg text-sm">
+                                <input type="text" id="middle" oninput="updatePreview()" placeholder="Middle name" class="p-3 bg-slate-50 rounded-lg text-sm">
+                                <input type="text" id="last" oninput="updatePreview()" placeholder="Last name or group" class="p-3 bg-slate-50 rounded-lg text-sm">
+                                <input type="text" id="suffix" oninput="updatePreview()" placeholder="Suffix" class="p-3 bg-slate-50 rounded-lg text-sm">
+                            </div>
+                        </div>
+
+                        <div class="space-y-4 pt-4 border-t">
+                            <label class="text-xs font-bold text-slate-400 uppercase">Type of image</label>
+                            <div class="flex gap-4">
+                                ${['Clip art', 'Illustration', 'Image', 'Photograph'].map(i => `
+                                    <label class="text-xs"><input type="radio" name="img-type" value="${i}" onchange="updatePreview()"> ${i}</label>
+                                `).join('')}
+                            </div>
+                            <div class="space-y-1">
+                                <label class="text-xs font-bold text-slate-400 uppercase">Title of photograph</label>
+                                <input type="text" id="title" oninput="updatePreview()" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg">
+                            </div>
+                        </div>
+
+                        <div class="space-y-2 pt-4 border-t">
+                            <label class="text-xs font-bold text-slate-400 uppercase">Date created / copyright</label>
+                            <div class="text-[10px] text-slate-400">Month</div>
+                            <div class="grid grid-cols-6 gap-1">${MONTHS.map(m => `<button onclick="setDateValue('pub-month', '${m}')" class="grid-select-btn pub-month-btn">${m.substring(0,3)}</button>`).join('')}</div>
+                            <input type="hidden" id="pub-month">
+                            <div class="text-[10px] text-slate-400 mt-2">Day</div>
+                            <div class="grid grid-cols-10 gap-1">${Array.from({length: 31}, (_, i) => `<button onclick="setDateValue('pub-day', ${i+1})" class="grid-select-btn pub-day-btn">${i+1}</button>`).join('')}</div>
+                            <input type="hidden" id="pub-day">
+                            <input type="text" id="pub-year" oninput="updatePreview()" placeholder="Year" class="w-full p-2 text-sm border-b mt-2 outline-none">
+                        </div>
+                    </div>
+                `;
+            }
+            container.innerHTML = html;
+            updatePreview();
+        }
+
+        function setDateValue(id, val) {
+            document.getElementById(id).value = val;
+            const btns = document.querySelectorAll(`.${id}-btn`);
+            btns.forEach(b => {
+                b.classList.remove('active');
+                if (b.innerText === val.toString().substring(0,3) || b.innerText === val.toString()) b.classList.add('active');
+            });
+            updatePreview();
+        }
+
+        function setToday() {
+            const now = new Date();
+            setDateValue('acc-month', MONTHS[now.getMonth()]);
+            setDateValue('acc-day', now.getDate());
+            document.getElementById('acc-year').value = now.getFullYear();
+            updatePreview();
+        }
+
+        function formatMLA() {
+            const data = {
+                type: currentSourceType,
+                first: document.getElementById('first')?.value.trim(),
+                last: document.getElementById('last')?.value.trim(),
+                title: document.getElementById('title')?.value.trim(),
+                pMonth: document.getElementById('pub-month')?.value,
+                pDay: document.getElementById('pub-day')?.value,
+                pYear: document.getElementById('pub-year')?.value.trim(),
+                role: document.querySelector('input[name="role"]:checked')?.value || 'Author'
+            };
+
+            if (!data.last && !data.title) return null;
+
+            let author = data.last ? `${data.last}${data.first ? ', ' + data.first : ''}. ` : "";
+            let mIndex = MONTHS.indexOf(data.pMonth);
+            let mShort = mIndex !== -1 ? MLA_MONTHS[mIndex] + " " : "";
+            let pubDate = `${data.pDay ? data.pDay + ' ' : ''}${mShort}${data.pYear ? data.pYear + ', ' : ''}`;
+
+            if (data.type === 'website') {
+                const site = document.getElementById('website-name').value.trim();
+                const pub = document.getElementById('publisher').value.trim();
+                const url = document.getElementById('url').value.trim();
+                const aMonth = document.getElementById('acc-month').value;
+                const aDay = document.getElementById('acc-day').value;
+                const aYear = document.getElementById('acc-year').value.trim();
+                
+                let access = "";
+                if (aYear) {
+                    let amIndex = MONTHS.indexOf(aMonth);
+                    let amShort = amIndex !== -1 ? MLA_MONTHS[amIndex] + " " : "";
+                    access = ` Accessed ${aDay ? aDay + ' ' : ''}${amShort}${aYear}.`;
+                }
+
+                return `${author}${data.title ? '"' + data.title + '."' : ''} <span class="italic">${site || ''}</span>, ${pub ? pub + ', ' : ''}${pubDate}${url ? url + '.' : ''}${access}`.replace(/, ,/g, ',').trim();
+            } else if (data.type === 'book') {
+                const pub = document.getElementById('publisher').value.trim();
+                const city = document.getElementById('city').value.trim();
+                return `${author}<span class="italic">${data.title || ''}</span>. ${pub ? pub + ', ' : ''}${city ? city + ', ' : ''}${data.pYear ? data.pYear + '.' : ''}`;
+            } else {
+                const fType = document.getElementById('file-type').value.trim();
+                const iType = document.querySelector('input[name="img-type"]:checked')?.value || 'Image';
+                return `${author}<span class="italic">${data.title || ''}</span>. ${fType || iType}. ${pubDate}`.trim();
+            }
+        }
+
+        function updatePreview() {
+            const formatted = formatMLA();
+            const render = document.getElementById('mla-render');
+            if (formatted) {
+                render.innerHTML = formatted;
+                render.className = "mla-preview text-sm text-slate-900";
+            } else {
+                render.innerHTML = "Preview will appear here...";
+                render.className = "mla-preview text-sm italic text-slate-400";
+            }
+        }
+
+        function renderProjects() {
+            const grid = document.getElementById('project-grid');
+            grid.innerHTML = projects.map(p => `
+                <div onclick="openProject(${p.id})" class="project-card group bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:shadow-xl cursor-pointer relative transition-all">
+                    <div class="flex items-start justify-between mb-8">
+                        <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl"><i class="fas fa-folder"></i></div>
+                        <button onclick="deleteProject(event, ${p.id})" class="project-actions opacity-0 p-2 text-slate-300 hover:text-red-500 transition-all"><i class="fas fa-trash-can"></i></button>
+                    </div>
+                    <h4 class="font-bold text-lg text-slate-900 mb-1">${p.name}</h4>
+                    <p class="text-slate-500 text-sm">${p.citations.length} Citations</p>
+                </div>
+            `).join('');
+        }
+
+        function renderCitations() {
+            const container = document.getElementById('citation-list');
+            const project = projects.find(p => p.id === currentProjectId);
+            if (project.citations.length === 0) {
+                container.innerHTML = `<div class="p-16 text-center text-slate-400">No citations yet.</div>`;
+                return;
+            }
+            container.innerHTML = `<div class="divide-y divide-slate-100">${project.citations.map(c => `
+                <div class="p-6 flex items-start justify-between group hover:bg-slate-50 transition-all">
+                    <div class="mla-preview text-slate-800 text-sm">${c.formatted}</div>
+                    <button onclick="deleteCitation(${c.id})" class="p-2 text-slate-200 hover:text-red-500"><i class="fas fa-times"></i></button>
+                </div>
+            `).join('')}</div>`;
+        }
+
+        function showCitationForm() {
+            hideAllViews();
+            document.getElementById('view-add-citation').classList.remove('view-hidden');
+            switchTab('website');
+        }
+
+        function saveCitation() {
+            const formatted = formatMLA();
+            if (!formatted) return;
+            const projectIndex = projects.findIndex(p => p.id === currentProjectId);
+            projects[projectIndex].citations.push({ id: Date.now(), formatted: formatted, textOnly: document.getElementById('mla-render').innerText });
+            projects[projectIndex].citations.sort((a,b) => a.textOnly.localeCompare(b.textOnly));
+            saveToDisk();
+            openProject(currentProjectId);
+            showToast("Citation saved!");
+        }
+
+        function deleteCitation(id) {
+            const pIdx = projects.findIndex(p => p.id === currentProjectId);
+            projects[pIdx].citations = projects[pIdx].citations.filter(c => c.id !== id);
+            saveToDisk();
+            renderCitations();
+        }
+
+        function openNewProjectModal() { document.getElementById('modal-project').classList.remove('opacity-0', 'pointer-events-none'); }
+        function closeProjectModal() { document.getElementById('modal-project').classList.add('opacity-0', 'pointer-events-none'); }
+        function createNewProject() {
+            const name = document.getElementById('project-name-input').value.trim();
+            if (!name) return;
+            projects.unshift({ id: Date.now(), name, citations: [], createdAt: Date.now() });
+            saveToDisk();
+            closeProjectModal();
+            renderProjects();
+        }
+        function deleteProject(e, id) { e.stopPropagation(); projects = projects.filter(p => p.id !== id); saveToDisk(); renderProjects(); }
+        function saveToDisk() { localStorage.setItem('citeflow_projects', JSON.stringify(projects)); }
+        function showToast(m) { const t = document.getElementById('toast'); t.innerText = m; t.classList.add('opacity-100'); setTimeout(() => t.classList.remove('opacity-100'), 2000); }
+        function cancelCitation() { openProject(currentProjectId); }
+        function copyProjectToClipboard() {
+            const citations = document.querySelectorAll("#citation-list .mla-preview");
+
+            let text = "";
+
+            citations.forEach(c => {
+                text += c.innerText + "\n\n";
+            });
+
+            navigator.clipboard.writeText(text);
+
+            showToast("Citations copied!");
+        }
+        function exportToGoogleDocs() {
+    		const citations = document.querySelectorAll("#citation-list .mla-preview");
+    		if (citations.length === 0) {
+        		showToast("No citations to export!");
+        		return;
+    		}
+			let text = "";
+
+            citations.forEach(c => {
+                text += c.innerText + "\n\n";
+            });
+
+            navigator.clipboard.writeText(text);
+
+    		let content = Array.from(citations).map(c => c.innerText).join("\n\n");
+
+    		const encodedContent = encodeURIComponent(content);
+
+    		const project = projects.find(p => p.id === currentProjectId);
+			const url = `https://docs.google.com/document/create?usp=docs_home&title=${encodeURIComponent(project.name)}&body=${encodedContent}`;
+			showToast("Opening Google Docs, press paste after opening.");
+            
+            setTimeout(() => {
+            	const project = projects.find(p => p.id === currentProjectId);
+            	const url = `https://docs.google.com/document/create?usp=docs_home&title=${encodeURIComponent(project.name)}&body=${encodeURIComponent(content)}`;
+            	window.open(url, "_blank");
+        	}, 4000);
+
+		}
+        function openComparison() {
+            document.getElementById("comparison-popup").classList.remove("hidden");
+            document.getElementById("comparison-popup").classList.add("flex");
+        }
+
+        function closeComparison() {
+            document.getElementById("comparison-popup").classList.add("hidden");
+        }
+        function openUpdates() {
+    		const popup = document.getElementById("updates-popup");
+    		const box = document.getElementById("updates-box");
+
+    		popup.classList.remove("hidden");
+
+    		setTimeout(() => {
+        		box.classList.remove("scale-95", "opacity-0");
+        		box.classList.add("scale-100", "opacity-100");
+    		}, 10);
+		}
+
+		function closeUpdates() {
+    		const popup = document.getElementById("updates-popup");
+    		const box = document.getElementById("updates-box");
+
+    		box.classList.add("scale-95", "opacity-0");
+
+    		setTimeout(() => {
+        		popup.classList.add("hidden");
+    		}, 200);
+		}
+		function disco() {
+			showToast("DISCO!");
+    		const allElements = document.querySelectorAll("*");
+
+    		let audio = new Audio("https://raw.githubusercontent.com/xerrortm/mla/refs/heads/main/disco.mp3");
+    		audio.loop = true;
+    		audio.volume = 0.7;
+
+    		audio.play().catch(() => {
+        		console.log("Audio failed or blocked — continuing without sound");
+        		audio = null;
+    		});
+
+    		const originalStyles = new Map();
+
+    		allElements.forEach(el => {
+        		const style = window.getComputedStyle(el);
+
+        		originalStyles.set(el, {
+            		backgroundColor: style.backgroundColor,
+            		borderColor: style.borderColor,
+            		transition: el.style.transition
+        		});
+
+        		el.style.transition = "background-color 1s linear, border-color 1s linear";
+    		});
+
+    		function randomColor() {
+        		const hue = Math.floor(Math.random() * 360);
+        		return `hsl(${hue}, 100%, 50%)`;
+    		}
+
+    		let currentHue = Math.random() * 360;
+
+    		const interval = setInterval(() => {
+        		currentHue = (currentHue + 60) % 360;
+        		const color = `hsl(${currentHue}, 100%, 50%)`;
+
+        		allElements.forEach(el => {
+            		el.style.backgroundColor = color;
+            		el.style.borderColor = color;
+        		});
+
+    		}, 1000);
+
+    		setTimeout(() => {
+        		clearInterval(interval);
+
+        		if (audio) {
+            		audio.pause();
+            		audio.currentTime = 0;
+        		}
+
+        		allElements.forEach(el => {
+            		const original = originalStyles.get(el);
+            		if (original) {
+                		el.style.backgroundColor = original.backgroundColor;
+                		el.style.borderColor = original.borderColor;
+                		el.style.transition = original.transition;
+            		}
+        		});
+
+    		}, 96000);
+		}
+		let adminCountdownInterval = null; // Store interval so we can clear it
+
+		function startAdminCountdown() {
+    		let timeLeft = 10;
+    		const countdownEl = document.getElementById("admin-countdown");
+    		const cancelBtn = document.getElementById("cancel-admin-btn");
+
+    		adminCountdownInterval = setInterval(() => {
+        		timeLeft--;
+        		if (countdownEl) countdownEl.innerText = timeLeft;
+
+        		if (timeLeft <= 0) {
+            		clearInterval(adminCountdownInterval);
+            		countdownEl.innerText = "0";
+
+            		setTimeout(() => {
+                		const banner = document.getElementById("admin-banner");
+                		if (banner) banner.remove();
+                		disco();
+            		}, 400);
+        		}
+    		}, 1000);
+
+    		if (cancelBtn) {
+        		cancelBtn.addEventListener("click", () => {
+            		clearInterval(adminCountdownInterval);
+            		const banner = document.getElementById("admin-banner");
+            		if (banner) banner.remove();
+            		showToast("Admin countdown cancelled!");
+        		});
+    		}
+		}
+		function showGoogleEasterEgg() {
+    		const old = document.getElementById('google-easter-egg');
+    		if (old) old.remove();
+
+    		// Create Easter egg div
+    		const easterDiv = document.createElement('div');
+    		easterDiv.id = 'google-easter-egg';
+    		easterDiv.className = 'flex flex-col items-center justify-center py-16';
+    		easterDiv.innerHTML = `
+        		<h2 class="text-3xl font-bold mb-6">Google Search</h2>
+        		<input id="google-easter-input" type="text" placeholder="Type anything..." class="w-full max-w-md p-3 border border-slate-300 rounded-xl text-center mb-4 focus:outline-none focus:ring-2 focus:ring-blue-600">
+        		<button id="google-easter-btn" class="px-6 py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700">Search</button>
+    		`;
+    		document.getElementById('view-project-details').prepend(easterDiv);
+
+    		document.getElementById('google-easter-btn').addEventListener('click', () => {
+        		const query = document.getElementById('google-easter-input').value.trim();
+        		if (!query) return;
+        		window.open(`https://www.google.com/search?q=${encodeURIComponent(query)}`, '_blank');
+    		});
+		}
+		function addToCalendar() {
+    		if (!confirm("Add this event to your calendar?")) return;
+
+    		const start = "20260327";
+    		const end = "20260328";
+
+    		const ics = `BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VEVENT
+SUMMARY:GoggleTools Major Update
+DESCRIPTION:A major update is coming to GoggleTools!
+DTSTART;VALUE=DATE:${start}
+DTEND;VALUE=DATE:${end}
+END:VEVENT
+END:VCALENDAR`;
+
+    		const blob = new Blob([ics], { type: "text/calendar;charset=utf-8;" });
+    		const url = URL.createObjectURL(blob);
+
+    		const a = document.createElement("a");
+    		a.href = url;
+    		a.download = "goggletools-update.ics";
+    		document.body.appendChild(a);
+    		a.click();
+    		document.body.removeChild(a);
+
+    		URL.revokeObjectURL(url);
+		}
+    	function shareProjectLink() {
+      		if (!currentProjectId) return showToast("No project open!");
+        	const project = projects.find(p => p.id === currentProjectId);
+      		if (!project) return;
+
+      		const encoded = encodeProject(project);
+      		const link = `${window.location.origin}/mla/share?project=${encoded}`;
+
+      		navigator.clipboard.writeText(link);
+      		showToast("Project link copied!");
+    	}
+    	window.addEventListener('DOMContentLoaded', () => {
+      		const params = new URLSearchParams(window.location.search);
+      		const encoded = params.get('project');
+      		if (!encoded) return;
+
+      		try {
+        		const decoded = decodeProject(encoded);
+
+        		const existingIndex = projects.findIndex(p => p.id === decoded.id);
+        		if (existingIndex !== -1) projects[existingIndex] = decoded;
+        		else projects.unshift(decoded);
+
+        		saveToDisk();
+        		renderProjects();
+
+        		currentProjectId = decoded.id;
+        		document.getElementById('current-project-name').innerText = decoded.name;
+        		hideAllViews();
+        		document.getElementById('view-project-details').classList.remove('view-hidden');
+
+        		if (decoded.citations && decoded.citations.length > 0) renderCitations();
+        		else document.getElementById('citation-list').innerHTML = `<div class="p-16 text-center text-slate-400">No citations yet.</div>`;
+
+      		} catch (e) {
+        		console.error("Failed to load shared project:", e);
+        		showToast("Failed to load shared project!");
+     		}
+    	});
+		function filterCitations() {
+    		const input = document.getElementById("citation-search").value.trim();
+   			const query = input.toLowerCase();
+
+    		let container = document.getElementById('search-results-container');
+    		if (!container) {
+        		container = document.createElement('div');
+        		container.id = 'search-results-container';
+        		container.className = 'mt-4 space-y-2';
+        		document.getElementById('dashboard-search').after(container);
+    		}
+
+    		if (!input) {
+        		container.innerHTML = "";
+        			return;
+    		}
+
+    		const allCitations = projects.flatMap(p => p.citations.map(c => ({
+        		projectName: p.name,
+        		formatted: c.formatted
+    		})));
+
+   			const results = allCitations.filter(c => c.formatted.toLowerCase().includes(query));
+
+    		if (results.length === 0) {
+        		container.innerHTML = `<div class="p-4 text-center text-slate-400 italic">No citations found.</div>`;
+        		return;
+    		}
+
+    		container.innerHTML = results.map(r => `
+        		<div class="p-3 border rounded-lg bg-white dark:bg-black text-slate-900 dark:text-white">
+            		<p class="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Project: ${r.projectName}</p>
+            		<p>${r.formatted}</p>
+        		</div>
+    		`).join('') + "<br>";
+		}
+
+        window.onload = () => {
+    		showDashboard();
+    		startAdminCountdown();
+		};
+    </script>
+</body>
+</html>
 
