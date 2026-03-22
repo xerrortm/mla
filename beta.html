@@ -869,7 +869,7 @@ END:VCALENDAR`;
       		if (!project) return;
 
       		const encoded = encodeProject(project);
-      		const link = `${window.location.origin + window.location.pathname}?project=${encoded}`;
+      		const link = `${window.location.origin}/mla/share?project=${encoded}`;
 
       		navigator.clipboard.writeText(link);
       		showToast("Project link copied!");
@@ -881,7 +881,6 @@ END:VCALENDAR`;
 
       		try {
         		const decoded = decodeProject(encoded);
-				document.title = "Shared Project | GoggleTools";
 
         		const existingIndex = projects.findIndex(p => p.id === decoded.id);
         		if (existingIndex !== -1) projects[existingIndex] = decoded;
