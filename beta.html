@@ -1413,16 +1413,58 @@ function celebrationMode(mp3Url, bpm = 120) {
     }, 60000);
 }
 		function adminAbuse() {
-			showToast("xerrortm: WELCOME EVERYONE!!!!")
-			showToast("xerrortm: today ill be hosting the first ever ADMIN ABUSE")
-			showToast("xerrortm: lets start with a game...")
-    		brickBreakerMode();
-    		discoMode();
-    		startSnakeMode();
-			showToast("xerrortm: thank you everyone for joining us today!")
-			showToast("xerrortm: enjoy the new features and see you next time!")
-    		celebrationMode();
-		}
+    // Toast 1
+    setTimeout(() => {
+        showToast("xerrortm: WELCOME EVERYONE!!!!");
+
+        // Toast 2
+        setTimeout(() => {
+            showToast("xerrortm: today ill be hosting the first ever ADMIN ABUSE");
+
+            // Toast 3
+            setTimeout(() => {
+                showToast("xerrortm: lets start with a game...");
+
+                // Brick breaker after 1 min
+                setTimeout(() => {
+                    brickBreakerMode();
+
+                    // Disco after 1 min
+                    setTimeout(() => {
+                        discoMode();
+
+                        // Snake after 1 min
+                        setTimeout(() => {
+                            startSnakeMode();
+
+                            // Toasts after snake
+                            setTimeout(() => {
+                                showToast("xerrortm: thank you everyone for joining us today!");
+
+                                setTimeout(() => {
+                                    showToast("xerrortm: enjoy the new features and see you next time!");
+
+                                    // Celebration after 1 min
+                                    setTimeout(() => {
+                                        celebrationMode();
+                                    }, 60000);
+
+                                }, 6001);
+
+                            }, 6001);
+
+                        }, 60000);
+
+                    }, 60000);
+
+                }, 60000);
+
+            }, 6001);
+
+        }, 6001);
+
+    }, 6001);
+}
 	</script>
 </body>
 </html>
