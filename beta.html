@@ -321,7 +321,7 @@
     <div id="toast" class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-6 py-3 rounded-full shadow-2xl opacity-0 pointer-events-none transition-all duration-300 z-[200]">Action successful!</div>
 
     <script id = "main">
-        let projects = JSON.parse(localStorage.getItem('citeflow_projects')) || [{ id: 1, name: 'Main Bibliography', citations: [], createdAt: Date.now() }];
+        let projects = JSON.parse(localStorage.getItem('citeflow_projects')) || [{ id: 1, name: 'My Project', citations: [], createdAt: Date.now() }];
         let currentProjectId = null;
         let currentSourceType = 'website';
         const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
