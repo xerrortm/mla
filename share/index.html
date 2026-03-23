@@ -832,8 +832,11 @@ END:VCALENDAR`;
 
         		currentProjectId = decoded.id;
         		document.getElementById('current-project-name').innerText = decoded.name;
-        		hideAllViews();
-        		document.getElementById('view-project-details').classList.remove('view-hidden');
+
+				setTimeout(() => {
+        			hideAllViews();
+        			document.getElementById('view-project-details').classList.remove('view-hidden');
+				}, 1000);
 
         		if (decoded.citations && decoded.citations.length > 0) renderCitations();
         		else document.getElementById('citation-list').innerHTML = `<div class="p-16 text-center text-slate-400">No citations yet.</div>`;
