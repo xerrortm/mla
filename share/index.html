@@ -52,7 +52,6 @@
         <div class="flex justify-between items-end mb-10">
             <div>
                 <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">Shared Projects</h2>
-                <br>
             </div>
         </div>
 
@@ -63,8 +62,8 @@
                     <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl"><i class="fas fa-folder"></i></div>
                     <button onclick="deleteProject(event, 1773656135194)" class="project-actions opacity-0 p-2 text-slate-300 hover:text-red-500 transition-all"><i class="fas fa-trash-can"></i></button>
                 </div>
-                <h4 class="font-bold text-lg text-slate-900 mb-1">Random Stuff</h4>
-                <p class="text-slate-500 text-sm">1 Citations</p>
+                <h4 class="font-bold text-lg text-slate-900 mb-1">My Project</h4>
+                <p class="text-slate-500 text-sm">? Citations</p>
             </div>
         </div>
 
@@ -279,7 +278,7 @@
     <div id="toast" class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-6 py-3 rounded-full shadow-2xl opacity-0 pointer-events-none transition-all duration-300 z-[200]">Action successful!</div>
 
     <script>
-        let projects = JSON.parse(localStorage.getItem('citeflow_projects')) || [{ id: 1, name: 'Main Bibliography', citations: [], createdAt: Date.now() }];
+        let projects = JSON.parse(localStorage.getItem('citeflow_projects')) || [{ id: 1, name: 'My Projects', citations: [], createdAt: Date.now() }];
         let currentProjectId = null;
         let currentSourceType = 'website';
         const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
