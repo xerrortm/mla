@@ -872,17 +872,30 @@ END:VCALENDAR`;
 
     		URL.revokeObjectURL(url);
 		}
-    	function shareProjectLink() {
-      		if (!currentProjectId) return showToast("No project open!");
-        	const project = projects.find(p => p.id === currentProjectId);
-      		if (!project) return;
+    	async function shareProjectLink() {
+    		if (!currentProjectId) return showToast("No project open!");
 
-      		const encoded = encodeProject(project);
-      		const link = `${window.location.origin}/mla/share?project=${encoded}`;
+    		const project = projects.find(p => p.id === currentProjectId);
+    		if (!project) return;
+    		const encoded = encodeProject(project);
+    		const link = `${window.location.origin}/mla/share?project=${encoded}`;
 
-      		navigator.clipboard.writeText(link);
-      		showToast("Project link copied!");
-    	}
+    		if (navigator.share) {
+        		try {
+            		await navigator.share({
+                		title: project.name,
+                		text: "GoggleTools Project Sharing",
+                		url: link
+            		});
+					showToast("Shared successfully!");
+        		} catch (err) {
+            		console.log("Share cancelled or failed", err);
+        		}
+    		} else {
+        		navigator.clipboard.writeText(link);
+        		showToast("Project link copied!");
+    		}
+		}
 		function filterCitations() {
     		const input = document.getElementById("citation-search").value.trim();
    			const query = input.toLowerCase();
