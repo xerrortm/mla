@@ -634,6 +634,7 @@
         }
 
         function deleteCitation(id) {
+			 if (!confirm("Delete this citation? This cannot be undone.")) return;
             const pIdx = projects.findIndex(p => p.id === currentProjectId);
             projects[pIdx].citations = projects[pIdx].citations.filter(c => c.id !== id);
             saveToDisk();
@@ -650,7 +651,7 @@
             closeProjectModal();
             renderProjects();
         }
-        function deleteProject(e, id) { e.stopPropagation(); projects = projects.filter(p => p.id !== id); saveToDisk(); renderProjects(); }
+        function deleteProject(e, id) { e.stopPropagation(); if (!confirm("Delete this project and all its citations? This cannot be undone.")) return; projects = projects.filter(p => p.id !== id); saveToDisk(); renderProjects(); }
         function saveToDisk() { localStorage.setItem('citeflow_projects', JSON.stringify(projects)); }
         function showToast(m) { const t = document.getElementById('toast'); t.innerText = m; t.classList.add('opacity-100'); setTimeout(() => t.classList.remove('opacity-100'), 6000); }
         function cancelCitation() { openProject(currentProjectId); }
