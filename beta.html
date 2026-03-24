@@ -333,10 +333,11 @@
         const MLA_MONTHS = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "June", "July", "Aug.", "Sept.", "Oct.", "Nov.", "Dec."];
 
 		function encodeProject(project) {
-    		return btoa(encodeURIComponent(JSON.stringify(project)));
+    		return LZString.compressToEncodedURIComponent(JSON.stringify(project));
 		}
+
 		function decodeProject(encoded) {
-    		return JSON.parse(decodeURIComponent(atob(encoded)));
+    		return JSON.parse(LZString.decompressFromEncodedURIComponent(encoded));
 		}
         function hideAllViews() {
             document.querySelectorAll('section').forEach(s => s.classList.add('view-hidden'));
