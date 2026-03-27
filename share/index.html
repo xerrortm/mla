@@ -44,7 +44,7 @@
 
     <!-- DASHBOARD -->
     <section id="view-dashboard" class="max-w-6xl mx-auto px-6 py-12">
-		<div id="dashboard-search" class="mb-4">
+		<div id="dashboard-search" class="mb-4 hidden">
     		<input type="text" id="citation-search" placeholder="Search citations by MLA output..." 
         	class="w-full p-3 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" 
         	oninput="filterCitations()">
@@ -57,7 +57,17 @@
                 <br>
             </div>
         </div>
-
+		<!-- Projects Grid -->
+        <div id="project-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 hidden">
+            <div onclick="openProject(1773656135194)" class="project-card group bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:shadow-xl cursor-pointer relative transition-all">
+                <div class="flex items-start justify-between mb-8">
+                    <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl"><i class="fas fa-folder"></i></div>
+                    <button onclick="deleteProject(event, 1773656135194)" class="project-actions opacity-0 p-2 text-slate-300 hover:text-red-500 transition-all"><i class="fas fa-trash-can"></i></button>
+                </div>
+                <h4 class="font-bold text-lg text-slate-900 mb-1">Random Stuff</h4>
+                <p class="text-slate-500 text-sm">1 Citations</p>
+            </div>
+        </div>
     </section>
 
     <!-- PROJECT DETAILS -->
