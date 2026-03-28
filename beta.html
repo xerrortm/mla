@@ -101,24 +101,6 @@
             </div>
         </div>
 
-        <!-- Banner -->
-        <div class="mb-8 bg-blue-50 border border-blue-100 text-blue-800 px-6 py-4 rounded-2xl flex items-center justify-between shadow-sm">
-            <div class="flex items-center gap-3">
-                <div class="bg-blue-600 text-white w-10 h-10 flex items-center justify-center rounded-xl">
-                    <i class="fas fa-flask"></i>
-                </div>
-                <div>
-                    <h3 class="font-bold text-sm">Welcome to GoggleTools BETA</h3>
-                    <p class="text-sm text-blue-700">
-                        This is where you test out the new features.
-                    </p>
-                </div>
-            </div>
-            <button onclick="this.parentElement.remove()" class="text-blue-400 hover:text-blue-700">
-                <i class="fas fa-xmark"></i>
-            </button>
-        </div>
-
         <!-- Dashboard Header -->
         <div class="flex justify-between items-end mb-10">
             <div>
@@ -129,7 +111,7 @@
                     Why use GoggleTools
                 </button>
             </div>
-            <button onclick="openNewProjectModal()" class="bg-blue-600 text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 hover:bg-blue-700 transition-all">
+            <button id="new-project-btn" onclick="openNewProjectModal()" class="bg-blue-600 text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 hover:bg-blue-700 transition-all">
                 <i class="fas fa-plus"></i> New Project
             </button>
         </div>
@@ -158,7 +140,7 @@
                     <p class="text-sm text-slate-500">Works Cited</p>
                 </div>
             </div>
-            <button onclick="showCitationForm()" class="bg-blue-600 text-white px-6 py-3 rounded-xl font-bold shadow-lg hover:bg-blue-700 transition-all"><i class="fas fa-plus"></i> Add Citation</button>
+            <button id="add-citation-btn"onclick="showCitationForm()" class="bg-blue-600 text-white px-6 py-3 rounded-xl font-bold shadow-lg hover:bg-blue-700 transition-all"><i class="fas fa-plus"></i> Add Citation</button>
         </div>
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
             <div class="lg:col-span-8 bg-white rounded-2xl shadow-sm border border-slate-200 min-h-[400px]" id="citation-list"></div>
@@ -207,7 +189,7 @@
                     </div>
 
                     <div class="mt-8 flex gap-4">
-                        <button onclick="saveCitation()" class="flex-1 bg-blue-600 text-white py-4 rounded-xl font-bold shadow-lg hover:bg-blue-700">Save Citation</button>
+                        <button id="save-citation-btn" onclick="saveCitation()" class="flex-1 bg-blue-600 text-white py-4 rounded-xl font-bold shadow-lg hover:bg-blue-700">Save Citation</button>
                     </div>
                 </div>
             </div>
@@ -231,7 +213,7 @@
             <input type="text" id="project-name-input" placeholder="Project Name" class="w-full px-4 py-4 bg-slate-50 border border-slate-200 rounded-xl mb-6 outline-none">
             <div class="flex gap-3">
                 <button onclick="closeProjectModal()" class="flex-1 py-3 font-bold text-slate-500">Cancel</button>
-                <button onclick="createNewProject()" class="flex-1 py-3 font-bold bg-blue-600 text-white rounded-xl">Create</button>
+                <button id="create-project-btn" onclick="createNewProject()" class="flex-1 py-3 font-bold bg-blue-600 text-white rounded-xl">Create</button>
             </div>
         </div>
     </div>
