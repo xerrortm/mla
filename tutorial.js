@@ -25,9 +25,8 @@ function highlightElement(el) {
     highlightOverlay.style.zIndex = '9999';
     highlightOverlay.style.transition = 'all 0.1s ease';
     highlightOverlay.style.boxShadow = '0 0 20px 5px rgba(255,255,0,0.5)';
-    highlightOverlay.style.animation = 'pulseHighlight 1.5s infinite';
+    highlightOverlay.style.animation = 'pulseHighlight 2s infinite';
 
-    // Add shiny pseudo effect via before element
     highlightOverlay.style.background = 'linear-gradient(45deg, rgba(255,255,255,0.2), rgba(255,255,0,0.1))';
     highlightOverlay.style.backgroundSize = '200% 200%';
     highlightOverlay.style.animation += ', shine 2s infinite linear';
@@ -46,7 +45,6 @@ function highlightElement(el) {
     updatePosition();
     highlightInterval = setInterval(updatePosition, 50);
 
-    // Add the CSS animations dynamically
     if (!document.getElementById('highlight-animations')) {
         const style = document.createElement('style');
         style.id = 'highlight-animations';
@@ -124,40 +122,42 @@ function finishTutorial() {
     showConfetti();
     localStorage.setItem('newUser', 'false');
 }
+
 function showConfetti(x = window.innerWidth / 2, y = window.innerHeight / 2) {
-    const confettiCount = 50; // number of pieces
-    const colors = ['#FFD700','#FF4C4C','#4CFF4C','#4C6BFF','#FF4CFF','#FF924C'];
+    const confettiCount = 120; // more pieces
+    const colors = ['#FFD700','#FF4C4C','#4CFF4C','#4C6BFF','#FF4CFF','#FF924C','#00FFFF','#FFA500'];
 
     for (let i = 0; i < confettiCount; i++) {
         const confetti = document.createElement('div');
-        confetti.style.position = 'fixed';
-        confetti.style.width = `${Math.random() * 8 + 4}px`;
-        confetti.style.height = `${Math.random() * 12 + 4}px`;
+        const size = Math.random() * 12 + 6; // bigger pieces
+        confetti.style.width = `${size}px`;
+        confetti.style.height = `${size}px`;
         confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.position = 'fixed';
         confetti.style.borderRadius = '50%';
         confetti.style.pointerEvents = 'none';
         confetti.style.zIndex = 9999;
         confetti.style.top = `${y}px`;
         confetti.style.left = `${x}px`;
         confetti.style.opacity = 1;
-        confetti.style.transform = `translate(0,0) rotate(${Math.random() * 360}deg)`;
+        confetti.style.transform = `translate(0,0) rotate(${Math.random()*360}deg)`;
 
         document.body.appendChild(confetti);
 
+        // Burst direction and distance
         const angle = Math.random() * 2 * Math.PI;
-        const distance = Math.random() * 120 + 60; // how far it bursts
-        const rotate = (Math.random() - 0.5) * 720;
+        const distance = Math.random() * 300 + 150; // bigger spread
+        const rotate = (Math.random() - 0.5) * 1080; // more rotation
 
-        // Animate: burst out and slowly fall/fade
         confetti.animate([
-            { transform: `translate(0,0) rotate(0deg)`, opacity: 1 },
-            { transform: `translate(${Math.cos(angle)*distance}px, ${Math.sin(angle)*distance + 60}px) rotate(${rotate}deg)`, opacity: 0 }
+            { transform: `translate(0,0) rotate(0deg) scale(1)`, opacity: 1 },
+            { transform: `translate(${Math.cos(angle)*distance}px, ${Math.sin(angle)*distance + 100}px) rotate(${rotate}deg) scale(1.2)`, opacity: 0 }
         ], {
-            duration: 1500 + Math.random()*500,
+            duration: 2000 + Math.random() * 500,
             easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
             fill: 'forwards'
         });
 
-        setTimeout(() => confetti.remove(), 2000);
+        setTimeout(() => confetti.remove(), 2500);
     }
 }
