@@ -1,4 +1,3 @@
-// NEW USER TUTORIAL SCRIPT (DYNAMIC HIGHLIGHT)
 document.addEventListener('DOMContentLoaded', () => {
     if (!localStorage.getItem('newUser')) {
         localStorage.setItem('newUser', 'true');
@@ -20,11 +19,19 @@ function highlightElement(el) {
 
     highlightOverlay = document.createElement('div');
     highlightOverlay.style.position = 'absolute';
-    highlightOverlay.style.border = '4px solid yellow';
+    highlightOverlay.style.border = '6px solid orange';
     highlightOverlay.style.borderRadius = '8px';
     highlightOverlay.style.pointerEvents = 'none';
     highlightOverlay.style.zIndex = '9999';
     highlightOverlay.style.transition = 'all 0.1s ease';
+    highlightOverlay.style.boxShadow = '0 0 20px 5px rgba(255,255,0,0.5)';
+    highlightOverlay.style.animation = 'pulseHighlight 1.5s infinite';
+
+    // Add shiny pseudo effect via before element
+    highlightOverlay.style.background = 'linear-gradient(45deg, rgba(255,255,255,0.2), rgba(255,255,0,0.1))';
+    highlightOverlay.style.backgroundSize = '200% 200%';
+    highlightOverlay.style.animation += ', shine 2s infinite linear';
+
     document.body.appendChild(highlightOverlay);
 
     function updatePosition() {
@@ -38,6 +45,24 @@ function highlightElement(el) {
 
     updatePosition();
     highlightInterval = setInterval(updatePosition, 50);
+
+    // Add the CSS animations dynamically
+    if (!document.getElementById('highlight-animations')) {
+        const style = document.createElement('style');
+        style.id = 'highlight-animations';
+        style.innerHTML = `
+        @keyframes pulseHighlight {
+            0% { box-shadow: 0 0 10px 2px rgba(255,255,0,0.4); }
+            50% { box-shadow: 0 0 25px 8px rgba(255,255,0,0.7); }
+            100% { box-shadow: 0 0 10px 2px rgba(255,255,0,0.4); }
+        }
+        @keyframes shine {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        `;
+        document.head.appendChild(style);
+    }
 }
 
 function removeHighlight() {
@@ -99,29 +124,40 @@ function finishTutorial() {
     showConfetti();
     localStorage.setItem('newUser', 'false');
 }
+function showConfetti(x = window.innerWidth / 2, y = window.innerHeight / 2) {
+    const confettiCount = 50; // number of pieces
+    const colors = ['#FFD700','#FF4C4C','#4CFF4C','#4C6BFF','#FF4CFF','#FF924C'];
 
-// Simple Confetti
-function showConfetti() {
-    const confettiCount = 50;
     for (let i = 0; i < confettiCount; i++) {
-        const div = document.createElement('div');
-        div.style.position = 'fixed';
-        div.style.width = '8px';
-        div.style.height = '8px';
-        div.style.background = `hsl(${Math.random()*360}, 70%, 50%)`;
-        div.style.top = '0px';
-        div.style.left = `${Math.random() * window.innerWidth}px`;
-        div.style.zIndex = '9999';
-        div.style.borderRadius = '50%';
-        div.style.pointerEvents = 'none';
-        div.style.transition = 'transform 1s ease-out, opacity 1s';
-        document.body.appendChild(div);
+        const confetti = document.createElement('div');
+        confetti.style.position = 'fixed';
+        confetti.style.width = `${Math.random() * 8 + 4}px`;
+        confetti.style.height = `${Math.random() * 12 + 4}px`;
+        confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.borderRadius = '50%';
+        confetti.style.pointerEvents = 'none';
+        confetti.style.zIndex = 9999;
+        confetti.style.top = `${y}px`;
+        confetti.style.left = `${x}px`;
+        confetti.style.opacity = 1;
+        confetti.style.transform = `translate(0,0) rotate(${Math.random() * 360}deg)`;
 
-        setTimeout(() => {
-            div.style.transform = `translateY(${window.innerHeight + 50}px) rotate(${Math.random()*360}deg)`;
-            div.style.opacity = '0';
-        }, 50);
+        document.body.appendChild(confetti);
 
-        setTimeout(() => div.remove(), 1200);
+        const angle = Math.random() * 2 * Math.PI;
+        const distance = Math.random() * 120 + 60; // how far it bursts
+        const rotate = (Math.random() - 0.5) * 720;
+
+        // Animate: burst out and slowly fall/fade
+        confetti.animate([
+            { transform: `translate(0,0) rotate(0deg)`, opacity: 1 },
+            { transform: `translate(${Math.cos(angle)*distance}px, ${Math.sin(angle)*distance + 60}px) rotate(${rotate}deg)`, opacity: 0 }
+        ], {
+            duration: 1500 + Math.random()*500,
+            easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+            fill: 'forwards'
+        });
+
+        setTimeout(() => confetti.remove(), 2000);
     }
 }
