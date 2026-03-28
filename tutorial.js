@@ -123,12 +123,10 @@ function step2NewProjectInput() {
     removeTooltip();
     const projectInput = document.getElementById('project-name-input');
     highlightElement(projectInput);
-    showTooltip(projectInput, "Type a project name here.");
+    showTooltip(projectInput, "Type your project name here.");
 
     const createBtn = document.querySelector("#modal-project button[onclick='createNewProject()']");
-    createBtn.addEventListener('click', () => {
-        setTimeout(step3ProjectCard, 300);
-    }, { once: true });
+    createBtn.addEventListener('click',step3ProjectCard, { once: true });
 }
 
 function step3ProjectCard() {
@@ -138,7 +136,7 @@ function step3ProjectCard() {
     if (!firstCard) return;
 
     highlightElement(firstCard);
-    showTooltip(firstCard, "Click your project card to open it.");
+    showTooltip(firstCard, "Double click your project card to open it.");
     firstCard.addEventListener('click', step4AddCitation, { once: true });
 }
 
@@ -159,7 +157,7 @@ function step5SaveCitation() {
     const saveCitationBtn = document.querySelector("#view-add-citation button[onclick='saveCitation()']");
     if (!saveCitationBtn) return;
     highlightElement(saveCitationBtn);
-    showTooltip(saveCitationBtn, "Save your citation to finish this step!");
+    showTooltip(saveCitationBtn, "Save your citation to finish!");
 
     saveCitationBtn.addEventListener('click', finishTutorial, { once: true });
 }
