@@ -69,20 +69,61 @@ function removeHighlight() {
     highlightedElement = null;
     if (highlightInterval) clearInterval(highlightInterval);
 }
+let tutorialTooltip;
 
-// Tutorial Steps
+function showTooltip(el, text) {
+    removeTooltip();
+
+    tutorialTooltip = document.createElement('div');
+    tutorialTooltip.innerText = text;
+    tutorialTooltip.style.position = 'absolute';
+    tutorialTooltip.style.background = 'rgba(0,0,0,0.85)';
+    tutorialTooltip.style.color = '#fff';
+    tutorialTooltip.style.padding = '10px 14px';
+    tutorialTooltip.style.borderRadius = '10px';
+    tutorialTooltip.style.fontSize = '14px';
+    tutorialTooltip.style.maxWidth = '250px';
+    tutorialTooltip.style.pointerEvents = 'none';
+    tutorialTooltip.style.zIndex = 10000;
+    tutorialTooltip.style.boxShadow = '0 4px 15px rgba(0,0,0,0.3)';
+    tutorialTooltip.style.transition = 'all 0.2s ease';
+
+    document.body.appendChild(tutorialTooltip);
+
+    function updateTooltip() {
+        const rect = el.getBoundingClientRect();
+        tutorialTooltip.style.top = `${window.scrollY + rect.top - tutorialTooltip.offsetHeight - 10}px`;
+        tutorialTooltip.style.left = `${window.scrollX + rect.left + rect.width/2 - tutorialTooltip.offsetWidth/2}px`;
+    }
+
+    updateTooltip();
+    const tooltipInterval = setInterval(updateTooltip, 50);
+    tutorialTooltip.dataset.interval = tooltipInterval;
+}
+
+function removeTooltip() {
+    if (tutorialTooltip) {
+        clearInterval(tutorialTooltip.dataset.interval);
+        tutorialTooltip.remove();
+        tutorialTooltip = null;
+    }
+}
+
 function startTutorial() {
     const newProjectBtn = document.querySelector("button[onclick='openNewProjectModal()']");
     if (!newProjectBtn) return console.warn("New Project button not found!");
 
     highlightElement(newProjectBtn);
+    showTooltip(newProjectBtn, "Click here to create your first project!");
     newProjectBtn.addEventListener('click', step2NewProjectInput, { once: true });
 }
 
 function step2NewProjectInput() {
     removeHighlight();
+    removeTooltip();
     const projectInput = document.getElementById('project-name-input');
     highlightElement(projectInput);
+    showTooltip(projectInput, "Type a project name here.");
 
     const createBtn = document.querySelector("#modal-project button[onclick='createNewProject()']");
     createBtn.addEventListener('click', () => {
@@ -92,37 +133,43 @@ function step2NewProjectInput() {
 
 function step3ProjectCard() {
     removeHighlight();
+    removeTooltip();
     const firstCard = document.querySelector('#project-grid .project-card');
     if (!firstCard) return;
 
     highlightElement(firstCard);
+    showTooltip(firstCard, "Click your project card to open it.");
     firstCard.addEventListener('click', step4AddCitation, { once: true });
 }
 
 function step4AddCitation() {
     removeHighlight();
+    removeTooltip();
     const addCitationBtn = document.querySelector("#view-project-details button[onclick='showCitationForm()']");
     if (!addCitationBtn) return;
     highlightElement(addCitationBtn);
+    showTooltip(addCitationBtn, "Add a new citation here!");
 
     addCitationBtn.addEventListener('click', step5SaveCitation, { once: true });
 }
 
 function step5SaveCitation() {
     removeHighlight();
+    removeTooltip();
     const saveCitationBtn = document.querySelector("#view-add-citation button[onclick='saveCitation()']");
     if (!saveCitationBtn) return;
     highlightElement(saveCitationBtn);
+    showTooltip(saveCitationBtn, "Save your citation to finish this step!");
 
     saveCitationBtn.addEventListener('click', finishTutorial, { once: true });
 }
 
 function finishTutorial() {
     removeHighlight();
+    removeTooltip();
     showConfetti();
     localStorage.setItem('newUser', 'false');
 }
-
 function showConfetti(x = window.innerWidth / 2, y = window.innerHeight / 2) {
     const confettiCount = 120; // more pieces
     const colors = ['#FFD700','#FF4C4C','#4CFF4C','#4C6BFF','#FF4CFF','#FF924C','#00FFFF','#FFA500'];
