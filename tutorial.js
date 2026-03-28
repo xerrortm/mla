@@ -1,16 +1,53 @@
-// NEW USER TUTORIAL SCRIPT
+// NEW USER TUTORIAL SCRIPT (DYNAMIC HIGHLIGHT)
 document.addEventListener('DOMContentLoaded', () => {
     if (!localStorage.getItem('newUser')) {
         localStorage.setItem('newUser', 'true');
     }
 
-    // Start tutorial only if new user
     if (localStorage.getItem('newUser') === 'true') {
-        // Wait a tiny bit to make sure projects are rendered
         setTimeout(() => startTutorial(), 500);
     }
 });
 
+let highlightOverlay;
+let highlightedElement;
+let highlightInterval;
+
+function highlightElement(el) {
+    removeHighlight();
+    if (!el) return;
+    highlightedElement = el;
+
+    highlightOverlay = document.createElement('div');
+    highlightOverlay.style.position = 'absolute';
+    highlightOverlay.style.border = '4px solid yellow';
+    highlightOverlay.style.borderRadius = '8px';
+    highlightOverlay.style.pointerEvents = 'none';
+    highlightOverlay.style.zIndex = '9999';
+    highlightOverlay.style.transition = 'all 0.1s ease';
+    document.body.appendChild(highlightOverlay);
+
+    function updatePosition() {
+        if (!highlightedElement) return;
+        const rect = highlightedElement.getBoundingClientRect();
+        highlightOverlay.style.width = rect.width + 'px';
+        highlightOverlay.style.height = rect.height + 'px';
+        highlightOverlay.style.top = window.scrollY + rect.top + 'px';
+        highlightOverlay.style.left = window.scrollX + rect.left + 'px';
+    }
+
+    updatePosition();
+    highlightInterval = setInterval(updatePosition, 50);
+}
+
+function removeHighlight() {
+    if (highlightOverlay) highlightOverlay.remove();
+    highlightOverlay = null;
+    highlightedElement = null;
+    if (highlightInterval) clearInterval(highlightInterval);
+}
+
+// Tutorial Steps
 function startTutorial() {
     const newProjectBtn = document.querySelector("button[onclick='openNewProjectModal()']");
     if (!newProjectBtn) return console.warn("New Project button not found!");
@@ -26,15 +63,12 @@ function step2NewProjectInput() {
 
     const createBtn = document.querySelector("#modal-project button[onclick='createNewProject()']");
     createBtn.addEventListener('click', () => {
-        // Wait for renderProjects to finish
         setTimeout(step3ProjectCard, 300);
     }, { once: true });
 }
 
 function step3ProjectCard() {
     removeHighlight();
-
-    // pick the top-left project card (first in grid)
     const firstCard = document.querySelector('#project-grid .project-card');
     if (!firstCard) return;
 
@@ -66,32 +100,7 @@ function finishTutorial() {
     localStorage.setItem('newUser', 'false');
 }
 
-// HIGHLIGHT AND CONFETTI UTILS
-let highlightOverlay;
-function highlightElement(el) {
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
-    highlightOverlay = document.createElement('div');
-    highlightOverlay.style.position = 'fixed';
-    highlightOverlay.style.top = rect.top + 'px';
-    highlightOverlay.style.left = rect.left + 'px';
-    highlightOverlay.style.width = rect.width + 'px';
-    highlightOverlay.style.height = rect.height + 'px';
-    highlightOverlay.style.border = '4px solid #3b82f6';
-    highlightOverlay.style.borderRadius = '8px';
-    highlightOverlay.style.pointerEvents = 'none';
-    highlightOverlay.style.zIndex = '9999';
-    highlightOverlay.style.transition = 'all 0.2s';
-    document.body.appendChild(highlightOverlay);
-}
-
-function removeHighlight() {
-    if (highlightOverlay) {
-        highlightOverlay.remove();
-        highlightOverlay = null;
-    }
-}
-
+// Simple Confetti
 function showConfetti() {
     const confettiCount = 50;
     for (let i = 0; i < confettiCount; i++) {
