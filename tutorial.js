@@ -1,18 +1,21 @@
 // NEW USER TUTORIAL SCRIPT
-if (!localStorage.getItem('newUser')) {
-    localStorage.setItem('newUser', 'true');
-}
+document.addEventListener('DOMContentLoaded', () => {
+    if (!localStorage.getItem('newUser')) {
+        localStorage.setItem('newUser', 'true');
+    }
 
-if (localStorage.getItem('newUser') === 'true') {
-    startTutorial();
-}
+    // Start tutorial only if new user
+    if (localStorage.getItem('newUser') === 'true') {
+        // Wait a tiny bit to make sure projects are rendered
+        setTimeout(() => startTutorial(), 500);
+    }
+});
 
 function startTutorial() {
-    // STEP 1: Highlight "New Project" button
     const newProjectBtn = document.querySelector("button[onclick='openNewProjectModal()']");
-    highlightElement(newProjectBtn);
+    if (!newProjectBtn) return console.warn("New Project button not found!");
 
-    // Wait for click on New Project button
+    highlightElement(newProjectBtn);
     newProjectBtn.addEventListener('click', step2NewProjectInput, { once: true });
 }
 
@@ -21,26 +24,28 @@ function step2NewProjectInput() {
     const projectInput = document.getElementById('project-name-input');
     highlightElement(projectInput);
 
-    // Wait for typing and clicking "Create"
     const createBtn = document.querySelector("#modal-project button[onclick='createNewProject()']");
-    createBtn.addEventListener('click', step3ProjectCard, { once: true });
+    createBtn.addEventListener('click', () => {
+        // Wait for renderProjects to finish
+        setTimeout(step3ProjectCard, 300);
+    }, { once: true });
 }
 
 function step3ProjectCard() {
     removeHighlight();
 
-    // Highlight the top-left project card
+    // pick the top-left project card (first in grid)
     const firstCard = document.querySelector('#project-grid .project-card');
     if (!firstCard) return;
-    highlightElement(firstCard);
 
-    // Wait for click on the project card
+    highlightElement(firstCard);
     firstCard.addEventListener('click', step4AddCitation, { once: true });
 }
 
 function step4AddCitation() {
     removeHighlight();
     const addCitationBtn = document.querySelector("#view-project-details button[onclick='showCitationForm()']");
+    if (!addCitationBtn) return;
     highlightElement(addCitationBtn);
 
     addCitationBtn.addEventListener('click', step5SaveCitation, { once: true });
@@ -49,6 +54,7 @@ function step4AddCitation() {
 function step5SaveCitation() {
     removeHighlight();
     const saveCitationBtn = document.querySelector("#view-add-citation button[onclick='saveCitation()']");
+    if (!saveCitationBtn) return;
     highlightElement(saveCitationBtn);
 
     saveCitationBtn.addEventListener('click', finishTutorial, { once: true });
@@ -57,17 +63,14 @@ function step5SaveCitation() {
 function finishTutorial() {
     removeHighlight();
     showConfetti();
-
-    // Tutorial done
     localStorage.setItem('newUser', 'false');
 }
 
-// UTILITY: Highlight an element
+// HIGHLIGHT AND CONFETTI UTILS
 let highlightOverlay;
 function highlightElement(el) {
     if (!el) return;
     const rect = el.getBoundingClientRect();
-    
     highlightOverlay = document.createElement('div');
     highlightOverlay.style.position = 'fixed';
     highlightOverlay.style.top = rect.top + 'px';
@@ -82,7 +85,6 @@ function highlightElement(el) {
     document.body.appendChild(highlightOverlay);
 }
 
-// Remove highlight
 function removeHighlight() {
     if (highlightOverlay) {
         highlightOverlay.remove();
@@ -90,7 +92,6 @@ function removeHighlight() {
     }
 }
 
-// SIMPLE CONFETTI
 function showConfetti() {
     const confettiCount = 50;
     for (let i = 0; i < confettiCount; i++) {
