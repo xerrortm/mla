@@ -32,10 +32,6 @@
             <h1 class="text-xl font-bold tracking-tight text-slate-900">GoggleTools</h1>
         </div>  
         <div class="flex items-center gap-4">
-            <button onclick="location.href='/mla'" class="text-sm font-semibold text-slate-600 hover:text-orange-700 px-3 py-2 flex items-center gap-2">
-                <i class="fas fa-undo"></i>
-                Back
-            </button>
             <button onclick="location.href='/mla/about.html'" class="text-sm font-semibold text-slate-600 hover:text-blue-600 px-3 py-2">
                 About
             </button>
@@ -76,7 +72,7 @@
                 <button onclick="location.href='/mla'" class="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-500 hover:text-blue-600"><i class="fas fa-arrow-left"></i></button>
                 <div>
                     <h2 id="current-project-name" class="text-2xl font-bold text-slate-900">Project Name</h2>
-                    <p class="text-sm text-slate-500">Citations</p>
+                    <p class="text-sm text-slate-500">Works Cited</p>
                 </div>
             </div>
             <button onclick="showCitationForm()" class="bg-blue-600 text-white px-6 py-3 rounded-xl font-bold shadow-lg hover:bg-blue-700 transition-all"><i class="fas fa-plus"></i> Add Citation</button>
@@ -777,7 +773,7 @@
 				setTimeout(() => {
         			hideAllViews();
         			document.getElementById('view-project-details').classList.remove('view-hidden');
-				}, 1000);
+				}, 1500);
 
         		if (decoded.citations && decoded.citations.length > 0) renderCitations();
         		else document.getElementById('citation-list').innerHTML = `<div class="p-16 text-center text-slate-400">No citations yet.</div>`;
