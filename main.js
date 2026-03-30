@@ -722,7 +722,7 @@ function handleGoggle(text) {
         res = "GoggleTools is a world's first offline MLA citation tool with projects and modern UI!";
     }
     else if (text.includes("how") && text.includes("goggletools")) {
-        res = "Click teh button here to create a project, add a citation and you can see the output in MLA format!";
+        res = "Click the button here to create a project, add a citation and you can see the output in MLA format!";
     }
     else if (text.includes("project")) {
         res = "Projects store your citations. Click 'New Project' to create one.";
