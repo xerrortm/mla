@@ -643,3 +643,109 @@ END:VCALENDAR`;
     		showDashboard();
     		startAdminCountdown();
 		};
+
+const icon = document.getElementById("goggle-icon");
+const panel = document.getElementById("goggle-panel");
+const input = document.getElementById("goggle-input");
+const reply = document.getElementById("goggle-reply");
+const suggests = document.querySelectorAll(".goggle-suggest");
+
+let open = false;
+icon.classList.add("idle");
+
+icon.onclick = (e) => {
+    e.stopPropagation();
+    open = !open;
+
+    if (open) {
+        icon.classList.remove("idle");
+        icon.classList.add("active");
+        panel.classList.add("show");
+        panel.classList.remove("hidden");
+        input.focus();
+    } else {
+        closeGoggle();
+    }
+};
+
+function closeGoggle() {
+    open = false;
+    icon.classList.remove("active");
+    icon.classList.add("deactivate");
+
+    panel.classList.remove("show");
+    panel.classList.add("hidden");
+    reply.classList.remove("show");
+
+    setTimeout(() => {
+        icon.classList.remove("deactivate");
+        icon.classList.add("idle");
+    }, 300);
+}
+
+document.addEventListener("click", (e) => {
+    if (!document.getElementById("goggle-agent").contains(e.target)) {
+        closeGoggle();
+    }
+});
+
+suggests.forEach(btn => {
+    btn.onclick = (e) => {
+        e.stopPropagation();
+        input.value = btn.innerText;
+        input.focus();
+    };
+});
+
+input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+        handleGoggle(input.value.toLowerCase());
+        input.value = "";
+    }
+});
+
+let awaitingChatGPT = false;
+
+function handleGoggle(text) {
+    text = text.toLowerCase().trim();
+
+    if (awaitingChatGPT && (text === "ok" || text === "y" || text === "yes")) {
+        window.location.href = "https://chatgpt.com";
+        return;
+    }
+
+    awaitingChatGPT = false;
+
+    let res = "";
+
+    if (text.includes("what") && text.includes("goggletools")) {
+        res = "GoggleTools is a world's first offline MLA citation tool with projects and modern UI!";
+    }
+    else if (text.includes("how") && text.includes("goggletools")) {
+        res = "Click teh button here to create a project, add a citation and you can see the output in MLA format!";
+    }
+    else if (text.includes("project")) {
+        res = "Projects store your citations. Click 'New Project' to create one.";
+    }
+    else if (text.includes("citation")) {
+        res = "Click 'Add Citation' inside a project, fill in the form as much information as you can find, and click save to check the MLA output.";
+    }
+    else if (text.includes("mla")) {
+        res = "MLA is a citation format used for academic writing.";
+    }
+	else if (text.includes("noodletools")) {
+        res = "NoodleTools? Nah, it's outdated, slow and has an old interface.";
+    }
+    else {
+        res = "Ask ChatGPT?";
+        awaitingChatGPT = true;
+    }
+
+    showReply(res);
+}
+function showReply(text) {
+    setTimeout(() => {
+        reply.textContent = text;
+        reply.classList.add("show");
+    }, 1000);
+}
