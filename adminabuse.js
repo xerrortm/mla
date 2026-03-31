@@ -485,6 +485,225 @@ function celebrationMode(mp3Url, bpm = 120) {
         if (audio) audio.pause();
     }, 60000);
 }
+function toxic(duration = 60000) {
+    const allElements = document.querySelectorAll("*");
+    const originalStyles = new Map();
+
+    // store original styles for backgrounds and borders ONLY
+    allElements.forEach(el => {
+        const style = window.getComputedStyle(el);
+        originalStyles.set(el, {
+            backgroundColor: style.backgroundColor,
+            borderColor: style.borderColor,
+            transition: el.style.transition
+        });
+        el.style.transition = "background-color 1s linear, border-color 1s linear";
+        el.style.backgroundColor = "#000"; // start black
+        el.style.borderColor = "#000";
+    });
+
+    // particle overlay
+    const particleDiv = document.createElement("div");
+    particleDiv.style.position = "fixed";
+    particleDiv.style.top = "0";
+    particleDiv.style.left = "0";
+    particleDiv.style.width = "100%";
+    particleDiv.style.height = "100%";
+    particleDiv.style.pointerEvents = "none";
+    particleDiv.style.zIndex = "99999";
+    document.body.appendChild(particleDiv);
+
+    // spawn glowing particles
+    let particleInterval = setInterval(() => {
+        const p = document.createElement("div");
+        const size = Math.random() * 6 + 4;
+        p.style.width = `${size}px`;
+        p.style.height = `${size}px`;
+        p.style.borderRadius = "50%";
+        p.style.background = "limegreen";
+        p.style.boxShadow = "0 0 10px 4px limegreen";
+        p.style.position = "fixed";
+        p.style.left = `${Math.random() * window.innerWidth}px`;
+        p.style.top = `${Math.random() * window.innerHeight}px`;
+        p.style.opacity = 1;
+        particleDiv.appendChild(p);
+
+        const angle = Math.random() * 2 * Math.PI;
+        const dist = Math.random() * 200 + 50;
+        p.animate([
+            { transform: `translate(0,0)`, opacity: 1 },
+            { transform: `translate(${Math.cos(angle)*dist}px, ${Math.sin(angle)*dist}px)`, opacity: 0 }
+        ], { duration: 3000 + Math.random()*2000, easing: 'ease-out', fill: 'forwards' });
+
+        setTimeout(() => p.remove(), 5000);
+    }, 150);
+
+    // after 10 sec, make background green and overlay smoke
+    setTimeout(() => {
+        allElements.forEach(el => {
+            el.style.backgroundColor = "#003300"; // dark green background
+            el.style.borderColor = "#00ff00";     // green borders
+        });
+
+        const smoke = document.createElement("div");
+        smoke.style.position = "fixed";
+        smoke.style.top = "0";
+        smoke.style.left = "0";
+        smoke.style.width = "100%";
+        smoke.style.height = "100%";
+        smoke.style.pointerEvents = "none";
+        smoke.style.zIndex = "99998";
+        smoke.style.background = "radial-gradient(circle, rgba(0,255,0,0.1) 0%, transparent 70%)";
+        smoke.style.mixBlendMode = "screen";
+        smoke.style.animation = "smokeMove 5s infinite alternate";
+        document.body.appendChild(smoke);
+
+        const styleTag = document.createElement("style");
+        styleTag.innerHTML = `
+            @keyframes smokeMove {
+                0% { transform: translate(0,0) scale(1); }
+                50% { transform: translate(20px,10px) scale(1.1); }
+                100% { transform: translate(-20px,-10px) scale(1); }
+            }
+        `;
+        document.head.appendChild(styleTag);
+    }, 10000);
+
+    // restore after duration
+    setTimeout(() => {
+        clearInterval(particleInterval);
+        particleDiv.remove();
+        allElements.forEach(el => {
+            const original = originalStyles.get(el);
+            if (!original) return;
+            el.style.backgroundColor = original.backgroundColor;
+            el.style.borderColor = original.borderColor;
+            el.style.transition = original.transition;
+        });
+    }, duration);
+}
+function strike() {
+    const duration = 94000;
+    let audio;
+    try {
+        audio = new Audio("https://raw.githubusercontent.com/xerrortm/mla/refs/heads/main/strike.m4a");
+        audio.play().catch(() => {});
+    } catch (e) {}
+
+    const overlay = document.createElement('div');
+    overlay.style.position = "fixed";
+    overlay.style.top = "0";
+    overlay.style.left = "0";
+    overlay.style.width = "100vw";
+    overlay.style.height = "100vh";
+    overlay.style.zIndex = "99999";
+    overlay.style.pointerEvents = "none";
+    overlay.style.mixBlendMode = "color-dodge";
+    overlay.style.opacity = "0.5";
+    document.body.appendChild(overlay);
+
+    const style = document.createElement('style');
+    style.innerHTML = `
+    @keyframes overlayColorShift {
+        0%   { background: rgba(255,0,0,0.4); }
+        25%  { background: rgba(0,255,255,0.4); }
+        50%  { background: rgba(255,0,255,0.4); }
+        75%  { background: rgba(0,255,0,0.4); }
+        100% { background: rgba(255,0,0,0.4); }
+    }
+
+    @keyframes overlayFlash {
+        0%,100% { opacity: 0.3; }
+        50% { opacity: 0.8; }
+    }
+
+    @keyframes violentShake {
+        0% { transform: translate(0,0) rotate(0); }
+        20% { transform: translate(-25px, 20px) rotate(-6deg); }
+        40% { transform: translate(25px, -20px) rotate(6deg); }
+        60% { transform: translate(-15px, 10px) rotate(-4deg); }
+        80% { transform: translate(15px, -10px) rotate(4deg); }
+        100% { transform: translate(0,0) rotate(0); }
+    }
+
+    @keyframes lightningFlash {
+        0%,100% { opacity: 0; }
+        50% { opacity: 1; }
+    }
+    `;
+    document.head.appendChild(style);
+
+    overlay.style.animation = "overlayColorShift 1s infinite linear, overlayFlash 0.3s infinite";
+
+    let wrapper = document.createElement('div');
+    while (document.body.firstChild) {
+        wrapper.appendChild(document.body.firstChild);
+    }
+    wrapper.style.animation = "violentShake 0.8s ease";
+    wrapper.style.animationFillMode = "forwards";
+    document.body.appendChild(wrapper);
+
+const lightningInterval = setInterval(() => {
+    const bolt = document.createElement('div');
+    bolt.style.position = 'fixed';
+    bolt.style.top = '0';
+    bolt.style.left = Math.random() * window.innerWidth + 'px';
+    bolt.style.width = '4px';
+    bolt.style.height = '100vh';
+    bolt.style.background = 'white';
+    bolt.style.zIndex = '99998';
+    bolt.style.transform = `rotate(${(Math.random()*20)-10}deg)`;
+    
+    // Glow effect
+    bolt.style.boxShadow = "0 0 20px 5px white";
+    bolt.style.filter = "drop-shadow(0 0 20px white)";
+    
+    bolt.style.animation = 'lightningFlash 0.15s ease';
+    document.body.appendChild(bolt);
+
+    setTimeout(() => bolt.remove(), 150);
+}, 250);
+
+    const particleInterval = setInterval(() => {
+        const p = document.createElement('div');
+        p.style.position = 'fixed';
+        p.style.width = '6px';
+        p.style.height = '6px';
+        p.style.borderRadius = '50%';
+        p.style.background = `hsl(${Math.random()*360},100%,50%)`;
+        p.style.top = Math.random() * window.innerHeight + 'px';
+        p.style.left = Math.random() * window.innerWidth + 'px';
+        p.style.zIndex = 99997;
+        p.style.pointerEvents = "none";
+
+        document.body.appendChild(p);
+        p.animate([
+            { transform: 'translateY(0)', opacity: 1 },
+            { transform: 'translateY(-120px)', opacity: 0 }
+        ], {
+            duration: 1200,
+            easing: 'ease-out'
+        });
+
+        setTimeout(() => p.remove(), 1200);
+    }, 80);
+
+setTimeout(() => {
+    clearInterval(lightningInterval);
+    clearInterval(particleInterval);
+
+    overlay.remove();
+    style.remove();
+
+    wrapper.style.animation = "";
+    wrapper.style.animationFillMode = "";
+    document.body.style.transform = "";
+
+    if (audio) {
+        try { audio.pause(); } catch (e) {}
+    }
+}, duration);
+}
 		function adminAbuse() {
         showToast("xerrortm: WELCOME EVERYONE!!!!");
 
