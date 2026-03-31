@@ -1,5 +1,4 @@
-
-		function startSnakeMode() {
+function startSnakeMode() {
 
     const canvas = document.createElement("canvas");
     canvas.style.position = "fixed";
@@ -489,7 +488,7 @@ function toxic(duration = 60000) {
     const allElements = document.querySelectorAll("*");
     const originalStyles = new Map();
 
-    // store original styles for backgrounds and borders ONLY
+    // store original styles for backgrounds and borders
     allElements.forEach(el => {
         const style = window.getComputedStyle(el);
         originalStyles.set(el, {
@@ -497,12 +496,13 @@ function toxic(duration = 60000) {
             borderColor: style.borderColor,
             transition: el.style.transition
         });
-        el.style.transition = "background-color 1s linear, border-color 1s linear";
-        el.style.backgroundColor = "#000"; // start black
+        el.style.transition = "background-color 3s linear, border-color 1s linear";
+        el.style.backgroundColor = "#000";
         el.style.borderColor = "#000";
     });
+    showToast("The toxical spirit is coming to GoggleTools...");
 
-    // particle overlay
+    // Particle overlay (optional green sparks)
     const particleDiv = document.createElement("div");
     particleDiv.style.position = "fixed";
     particleDiv.style.top = "0";
@@ -513,19 +513,16 @@ function toxic(duration = 60000) {
     particleDiv.style.zIndex = "99999";
     document.body.appendChild(particleDiv);
 
-    // spawn glowing particles
     let particleInterval = setInterval(() => {
         const p = document.createElement("div");
         const size = Math.random() * 6 + 4;
-        p.style.width = `${size}px`;
-        p.style.height = `${size}px`;
+        p.style.width = p.style.height = `${size}px`;
         p.style.borderRadius = "50%";
         p.style.background = "limegreen";
         p.style.boxShadow = "0 0 10px 4px limegreen";
         p.style.position = "fixed";
         p.style.left = `${Math.random() * window.innerWidth}px`;
         p.style.top = `${Math.random() * window.innerHeight}px`;
-        p.style.opacity = 1;
         particleDiv.appendChild(p);
 
         const angle = Math.random() * 2 * Math.PI;
@@ -538,41 +535,159 @@ function toxic(duration = 60000) {
         setTimeout(() => p.remove(), 5000);
     }, 150);
 
-    // after 10 sec, make background green and overlay smoke
     setTimeout(() => {
         allElements.forEach(el => {
-            el.style.backgroundColor = "#003300"; // dark green background
-            el.style.borderColor = "#00ff00";     // green borders
+            el.style.backgroundColor = "#003300";
+            el.style.borderColor = "#00ff00";
         });
 
-        const smoke = document.createElement("div");
-        smoke.style.position = "fixed";
-        smoke.style.top = "0";
-        smoke.style.left = "0";
-        smoke.style.width = "100%";
-        smoke.style.height = "100%";
-        smoke.style.pointerEvents = "none";
-        smoke.style.zIndex = "99998";
-        smoke.style.background = "radial-gradient(circle, rgba(0,255,0,0.1) 0%, transparent 70%)";
-        smoke.style.mixBlendMode = "screen";
-        smoke.style.animation = "smokeMove 5s infinite alternate";
-        document.body.appendChild(smoke);
+        const projects = document.querySelectorAll(".project-card");
+        if (!projects.length) return;
+        const toxicProject = projects[Math.floor(Math.random() * projects.length)];
+        showToast(`Your project "${toxicProject.innerText}" has turned toxic!`);
 
-        const styleTag = document.createElement("style");
-        styleTag.innerHTML = `
-            @keyframes smokeMove {
-                0% { transform: translate(0,0) scale(1); }
-                50% { transform: translate(20px,10px) scale(1.1); }
-                100% { transform: translate(-20px,-10px) scale(1); }
+        // Smoke coming out of project (huge)
+        const rect = toxicProject.getBoundingClientRect();
+        const smokeDiv = document.createElement("div");
+        smokeDiv.style.position = "absolute";
+        smokeDiv.style.top = `${rect.top}px`;
+        smokeDiv.style.left = `${rect.left + rect.width/2}px`;
+        smokeDiv.style.width = "0px";
+        smokeDiv.style.height = "0px";
+        smokeDiv.style.pointerEvents = "none";
+        smokeDiv.style.zIndex = "10001";
+        document.body.appendChild(smokeDiv);
+
+        const smokeInterval = setInterval(() => {
+            const s = document.createElement("div");
+            const size = Math.random() * 120 + 80; // MASSIVE smoke
+            s.style.width = s.style.height = `${size}px`;
+            s.style.background = `radial-gradient(circle, rgba(0,255,0,0.4), transparent 70%)`;
+            s.style.borderRadius = "50%";
+            s.style.position = "absolute";
+            s.style.left = `${Math.random()*120 - 60}px`;
+            s.style.top = `0px`;
+            s.style.opacity = 0.6;
+            smokeDiv.appendChild(s);
+
+            s.animate([
+                { transform: 'translateY(0px) scale(0.5)', opacity: 0.6 },
+                { transform: `translateY(-${250 + Math.random()*100}px) scale(2)`, opacity: 0 }
+            ], { duration: 4000 + Math.random()*1000, easing: 'ease-out', fill: 'forwards' });
+
+            setTimeout(() => s.remove(), 5000);
+        }, 200);
+
+        // Monster battle
+        toxicProject.addEventListener("click", function monsterBattle() {
+            let clicks = 0;
+            const maxClicks = 150;
+
+            // Large Canvas Monster
+            const monster = document.createElement("canvas");
+            monster.width = 300;
+            monster.height = 300;
+            monster.style.position = "fixed";
+            monster.style.top = "50%";
+            monster.style.left = "50%";
+            monster.style.transform = "translate(-50%,-50%)";
+            monster.style.zIndex = "10002";
+            monster.style.cursor = "pointer";
+            document.body.appendChild(monster);
+
+            const ctx = monster.getContext("2d");
+
+            // Health bar
+            const healthBar = document.createElement("div");
+            healthBar.style.position = "fixed";
+            healthBar.style.top = "calc(50% - 170px)";
+            healthBar.style.left = "50%";
+            healthBar.style.transform = "translateX(-50%)";
+            healthBar.style.width = "200px";
+            healthBar.style.height = "20px";
+            healthBar.style.backgroundColor = "#555";
+            healthBar.style.border = "2px solid #000";
+            healthBar.style.borderRadius = "10px";
+            healthBar.style.zIndex = "10003";
+            document.body.appendChild(healthBar);
+
+            const healthFill = document.createElement("div");
+            healthFill.style.height = "100%";
+            healthFill.style.width = "100%";
+            healthFill.style.backgroundColor = "#0f0";
+            healthFill.style.borderRadius = "8px";
+            healthBar.appendChild(healthFill);
+
+            function drawMonster() {
+                ctx.clearRect(0,0,300,300);
+                // Strong body
+                ctx.fillStyle = "#004d00";
+                ctx.beginPath();
+                ctx.ellipse(150, 170, 80, 100, 0, 0, Math.PI*2);
+                ctx.fill();
+                // Eyes
+                ctx.fillStyle = "red";
+                ctx.beginPath();
+                ctx.arc(110, 130, 15, 0, Math.PI*2);
+                ctx.fill();
+                ctx.beginPath();
+                ctx.arc(190, 130, 15, 0, Math.PI*2);
+                ctx.fill();
+                // Mouth (serious)
+                ctx.fillStyle = "#000";
+                ctx.fillRect(110, 210, 80, 15);
+                // Horns
+                ctx.fillStyle = "#000";
+                ctx.beginPath();
+                ctx.moveTo(90, 80);
+                ctx.lineTo(110, 110);
+                ctx.lineTo(90, 110);
+                ctx.fill();
+                ctx.beginPath();
+                ctx.moveTo(210, 80);
+                ctx.lineTo(190, 110);
+                ctx.lineTo(210, 110);
+                ctx.fill();
             }
-        `;
-        document.head.appendChild(styleTag);
+
+            drawMonster();
+
+            monster.onclick = () => {
+                clicks++;
+                // Damage animation: shake, scale, screen shake
+                monster.style.transition = "transform 0.1s";
+                monster.style.transform = "translate(calc(-50% + 5px),-50%) scale(1.05) rotate(-5deg)";
+                setTimeout(() => {
+                    monster.style.transform = "translate(-50%,-50%) scale(1) rotate(0deg)";
+                }, 100);
+
+                // Screen shake
+                const shakeAmount = 10;
+                document.body.style.transition = "transform 0.05s";
+                document.body.style.transform = `translate(${(Math.random()-0.5)*shakeAmount}px, ${(Math.random()-0.5)*shakeAmount}px)`;
+                setTimeout(() => {
+                    document.body.style.transform = "translate(0,0)";
+                }, 50);
+
+                // Update health
+                healthFill.style.width = `${Math.max(0, 100 - (clicks/maxClicks)*100)}%`;
+
+                if (clicks >= maxClicks) {
+                    showToast("You defeated the monster!");
+                    monster.remove();
+                    healthBar.remove();
+                    clearInterval(smokeInterval);
+                    smokeDiv.remove();
+                }
+            };
+
+            toxicProject.removeEventListener("click", monsterBattle);
+        });
+
     }, 10000);
 
-    // restore after duration
-    setTimeout(() => {
+    const normalEndTimeout = setTimeout(() => {
         clearInterval(particleInterval);
-        particleDiv.remove();
         allElements.forEach(el => {
             const original = originalStyles.get(el);
             if (!original) return;
