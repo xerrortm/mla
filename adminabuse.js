@@ -488,7 +488,6 @@ function toxic(duration = 60000) {
     const allElements = document.querySelectorAll("*");
     const originalStyles = new Map();
 
-    // store original styles for backgrounds and borders
     allElements.forEach(el => {
         const style = window.getComputedStyle(el);
         originalStyles.set(el, {
@@ -502,7 +501,6 @@ function toxic(duration = 60000) {
     });
     showToast("The toxical spirit is coming to GoggleTools...");
 
-    // Particle overlay (optional green sparks)
     const particleDiv = document.createElement("div");
     particleDiv.style.position = "fixed";
     particleDiv.style.top = "0";
@@ -546,7 +544,6 @@ function toxic(duration = 60000) {
         const toxicProject = projects[Math.floor(Math.random() * projects.length)];
         showToast(`Your project "${toxicProject.innerText}" has turned toxic!`);
 
-        // Smoke coming out of project (huge)
         const rect = toxicProject.getBoundingClientRect();
         const smokeDiv = document.createElement("div");
         smokeDiv.style.position = "absolute";
@@ -560,7 +557,7 @@ function toxic(duration = 60000) {
 
         const smokeInterval = setInterval(() => {
             const s = document.createElement("div");
-            const size = Math.random() * 120 + 80; // MASSIVE smoke
+            const size = Math.random() * 120 + 80;
             s.style.width = s.style.height = `${size}px`;
             s.style.background = `radial-gradient(circle, rgba(0,255,0,0.4), transparent 70%)`;
             s.style.borderRadius = "50%";
@@ -578,12 +575,10 @@ function toxic(duration = 60000) {
             setTimeout(() => s.remove(), 5000);
         }, 200);
 
-        // Monster battle
         toxicProject.addEventListener("click", function monsterBattle() {
             let clicks = 0;
             const maxClicks = 150;
 
-            // Large Canvas Monster
             const monster = document.createElement("canvas");
             monster.width = 300;
             monster.height = 300;
@@ -597,7 +592,6 @@ function toxic(duration = 60000) {
 
             const ctx = monster.getContext("2d");
 
-            // Health bar
             const healthBar = document.createElement("div");
             healthBar.style.position = "fixed";
             healthBar.style.top = "calc(50% - 170px)";
@@ -633,7 +627,7 @@ function toxic(duration = 60000) {
                 ctx.beginPath();
                 ctx.arc(190, 130, 15, 0, Math.PI*2);
                 ctx.fill();
-                // Mouth (serious)
+                // Mouth
                 ctx.fillStyle = "#000";
                 ctx.fillRect(110, 210, 80, 15);
                 // Horns
@@ -654,14 +648,12 @@ function toxic(duration = 60000) {
 
             monster.onclick = () => {
                 clicks++;
-                // Damage animation: shake, scale, screen shake
                 monster.style.transition = "transform 0.1s";
                 monster.style.transform = "translate(calc(-50% + 5px),-50%) scale(1.05) rotate(-5deg)";
                 setTimeout(() => {
                     monster.style.transform = "translate(-50%,-50%) scale(1) rotate(0deg)";
                 }, 100);
 
-                // Screen shake
                 const shakeAmount = 10;
                 document.body.style.transition = "transform 0.05s";
                 document.body.style.transform = `translate(${(Math.random()-0.5)*shakeAmount}px, ${(Math.random()-0.5)*shakeAmount}px)`;
@@ -669,7 +661,6 @@ function toxic(duration = 60000) {
                     document.body.style.transform = "translate(0,0)";
                 }, 50);
 
-                // Update health
                 healthFill.style.width = `${Math.max(0, 100 - (clicks/maxClicks)*100)}%`;
 
                 if (clicks >= maxClicks) {
@@ -734,10 +725,10 @@ function strike() {
 
     @keyframes violentShake {
         0% { transform: translate(0,0) rotate(0); }
-        20% { transform: translate(-25px, 20px) rotate(-6deg); }
-        40% { transform: translate(25px, -20px) rotate(6deg); }
-        60% { transform: translate(-15px, 10px) rotate(-4deg); }
-        80% { transform: translate(15px, -10px) rotate(4deg); }
+        20% { transform: translate(0px, 50px) rotate(0deg); }
+        30% { transform: translate(0px, -60px) rotate(0deg); }
+        50% { transform: translate(0px, 30px) rotate(0deg); }
+        80% { transform: translate(0px, -10px) rotate(0deg); }
         100% { transform: translate(0,0) rotate(0); }
     }
 
