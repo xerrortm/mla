@@ -435,7 +435,6 @@
     const encoded = params.get('user');
 
     if (!encoded) {
-        window.location.href = "/mla/404";
         return;
     }
 
@@ -451,7 +450,6 @@
 
     } catch (e) {
         console.error("Failed to decode project/email:", e);
-        window.location.href = "/mla/404";
     }
 });
   </script>
