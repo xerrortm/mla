@@ -430,27 +430,18 @@
 	<script src = "adminabuse.js"></script>
 	<script src = "tutorial.js"></script>
   <script>
-    window.addEventListener('DOMContentLoaded', () => {
-	function encodeProject(project) {
-    	return LZString.compressToEncodedURIComponent(JSON.stringify(project));
-	}
-
-	function decodeProject(encoded) {
-   		return JSON.parse(LZString.decompressFromEncodedURIComponent(encoded));
-	}
+   window.addEventListener('DOMContentLoaded', () => {
     const params = new URLSearchParams(window.location.search);
-    const encoded = params.get('user');
+    const userParam = params.get('user');
 
-    if (!encoded) {
-		window.location.href = "/mla"
+    if (!userParam) {
+        window.location.href = "/mla";
         return;
     }
 
-    try {
+    console.log("User param exists:", userParam);
+    if (typeof showToast === "function") {
         showToast(`Welcome to beta!`);
-
-    } catch (e) {
-        console.error("Failed to decode project/email:", e);
     }
 });
   </script>
