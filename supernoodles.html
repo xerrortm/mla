@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SuperNoodlesSucks | Why You Should Quit Using It</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap');
+        
+        :root { 
+            --accent-red: #ef4444; 
+            --bg-dark: #0f172a;
+        }
+
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+
+        .heading-font {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .glass-panel { 
+            background: rgba(255, 255, 255, 0.8); 
+            backdrop-filter: blur(12px); 
+            border-bottom: 1px solid rgba(229, 231, 235, 0.5); 
+        }
+
+        .hero-gradient {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        }
+
+        .red-flag-card {
+            transition: all 0.3s ease;
+            border: 1px solid #e2e8f0;
+        }
+
+        .red-flag-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            border-color: #f87171;
+        }
+
+        #noodle-container {
+            display: inline-block;
+            animation: noodleFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes noodleFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+        }
+
+        .view-hidden { display: none !important; }
+
+        .btn-primary {
+            background-color: #ef4444;
+            color: white;
+            transition: all 0.2s;
+        }
+
+        .btn-primary:hover {
+            background-color: #dc2626;
+            transform: scale(1.02);
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <!-- Navigation (GoggleTools Style) -->
+    <nav class="sticky top-0 z-50 glass-panel px-6 py-4 flex justify-between items-center">
+        <div class="flex items-center gap-2 cursor-pointer" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+            <div class="bg-red-600 p-2 rounded-lg"><i class="fas fa-ban text-white text-lg"></i></div>
+            <h1 class="text-xl font-bold tracking-tight text-slate-900 heading-font">Super <span class="text-red-600">Noodles</span> Sucks</h1>
+        </div>  
+        <div class="flex items-center gap-6">
+            <button onclick="document.getElementById('alternatives').scrollIntoView({behavior: 'smooth'})" class="bg-slate-900 text-white text-sm font-bold px-5 py-2 rounded-xl hover:bg-slate-800 transition">
+                Find Better Tools
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-6xl mx-auto px-6 py-12">
+        
+        <!-- ALERT BANNER (Version Update Style) -->
+        <div class="mb-12 relative overflow-hidden rounded-3xl bg-gradient-to-r from-red-600 via-orange-600 to-red-700 text-white shadow-2xl">
+            <div class="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
+            <div class="relative flex flex-col md:flex-row items-center justify-between px-8 py-8 gap-6">
+                <div class="flex items-center gap-5">
+                    <div class="bg-white/20 backdrop-blur-md p-4 rounded-2xl text-white text-2xl shadow-inner">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-extrabold text-xl tracking-tight uppercase heading-font">
+                            UPDATE: Super Noodles "New Update" is still trash
+                        </h3>
+                        <p class="text-white/80 mt-1">
+                            The "New Design" are actually copying GoggleTools. PLUS the admin abuse weathers sucks.
+                        </p>
+                    </div>
+                </div>
+                <button onclick="document.getElementById('alternatives').scrollIntoView({behavior: 'smooth'})" class="bg-white text-red-700 text-sm font-bold px-6 py-3 rounded-xl hover:bg-red-50 transition whitespace-nowrap">
+                    Quit Super Noodles
+                </button>
+            </div>
+        </div>
+
+        <!-- Dashboard Header Style -->
+        <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+            <div class="max-w-2xl">
+                <h2 class="text-4xl md:text-5xl font-black text-slate-900 tracking-tight heading-font leading-tight">
+                    Stop Using the World's Worst <br>
+                    <span class="text-red-600">Referencing Tool.</span>
+                </h2>
+                <p class="text-slate-500 mt-4 text-lg">
+                    Super Noodles isn't a MLA referencing tool. It's only a playground that let's you mess around with. (And they are all copied from GoggleTools)
+                </p>
+            </div>
+            <div id="noodle-container">
+                <i class="fas fa-bowl-food text-6xl text-red-500"></i>
+            </div>
+        </div>
+
+        <!-- Grid Sections (Project Style) -->
+        <section id="why" class="mb-24">
+            <div class="flex items-center gap-3 mb-8">
+                <div class="h-8 w-2 bg-red-600 rounded-full"></div>
+                <h3 class="text-2xl font-bold heading-font">Why Super Noodles Sucks</h3>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Card 1 -->
+                <div class="red-flag-card bg-white p-8 rounded-2xl shadow-sm">
+                    <div class="w-12 h-12 rounded-xl bg-red-50 text-red-600 flex items-center justify-center text-xl mb-6">
+                        <i class="fas fa-copy"></i>
+                    </div>
+                    <h4 class="font-bold text-xl text-slate-900 mb-3">Copying</h4>
+                    <p class="text-slate-500 leading-relaxed">
+                        The whole design is heavily based on GoggleTools and with useless admin abuse.
+                    </p>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="red-flag-card bg-white p-8 rounded-2xl shadow-sm">
+                    <div class="w-12 h-12 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center text-xl mb-6">
+                        <i class="fas fa-crown"></i>
+                    </div>
+                    <h4 class="font-bold text-xl text-slate-900 mb-3">Premium</h4>
+                    <p class="text-slate-500 leading-relaxed">
+                        Super Noodles need a premium subscription, which is super not user friendly.
+                </div>
+
+                <!-- Card 3 -->
+                <div class="red-flag-card bg-white p-8 rounded-2xl shadow-sm">
+                    <div class="w-12 h-12 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl mb-6">
+                        <i class="fas fa-terminal"></i>
+                    </div>
+                    <h4 class="font-bold text-xl text-slate-900 mb-3">Admin Abuses</h4>
+                    <p class="text-slate-500 leading-relaxed">
+                        Unlike GoggleTools, Super Noodles has a lot of low quality and boring admin abuse weathers, which is a waste of time.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Comparison Table (GoggleTools Style) -->
+        <section id="comparison" class="mb-24">
+            <div class="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm">
+                <h3 class="text-2xl font-bold heading-font mb-8"><span class="text-blue-600">GoggleTools</span> vs <span class="text-red-600">Super Noodles</span></h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="border-b border-slate-100">
+                                <th class="pb-4 font-semibold text-slate-400 uppercase text-xs tracking-widest">Criteria</th>
+                                <th class="pb-4 font-bold text-blue-600">GoggleTools</th>
+                                <th class="pb-4 font-bold text-red-600">Super Noodles</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-50">
+                            <tr>
+                                <td class="py-5 font-medium">High Quality Design</td>
+                                <td class="py-5 text-green-600 font-semibold"><i class="fas fa-check-circle mr-2"></i>Yes</td>
+                                <td class="py-5 text-red-500"><i class="fas fa-times-circle mr-2"></i>No</td>
+                            </tr>
+                            <tr>
+                                <td class="py-5 font-medium">Free</td>
+                                <td class="py-5 text-green-600 font-semibold"><i class="fas fa-check-circle mr-2"></i>100% FREE</td>
+                                <td class="py-5 text-red-500"><i class="fas fa-times-circle mr-2"></i>Has Premium</td>
+                            </tr>
+                            <tr>
+                                <td class="py-5 font-medium">Admin Abuse</td>
+                                <td class="py-5 text-green-600 font-semibold"><i class="fas fa-check-circle mr-2"></i>High quality and cool</td>
+                                <td class="py-5 text-red-500"><i class="fas fa-times-circle mr-2"></i>Basic and boring</td>
+                            </tr>
+                            <tr>
+                                <td class="py-5 font-medium">User Experience</td>
+                                <td class="py-5 text-green-600 font-semibold"><i class="fas fa-check-circle mr-2"></i>Good</td>
+                                <td class="py-5 text-red-500"><i class="fas fa-times-circle mr-2"></i>Fat design and boring</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Alternatives Footer -->
+        <section id="alternatives" class="text-center py-16 bg-slate-900 rounded-3xl text-white">
+            <h2 class="text-3xl font-bold heading-font mb-4">Ready to Reference Like a Pro?</h2>
+            <p class="text-slate-400 mb-10 max-w-lg mx-auto">Uninstall Super Noodles. Embrace tools that actually help you graduate without a citation error flag.</p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <button onclick="location.href='https://www.xerrortm.github.io/mla'" class="bg-white text-slate-900 px-8 py-3 rounded-xl font-bold hover:bg-slate-200 transition">Use GoggleTools</button>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="py-12 border-t border-slate-200 text-center text-slate-500 text-sm">
+        <p>© 2026 ERROR Inc. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
