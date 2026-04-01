@@ -431,6 +431,13 @@
 	<script src = "tutorial.js"></script>
   <script>
     window.addEventListener('DOMContentLoaded', () => {
+	function encodeProject(project) {
+    	return LZString.compressToEncodedURIComponent(JSON.stringify(project));
+	}
+
+	function decodeProject(encoded) {
+   		return JSON.parse(LZString.decompressFromEncodedURIComponent(encoded));
+	}
     const params = new URLSearchParams(window.location.search);
     const encoded = params.get('user');
 
