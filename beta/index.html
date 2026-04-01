@@ -440,9 +440,8 @@
     }
 
     try {
-        const decodedEmail = JSON.parse(LZString.decompressFromEncodedURIComponent(encoded));
+        const decodedEmail = decodeProject(encoded);
 
-        // Show welcome toast
         showToast(`Welcome ${decodedEmail}!`);
 
         console.log("Decoded email:", decodedEmail);
