@@ -429,19 +429,5 @@
 	<script src = "main.js"></script>
 	<script src = "adminabuse.js"></script>
 	<script src = "tutorial.js"></script>
-  <script>
-  window.addEventListener('DOMContentLoaded', () => {
-    const params = new URLSearchParams(window.location.search);
-    const userParam = params.get('user');
-
-    if (!userParam) {
-        setTimeout(() => {
-            window.location.href = "/mla";
-        }, 100);
-        return;
-    }
-    console.log("User param exists:", userParam);
-});
-  </script>
 </body>
 </html>
