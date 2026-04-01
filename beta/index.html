@@ -426,8 +426,34 @@
     		<i id="goggle-icon" class="fas fa-quote-right text-blue-600 cursor-pointer"></i>
 		</div>
 	</div>
-	<script src = "main.js"></script>
-	<script src = "adminabuse.js"></script>
-	<script src = "tutorial.js"></script>
+	<script src = "../main.js"></script>
+	<script src = "../adminabuse.js"></script>
+	<script src = "../tutorial.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(window.location.search);
+    const encoded = params.get('user');
+
+    if (!encoded) {
+        window.location.href = "/mla/404";
+        return;
+    }
+
+    try {
+        const decodedEmail = decodeProject(encoded);
+
+        showToast(`Welcome ${decodedEmail}!`);
+
+        console.log("Decoded email:", decodedEmail);
+
+        document.getElementById("email-input").value = decodedEmail;
+		return;
+
+    } catch (e) {
+        console.error("Failed to decode project/email:", e);
+        window.location.href = "/mla/404";
+    }
+});
+  </script>
 </body>
 </html>
