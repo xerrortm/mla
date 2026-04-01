@@ -430,19 +430,17 @@
 	<script src = "adminabuse.js"></script>
 	<script src = "tutorial.js"></script>
   <script>
-   window.addEventListener('DOMContentLoaded', () => {
+  window.addEventListener('DOMContentLoaded', () => {
     const params = new URLSearchParams(window.location.search);
     const userParam = params.get('user');
 
     if (!userParam) {
-        window.location.href = "/mla";
+        setTimeout(() => {
+            window.location.href = "/mla";
+        }, 100);
         return;
     }
-
     console.log("User param exists:", userParam);
-    if (typeof showToast === "function") {
-        showToast(`Welcome to beta!`);
-    }
 });
   </script>
 </body>
