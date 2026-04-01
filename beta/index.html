@@ -435,6 +435,7 @@
     const encoded = params.get('user');
 
     if (!encoded) {
+		window.location.href = "/mla"
         return;
     }
 
@@ -444,8 +445,6 @@
         showToast(`Welcome ${decodedEmail}!`);
 
         console.log("Decoded email:", decodedEmail);
-
-        document.getElementById("email-input").value = decodedEmail;
 		return;
 
     } catch (e) {
