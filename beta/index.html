@@ -447,12 +447,7 @@
     }
 
     try {
-        const decodedEmail = decodeProject(encoded);
-
-        showToast(`Welcome ${decodedEmail.textOnly}!`);
-
-        console.log("Decoded email:", decodedEmail.textOnly);
-		return;
+        showToast(`Welcome to beta!`);
 
     } catch (e) {
         console.error("Failed to decode project/email:", e);
