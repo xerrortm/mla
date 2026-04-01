@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[BETA] GoggleTools</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+	<script src="https://cdn.jsdelivr.net/npm/qrious/dist/qrious.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.4.4/lz-string.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital@0;1&family=JetBrains+Mono&display=swap');
+        
+        :root { --mla-font: 'Inter', sans-serif; }
+        body { font-family: 'Inter', sans-serif; }
+        .mla-preview { font-family: var(--mla-font); line-height: 2; padding-left: 2rem; text-indent: -2rem; }
+        .glass-panel { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(229, 231, 235, 0.5); }
+        .view-hidden { display: none !important; }
+        .grid-select-btn { border: 1px solid #e2e8f0; padding: 4px; border-radius: 4px; font-size: 11px; text-align: center; transition: all 0.2s; background: white; }
+        .grid-select-btn:hover { background: #eff6ff; border-color: #3b82f6; }
+        .grid-select-btn.active { background: #3b82f6; color: white; border-color: #2563eb; }
+        .project-card:hover .project-actions { opacity: 1; }
+		#goggle-container {
+    		display: inline-block;
+    		animation: goggleFloat 2s ease-in-out infinite;
+		}
+		@keyframes goggleFloat {
+    		0%, 100% { transform: translateY(0); }
+    		50% { transform: translateY(-6px); }
+		}
+		#goggle-icon.active {
+    		transform: translateY(-25px) rotate(10deg);
+    		transition: transform 0.3s ease-in-out;
+		}
+		#goggle-icon.deactivate {
+    		transform: translateY(0) rotate(0deg);
+    		transition: transform 0.3s ease-in-out;
+		}
+		#goggle-icon {
+    		font-size: 3em;
+		}
+		#goggle-panel.show {
+    		display: flex;
+    		animation: slideIn 0.5s ease forwards;
+		}
+		@keyframes slideIn {
+    		from { opacity: 0; transform: translateX(20px); }
+    		to { opacity: 1; transform: translateX(0); }
+		}
+		.goggle-suggest {
+    		padding: 0.75rem 1rem;
+    		font-size: 0.95rem;
+		}
+		#goggle-reply {
+    		margin-right: 3rem;
+    		display: none;
+    		white-space: nowrap;
+    		overflow-x: auto;
+    		max-width: none;
+		}
+		#goggle-reply.show {
+    		display: block;
+    		animation: slideIn 0.5s ease forwards;
+		}
+		@keyframes fadeIn {
+    		from { opacity: 0; transform: translateY(6px); }
+    		to { opacity: 1; transform: translateY(0); }
+		}
+		#goggle-panel {
+    		margin-right: 3rem;
+    		flex-direction: column;
+    		align-items: flex-end;
+		}
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen text-slate-800">
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 glass-panel border-b border-slate-200 px-6 py-3 flex justify-between items-center">
+        <div class="flex items-center gap-2 cursor-pointer" onclick="showDashboard()">
+            <div class="bg-blue-600 p-2 rounded-lg"><i class="fas fa-flask text-white text-lg"></i></div>
+            <h1 class="text-xl font-bold tracking-tight text-slate-900">GoggleTools</h1>
+        </div>  
+        <div class="flex items-center gap-4">
+            <button onclick="openUpdates()" class="text-sm font-semibold text-slate-600 hover:text-orange-700 px-3 py-2 flex items-center gap-2">
+                <i class="fas fa-clock-rotate-left"></i>
+                Updates
+            </button>
+            <button onclick="location.href='/mla/about.html'" class="text-sm font-semibold text-slate-600 hover:text-blue-600 px-3 py-2">
+                About
+            </button>
+        </div>
+    </nav>
+
+    <!-- DASHBOARD -->
+    <section id="view-dashboard" class="max-w-6xl mx-auto px-6 py-12">
+		<div id="dashboard-search" class="mb-4">
+    		<input type="text" id="citation-search" placeholder="Search citations by MLA output..." 
+        	class="w-full p-3 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" 
+        	oninput="filterCitations()">
+		</div>
+
+		<!-- UPDATE BANNER -->
+		<div class="mb-10 relative overflow-hidden rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white shadow-xl">
+
+    		<div class="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
+    		<div class="absolute bottom-0 left-0 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
+
+    		<div class="relative flex items-center justify-between px-6 py-5">
+
+        		<div class="flex items-center gap-4">
+            		<div class="bg-white/20 backdrop-blur-md p-3 rounded-xl text-white text-lg shadow-inner">
+                		<i class="fas fa-flask"></i>
+            		</div>
+
+            	<div>
+                	<h3 class="font-extrabold text-lg tracking-tight">
+                   		VERSION 1.5 IS PUBLIC
+                	</h3>
+                	<p class="text-sm text-white/80">
+                    	Project sharing, QR code sharing and search are now public! Visit the official website to check out!
+                	</p>
+
+                	<div class="flex gap-2 mt-2 text-xs">
+                    	<span class="bg-white/20 px-2 py-1 rounded-md">Share Projects</span>
+                    	<span class="bg-white/20 px-2 py-1 rounded-md">Search Citations</span>
+                    	<span class="bg-white/20 px-2 py-1 rounded-md">100% Free</span>
+                	</div>
+            	</div>
+        	</div>
+
+        	<div class="flex items-center gap-2">
+            	<button onclick="toxic()" class="bg-white text-blue-700 text-sm font-bold px-4 py-2 rounded-xl hover:bg-blue-100 transition">
+                	Toxic Raid
+            	</button>
+				<button onclick="strike()" class="bg-white text-blue-700 text-sm font-bold px-4 py-2 rounded-xl hover:bg-blue-100 transition">
+                	Strike
+            	</button>
+				<button onclick="disco()" class="bg-white text-blue-700 text-sm font-bold px-4 py-2 rounded-xl hover:bg-blue-100 transition">
+                	Disco
+            	</button>
+				<button onclick="celebrationMode()" class="bg-white text-blue-700 text-sm font-bold px-4 py-2 rounded-xl hover:bg-blue-100 transition">
+                	Celebration
+            	</button>
+        	</div>
+
+    	</div>
+	</div>
+
+        <!-- Admin Countdown Banner -->
+        <div id="admin-banner" class="mb-8 bg-red-50 border border-red-100 text-red-800 px-6 py-6 rounded-2xl flex items-center justify-center shadow-sm">
+            <div class="text-center">
+                <h3 class="font-bold text-sm mb-2">Admin abuse starts in</h3>
+                <div id="admin-countdown" class="text-5xl font-extrabold text-red-600">10</div>
+				<button id="cancel-admin-btn" class="mt-4 px-4 py-2 bg-red-600 text-white rounded-xl hover:bg-red-700">Cancel</button>
+            </div>
+        </div>
+
+        <!-- Dashboard Header -->
+        <div class="flex justify-between items-end mb-10">
+            <div>
+                <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">Offline MLA Referencing. World's First</h2>
+                <p class="text-slate-500 mt-1">Reference like a pro along with modern design and project sharing.</p>
+                <br>
+                <button onclick="openComparison()" class="bg-blue-600 text-white px-5 py-2 rounded-xl font-semibold hover:bg-blue-700 transition">
+                    Why use GoggleTools
+                </button>
+            </div>
+            <button id="new-project-btn" onclick="openNewProjectModal()" class="bg-blue-600 text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 hover:bg-blue-700 transition-all">
+                <i class="fas fa-plus"></i> New Project
+            </button>
+        </div>
+
+        <!-- Projects Grid -->
+        <div id="project-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div onclick="openProject(1773656135194)" class="project-card group bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:shadow-xl cursor-pointer relative transition-all">
+                <div class="flex items-start justify-between mb-8">
+                    <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl"><i class="fas fa-folder"></i></div>
+                    <button onclick="deleteProject(event, 1773656135194)" class="project-actions opacity-0 p-2 text-slate-300 hover:text-red-500 transition-all"><i class="fas fa-trash-can"></i></button>
+                </div>
+                <h4 class="font-bold text-lg text-slate-900 mb-1">Random Stuff</h4>
+                <p class="text-slate-500 text-sm">1 Citations</p>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- PROJECT DETAILS -->
+    <section id="view-project-details" class="view-hidden max-w-7xl mx-auto px-6 py-8">
+        <div class="mb-8 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <button onclick="showDashboard()" class="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-500 hover:text-blue-600"><i class="fas fa-arrow-left"></i></button>
+                <div>
+                    <h2 id="current-project-name" class="text-2xl font-bold text-slate-900">Project Name</h2>
+                    <p class="text-sm text-slate-500">Works Cited</p>
+                </div>
+            </div>
+            <button id="add-citation-btn"onclick="showCitationForm()" class="bg-blue-600 text-white px-6 py-3 rounded-xl font-bold shadow-lg hover:bg-blue-700 transition-all"><i class="fas fa-plus"></i> Add Citation</button>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <div class="lg:col-span-8 bg-white rounded-2xl shadow-sm border border-slate-200 min-h-[400px]" id="citation-list"></div>
+            <div class="lg:col-span-4">
+                <div class="bg-slate-900 rounded-2xl p-6 text-white shadow-xl">
+                    <h3 class="text-xs font-bold text-blue-400 uppercase tracking-widest mb-4">Quick Export</h3>
+                    <button onclick="shareProjectLink()" class="w-full bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white font-bold px-4 py-3 rounded-xl shadow-xl flex items-center justify-between hover:scale-[1.02] hover:shadow-2xl active:scale-95 transition-all duration-200">
+                        <span class="text-sm">[NEW] Share Project Link</span><i class="fas fa-share-alt text-white"></i>
+                    </button>
+					<br>
+					<button onclick="showQRCode()" class="w-full bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white font-bold px-4 py-3 rounded-xl shadow-xl flex items-center justify-between hover:scale-[1.02] hover:shadow-2xl active:scale-95 transition-all duration-200">
+                        <span class="text-sm">[NEW] Share QR Code</span><i class="fas fa-qrcode text-white"></i>
+                    </button>
+					<br>
+                    <button onclick="copyProjectToClipboard()" class="w-full py-3 px-4 bg-slate-800 border border-slate-700 rounded-xl text-left hover:bg-slate-700 flex items-center justify-between">
+                        <span class="text-sm">Copy All</span><i class="fas fa-copy text-slate-500"></i>
+                    </button>
+                    <br>
+                    <button onclick="exportToGoogleDocs()" class="w-full py-3 px-4 bg-slate-800 border border-slate-700 rounded-xl text-left hover:bg-slate-700 flex items-center justify-between">
+                        <span class="text-sm">Export to Google Docs</span><i class="fas fa-share-from-square text-slate-500"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CITATION FORM -->
+    <section id="view-add-citation" class="view-hidden max-w-5xl mx-auto px-6 py-8 pb-32">
+        <div class="mb-8 flex items-center gap-4">
+            <button onclick="cancelCitation()" class="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-500"><i class="fas fa-times"></i></button>
+            <h2 class="text-2xl font-bold">New Citation</h2>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <div class="lg:col-span-7 space-y-6">
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+                    <!-- Type Selector -->
+                    <div class="flex gap-2 mb-8 overflow-x-auto pb-2">
+                        <button onclick="switchTab('website')" id="btn-website" class="tab-btn px-4 py-2 bg-blue-50 text-blue-700 rounded-lg text-sm font-bold border border-blue-100 transition-all">Website</button>
+                        <button onclick="switchTab('book')" id="btn-book" class="tab-btn px-4 py-2 bg-slate-100 text-slate-600 rounded-lg text-sm font-bold hover:bg-slate-200 transition-all">Book</button>
+                        <button onclick="switchTab('media')" id="btn-media" class="tab-btn px-4 py-2 bg-slate-100 text-slate-600 rounded-lg text-sm font-bold hover:bg-slate-200 transition-all">Digital File</button>
+                    </div>
+
+                    <div id="form-container" class="space-y-8">
+                        <!-- Dynamic Content Loaded Here via JS -->
+                    </div>
+
+                    <div class="mt-8 flex gap-4">
+                        <button id="save-citation-btn" onclick="saveCitation()" class="flex-1 bg-blue-600 text-white py-4 rounded-xl font-bold shadow-lg hover:bg-blue-700">Save Citation</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Preview Sidebar -->
+            <div class="lg:col-span-5">
+                <div class="bg-slate-900 rounded-2xl p-6 text-white shadow-xl sticky top-24">
+                    <span class="text-xs font-bold text-blue-400 uppercase tracking-widest">MLA 9 Preview</span>
+                    <div class="bg-white text-slate-900 p-6 rounded-xl mt-4 min-h-[100px]">
+                        <div id="mla-render" class="mla-preview text-sm italic text-slate-400">Preview will appear here...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MODAL -->
+    <div id="modal-project" class="fixed inset-0 z-[100] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center opacity-0 pointer-events-none transition-all">
+        <div class="bg-white w-full max-w-md rounded-2xl p-8 shadow-2xl transform scale-95 transition-transform">
+            <h3 class="text-xl font-bold mb-2">Create New Project</h3>
+            <input type="text" id="project-name-input" placeholder="Project Name" class="w-full px-4 py-4 bg-slate-50 border border-slate-200 rounded-xl mb-6 outline-none">
+            <div class="flex gap-3">
+                <button onclick="closeProjectModal()" class="flex-1 py-3 font-bold text-slate-500">Cancel</button>
+                <button id="create-project-btn" onclick="createNewProject()" class="flex-1 py-3 font-bold bg-blue-600 text-white rounded-xl">Create</button>
+            </div>
+        </div>
+    </div>
+    <div id="comparison-popup" class="fixed inset-0 bg-black/40 items-center justify-center z-50 flex hidden">
+
+  <div class="bg-white rounded-2xl shadow-2xl max-w-3xl w-full p-6 relative">
+
+    <button onclick="closeComparison()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-xl">
+      ✕
+    </button>
+
+    <h2 class="text-2xl font-bold mb-6 text-gray-800">
+      NoodleTools vs GoggleTools
+    </h2>
+
+    <div class="overflow-x-auto">
+      <table class="w-full border-collapse text-left">
+
+        <thead>
+          <tr class="border-b">
+            <th class="py-3 font-semibold text-gray-600">Feature</th>
+            <th class="py-3 font-semibold text-gray-600">NoodleTools</th>
+            <th class="py-3 font-semibold text-blue-600">GoggleTools</th>
+          </tr>
+        </thead>
+
+        <tbody class="divide-y">
+
+          <tr>
+            <td class="py-3">Price</td>
+            <td>~$15/year</td>
+            <td class="font-semibold text-blue-600">FREE</td>
+          </tr>
+
+          <tr>
+            <td class="py-3">Signup</td>
+            <td>Required</td>
+            <td class="font-semibold text-blue-600">No signup</td>
+          </tr>
+
+          <tr>
+            <td class="py-3">Speed</td>
+            <td>Slower</td>
+            <td class="font-semibold text-blue-600">Fast</td>
+          </tr>
+
+          <tr>
+            <td class="py-3">Design</td>
+            <td>Old UI</td>
+            <td class="font-semibold text-blue-600">Modern UI</td>
+          </tr>
+          <tr>
+            <td class="py-3">User-friendly</td>
+            <td>No</td>
+            <td class="font-semibold text-blue-600">Yes</td>
+          </tr>
+
+          <tr>
+            <td class="py-3">Offline use</td>
+            <td>No</td>
+            <td class="font-semibold text-blue-600">Yes</td>
+          </tr>
+
+          <tr>
+            <td class="py-3">Offline saving</td>
+            <td>No</td>
+            <td class="font-semibold text-blue-600">Yes</td>
+          </tr>
+
+          <tr>
+            <td class="py-3">MLA output</td>
+            <td>Correct</td>
+            <td class="font-semibold text-blue-600">Correct</td>
+          </tr>
+
+        </tbody>
+
+      </table>
+    </div>
+
+  </div>
+</div>
+<div id="updates-popup" class="fixed inset-0 bg-black/40 items-center justify-center z-50 flex hidden">
+
+  <div id="updates-box" class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full p-6 relative transform scale-95 opacity-0 transition-all duration-200">
+
+    <button onclick="closeUpdates()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-xl">
+      ✕
+    </button>
+
+    <h2 class="text-2xl font-bold mb-6 text-orange-600">
+      Update Log
+    </h2>
+
+    <div class="space-y-4 max-h-[400px] overflow-y-auto">
+
+      <!-- Update Log -->
+      <div class="bg-orange-50 border border-orange-100 rounded-xl p-4">
+        <p class="text-xs text-orange-500 font-bold mb-1">LATEST</p>
+        <h3 class="font-semibold text-gray-800">Version 1.5</h3>
+        <ul class="text-sm text-gray-600 mt-2 list-disc list-inside space-y-1">
+          <li>Supports project sharing!</li>
+          <li>Added search bar to search for citations!</li>
+          <li>Bug and performance fixes</li>
+        </ul>
+      </div>
+	  <div>
+        <h3 class="font-semibold text-gray-800">Version 1.3</h3>
+        <ul class="text-sm text-gray-600 mt-2 list-disc list-inside space-y-1">
+          <li>Projects now save automatically (even offline!)</li>
+          <li>Supports multiple reference types</li>
+          <li>Bug and performance fixes</li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="font-semibold text-gray-800">Version 1.1</h3>
+        <ul class="text-sm text-gray-600 mt-2 list-disc list-inside space-y-1">
+          <li>Improved MLA output</li>
+          <li>Added feature comparing section</li>
+          <li>Improved date choosing system</li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="font-semibold text-gray-800">Version 1.0</h3>
+        <ul class="text-sm text-gray-600 mt-2 list-disc list-inside space-y-1">
+          <li>Created the MLA referencing system</li>
+          <li>Added modern styles</li>
+        </ul>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+    <div id="toast" class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-6 py-3 rounded-full shadow-2xl opacity-0 pointer-events-none transition-all duration-300 z-[200]">Action successful!</div>
+	<!-- GOGGLE -->
+	<div id="goggle-agent" class="fixed bottom-6 right-6 z-[150] flex flex-col items-end gap-2">
+    	<div id="goggle-reply" class="hidden bg-white border border-blue-500 text-slate-700 text-sm px-4 py-2 rounded-xl shadow-lg whitespace-nowrap overflow-x-auto">
+        	Hello
+   		</div>
+
+    	<div id="goggle-panel" class="flex flex-col items-end gap-2 hidden">
+        	<div class="flex gap-2">
+            	<button class="goggle-suggest px-4 py-2 text-sm bg-white border border-slate-300 rounded-lg hover:border-blue-500">What is GoggleTools?</button>
+            	<button class="goggle-suggest px-4 py-2 text-sm bg-white border border-slate-300 rounded-lg hover:border-blue-500">How to add a citation?</button>
+        	</div>
+        	<input id="goggle-input"
+            	type="text"
+            	placeholder="Ask..."
+            	class="w-[200px] px-4 py-2 text-sm bg-white border border-slate-300 rounded-lg outline-none focus:border-blue-500 transition-all">
+    	</div>
+
+    	<div id="goggle-container">
+    		<i id="goggle-icon" class="fas fa-quote-right text-blue-600 cursor-pointer"></i>
+		</div>
+	</div>
+	<script src = "main.js"></script>
+	<script src = "adminabuse.js"></script>
+	<script src = "tutorial.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(window.location.search);
+    const encoded = params.get('user');
+
+    if (!encoded) {
+        window.location.href = "/mla/404";
+        return;
+    }
+
+    try {
+        const decodedEmail = JSON.parse(LZString.decompressFromEncodedURIComponent(encoded));
+
+        // Show welcome toast
+        showToast(`Welcome ${decodedEmail}!`);
+
+        console.log("Decoded email:", decodedEmail);
+
+        document.getElementById("email-input").value = decodedEmail;
+
+    } catch (e) {
+        console.error("Failed to decode project/email:", e);
+        window.location.href = "/mla/404";
+    }
+});
+  </script>
+</body>
+</html>
