@@ -810,6 +810,70 @@ setTimeout(() => {
     }
 }, duration);
 }
+function disco() {
+			showToast("xerrortm: DISCO!");
+    		const allElements = document.querySelectorAll("*");
+
+    		let audio = new Audio("https://raw.githubusercontent.com/xerrortm/mla/refs/heads/main/disco.mp3");
+    		audio.loop = true;
+    		audio.volume = 0.7;
+			
+    		audio.play().catch(() => {
+        		console.log("Audio failed or blocked — continuing without sound");
+        		audio = null;
+    		});
+
+    		const originalStyles = new Map();
+
+    		allElements.forEach(el => {
+        		const style = window.getComputedStyle(el);
+
+        		originalStyles.set(el, {
+            		backgroundColor: style.backgroundColor,
+            		borderColor: style.borderColor,
+            		transition: el.style.transition
+        		});
+
+        		el.style.transition = "background-color 1s linear, border-color 1s linear";
+    		});
+
+    		function randomColor() {
+        		const hue = Math.floor(Math.random() * 360);
+        		return `hsl(${hue}, 100%, 50%)`;
+    		}
+
+    		let currentHue = Math.random() * 360;
+
+    		const interval = setInterval(() => {
+        		currentHue = (currentHue + 60) % 360;
+        		const color = `hsl(${currentHue}, 100%, 50%)`;
+
+        		allElements.forEach(el => {
+            		el.style.backgroundColor = color;
+            		el.style.borderColor = color;
+        		});
+
+    		}, 1000);
+
+    		setTimeout(() => {
+        		clearInterval(interval);
+
+        		if (audio) {
+            		audio.pause();
+            		audio.currentTime = 0;
+        		}
+
+        		allElements.forEach(el => {
+            		const original = originalStyles.get(el);
+            		if (original) {
+                		el.style.backgroundColor = original.backgroundColor;
+                		el.style.borderColor = original.borderColor;
+                		el.style.transition = original.transition;
+            		}
+        		});
+
+    		}, 96000);
+		}
 		function adminAbuse() {
         showToast("xerrortm: WELCOME EVERYONE!!!!");
 
