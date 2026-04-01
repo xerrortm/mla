@@ -449,9 +449,9 @@
     try {
         const decodedEmail = decodeProject(encoded);
 
-        showToast(`Welcome ${decodedEmail}!`);
+        showToast(`Welcome ${decodedEmail.textOnly}!`);
 
-        console.log("Decoded email:", decodedEmail);
+        console.log("Decoded email:", decodedEmail.textOnly);
 		return;
 
     } catch (e) {
