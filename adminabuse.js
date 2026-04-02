@@ -175,6 +175,7 @@ function flood(duration = 60000) {
     setTimeout(() => {
         clearInterval(bubbleInterval);
         water.remove();
+		overlay.remove();
 
         allElements.forEach(el => {
             const original = originalStyles.get(el);
