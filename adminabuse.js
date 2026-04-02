@@ -29,7 +29,7 @@ function flood(duration = 60000) {
     // Animate rising water (to 66%)
     water.animate([
         { height: "0%" },
-        { height: "66%" }
+        { height: "80%" }
     ], {
         duration: 8000,
         easing: "ease-out",
@@ -109,10 +109,10 @@ function flood(duration = 60000) {
 
             // 🔥 REMOVE THE MAIN 66% WATER
             water.animate([
-                { height: "66%", opacity: 1 },
-                { height: "0%", opacity: 0 }
+                { height: "80%", opacity: 1 },
+                { height: "0%", opacity: 1 }
             ], {
-                duration: 800,
+                duration: 1,
                 easing: "ease-in",
                 fill: "forwards"
             });
@@ -138,7 +138,7 @@ function flood(duration = 60000) {
           const fishInterval = setInterval(() => {
     const fish = document.createElement("div");
 
-    const fishes = ["🐟", "🐠", "🐡", "🦈"];
+    const fishes = ["🐟", "🐠", "🐡"];
     fish.innerHTML = fishes[Math.floor(Math.random() * fishes.length)];
 
     const size = Math.random() * 20 + 20;
