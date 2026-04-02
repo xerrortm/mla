@@ -106,7 +106,7 @@ function flood(duration = 60000) {
 
         // ===== CLICK → FLOODED PROJECT VIEW =====
         wetProject.addEventListener("click", function waterView() {
-
+			drop.remove();
             // 🔥 REMOVE THE MAIN 66% WATER
             water.animate([
                 { height: "80%", opacity: 1 },
