@@ -14,7 +14,6 @@ function flood(duration = 60000) {
 
     showToast("The flood is rising...");
 
-    // ===== WATER OVERLAY =====
     const water = document.createElement("div");
     water.style.position = "fixed";
     water.style.left = "0";
@@ -26,7 +25,6 @@ function flood(duration = 60000) {
     water.style.pointerEvents = "none";
     document.body.appendChild(water);
 
-    // Animate rising water (to 66%)
     water.animate([
         { height: "0%" },
         { height: "80%" }
@@ -36,7 +34,6 @@ function flood(duration = 60000) {
         fill: "forwards"
     });
 
-    // ===== BUBBLES =====
     const bubbleInterval = setInterval(() => {
         const b = document.createElement("div");
         const size = Math.random() * 10 + 5;
@@ -104,10 +101,9 @@ function flood(duration = 60000) {
             setTimeout(() => drop.remove(), 1200);
         }, 200);
 
-        // ===== CLICK → FLOODED PROJECT VIEW =====
         wetProject.addEventListener("click", function waterView() {
-			drop.remove();
-            // 🔥 REMOVE THE MAIN 66% WATER
+			clearInterval(dripInterval);
+
             water.animate([
                 { height: "80%", opacity: 1 },
                 { height: "0%", opacity: 1 }
@@ -136,46 +132,44 @@ function flood(duration = 60000) {
             document.body.appendChild(overlay);
 
           const fishInterval = setInterval(() => {
-    const fish = document.createElement("div");
+    		const fish = document.createElement("div");
 
-    const fishes = ["🐟", "🐠", "🐡"];
-    fish.innerHTML = fishes[Math.floor(Math.random() * fishes.length)];
+    		const fishes = ["🐟", "🐠", "🐡"];
+   			fish.innerHTML = fishes[Math.floor(Math.random() * fishes.length)];
 
-    const size = Math.random() * 20 + 20;
-    const y = Math.random() * window.innerHeight;
-    const speed = 4000 + Math.random() * 4000;
+    		const size = Math.random() * 20 + 20;
+    		const y = Math.random() * window.innerHeight;
+    		const speed = 4000 + Math.random() * 4000;
 
-    fish.style.position = "fixed";
-    fish.style.right = "-60px";
-    fish.style.top = `${y}px`;
-    fish.style.fontSize = `${size}px`;
-    fish.style.zIndex = "100003";
-    fish.style.pointerEvents = "none";
+    		fish.style.position = "fixed";
+    		fish.style.right = "-60px";
+    		fish.style.top = `${y}px`;
+    		fish.style.fontSize = `${size}px`;
+    		fish.style.zIndex = "100003";
+    		fish.style.pointerEvents = "none";
 
-    document.body.appendChild(fish);
+    		document.body.appendChild(fish);
 
-    // ✅ RIGHT ➡️ LEFT (NO FLIP AT ALL)
-    fish.animate([
-        { transform: "translateX(0px)" },
-        { transform: `translateX(-${window.innerWidth + 120}px)` }
-    ], {
-        duration: speed,
-        easing: "linear",
-        fill: "forwards"
-    });
+    		fish.animate([
+        		{ transform: "translateX(0px)" },
+        		{ transform: `translateX(-${window.innerWidth + 120}px)` }
+    		], {
+        		duration: speed,
+        		easing: "linear",
+        		fill: "forwards"
+    		});
 
-    setTimeout(() => fish.remove(), speed);
-}, 400);
+    		setTimeout(() => fish.remove(), speed);
+			}, 400);
             wetProject.removeEventListener("click", waterView);
         });
 
     }, 10000);
 
-    // ===== END =====
     setTimeout(() => {
         clearInterval(bubbleInterval);
         water.remove();
-		overlay.remove();
+		clearInterval(fishInterval);
 
         allElements.forEach(el => {
             const original = originalStyles.get(el);
