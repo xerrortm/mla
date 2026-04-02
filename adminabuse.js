@@ -62,7 +62,6 @@ function flood(duration = 60000) {
         setTimeout(() => b.remove(), 5000);
     }, 120);
 
-    // ===== AFTER 10s → PICK PROJECT =====
     setTimeout(() => {
         const projects = document.querySelectorAll(".project-card");
         if (!projects.length) return;
@@ -101,6 +100,7 @@ function flood(duration = 60000) {
             setTimeout(() => drop.remove(), 1200);
         }, 200);
 
+		let fishInterval;
         wetProject.addEventListener("click", function waterView() {
 			clearInterval(dripInterval);
 
