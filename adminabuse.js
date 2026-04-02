@@ -34,6 +34,7 @@ function flood(duration = 60000) {
     });
 
     const bubbleInterval = setInterval(() => {
+		let stop = false;
         const b = document.createElement("div");
         const size = Math.random() * 10 + 5;
 
@@ -131,8 +132,9 @@ function flood(duration = 60000) {
             document.body.appendChild(overlay);
 
           const fishInterval = setInterval(() => {
+			if(stop) return;
     		const fish = document.createElement("div");
-			fish.id = "flood-fish"
+			fish.className = "flood-fish"
 
     		const fishes = ["🐟", "🐠", "🐡"];
    			fish.innerHTML = fishes[Math.floor(Math.random() * fishes.length)];
@@ -171,10 +173,8 @@ function flood(duration = 60000) {
         water.remove();
 		const overlayDiv = document.getElementById("flood-overlay");
 		if (overlayDiv) overlayDiv.remove();
-
-		const fishy = document.getElementById("flood-fish");
-		if (fishy) fishy.remove();
-
+		stop = true;
+		document.querySelectorAll(".flood-fish").forEach(fish => fish.remove());
         allElements.forEach(el => {
             const original = originalStyles.get(el);
             if (!original) return;
