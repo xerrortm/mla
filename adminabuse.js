@@ -2,7 +2,6 @@ function flood(duration = 60000) {
     const allElements = document.querySelectorAll("*");
     const originalStyles = new Map();
 
-    // Save styles
     allElements.forEach(el => {
         const style = window.getComputedStyle(el);
         originalStyles.set(el, {
@@ -100,7 +99,6 @@ function flood(duration = 60000) {
             setTimeout(() => drop.remove(), 1200);
         }, 200);
 
-		let fishInterval;
         wetProject.addEventListener("click", function waterView() {
 			clearInterval(dripInterval);
 
@@ -120,6 +118,7 @@ function flood(duration = 60000) {
             clearInterval(bubbleInterval);
 
             const overlay = document.createElement("div");
+			overlay.id = "flood-overlay"
             overlay.style.position = "fixed";
             overlay.style.top = "0";
             overlay.style.left = "0";
@@ -133,6 +132,7 @@ function flood(duration = 60000) {
 
           const fishInterval = setInterval(() => {
     		const fish = document.createElement("div");
+			fish.id = "flood-fish"
 
     		const fishes = ["🐟", "🐠", "🐡"];
    			fish.innerHTML = fishes[Math.floor(Math.random() * fishes.length)];
@@ -169,7 +169,11 @@ function flood(duration = 60000) {
     setTimeout(() => {
         clearInterval(bubbleInterval);
         water.remove();
-		clearInterval(fishInterval);
+		const overlayDiv = document.getElementById("flood-overlay");
+		if (overlayDiv) overlayDiv.remove();
+
+		const fishy = document.getElementById("flood-fish");
+		if (fishy) fishy.remove();
 
         allElements.forEach(el => {
             const original = originalStyles.get(el);
