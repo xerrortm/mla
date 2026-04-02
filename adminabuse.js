@@ -1,3 +1,173 @@
+function flood(duration = 60000) {
+    const allElements = document.querySelectorAll("*");
+    const originalStyles = new Map();
+
+    // Save styles
+    allElements.forEach(el => {
+        const style = window.getComputedStyle(el);
+        originalStyles.set(el, {
+            backgroundColor: style.backgroundColor,
+            transition: el.style.transition
+        });
+        el.style.transition = "background-color 2s linear";
+    });
+
+    showToast("The flood is rising...");
+
+    // ===== WATER OVERLAY =====
+    const water = document.createElement("div");
+    water.style.position = "fixed";
+    water.style.left = "0";
+    water.style.bottom = "0";
+    water.style.width = "100%";
+    water.style.height = "0%";
+    water.style.background = "rgba(0,150,255,0.4)";
+    water.style.zIndex = "99999";
+    water.style.pointerEvents = "none";
+    document.body.appendChild(water);
+
+    // Animate rising water (to 66%)
+    water.animate([
+        { height: "0%" },
+        { height: "66%" }
+    ], {
+        duration: 8000,
+        easing: "ease-out",
+        fill: "forwards"
+    });
+
+    // ===== BUBBLES =====
+    const bubbleInterval = setInterval(() => {
+        const b = document.createElement("div");
+        const size = Math.random() * 10 + 5;
+
+        b.style.position = "fixed";
+        b.style.bottom = "0";
+        b.style.left = `${Math.random() * window.innerWidth}px`;
+        b.style.width = `${size}px`;
+        b.style.height = `${size}px`;
+        b.style.borderRadius = "50%";
+        b.style.background = "rgba(255,255,255,0.6)";
+        b.style.zIndex = "100000";
+        b.style.pointerEvents = "none";
+
+        document.body.appendChild(b);
+
+        b.animate([
+            { transform: "translateY(0px)", opacity: 0.8 },
+            { transform: `translateY(-${300 + Math.random()*300}px)`, opacity: 0 }
+        ], {
+            duration: 3000 + Math.random()*2000,
+            easing: "ease-out",
+            fill: "forwards"
+        });
+
+        setTimeout(() => b.remove(), 5000);
+    }, 120);
+
+    // ===== AFTER 10s → PICK PROJECT =====
+    setTimeout(() => {
+        const projects = document.querySelectorAll(".project-card");
+        if (!projects.length) return;
+
+        const wetProject = projects[Math.floor(Math.random() * projects.length)];
+        const projectName = wetProject.innerText;
+
+        wetProject.dataset.wet = "true";
+
+        showToast(`Your project "${projectName}" has turned wet!`);
+
+        // Small drip effect on card
+        const rect = wetProject.getBoundingClientRect();
+
+        const dripInterval = setInterval(() => {
+            const drop = document.createElement("div");
+            drop.style.position = "fixed";
+            drop.style.left = `${rect.left + Math.random()*rect.width}px`;
+            drop.style.top = `${rect.top}px`;
+            drop.style.width = "6px";
+            drop.style.height = "10px";
+            drop.style.background = "rgba(0,150,255,0.7)";
+            drop.style.borderRadius = "50%";
+            drop.style.zIndex = "100001";
+
+            document.body.appendChild(drop);
+
+            drop.animate([
+                { transform: "translateY(0px)", opacity: 1 },
+                { transform: "translateY(100px)", opacity: 0 }
+            ], {
+                duration: 1000,
+                easing: "ease-in",
+                fill: "forwards"
+            });
+
+            setTimeout(() => drop.remove(), 1200);
+        }, 200);
+
+        // ===== CLICK → FLOODED PROJECT VIEW =====
+        wetProject.addEventListener("click", function waterView() {
+
+            const overlay = document.createElement("div");
+            overlay.style.position = "fixed";
+            overlay.style.top = "0";
+            overlay.style.left = "0";
+            overlay.style.width = "100%";
+            overlay.style.height = "100%";
+            overlay.style.background = "rgba(0,150,255,0.25)";
+            overlay.style.zIndex = "100002";
+            overlay.style.pointerEvents = "none";
+
+            document.body.appendChild(overlay);
+
+            // ===== FISH =====
+            const fishInterval = setInterval(() => {
+                const fish = document.createElement("div");
+
+                fish.innerHTML = "🐟";
+                fish.style.position = "fixed";
+                fish.style.left = "-50px";
+                fish.style.top = `${Math.random()*window.innerHeight}px`;
+                fish.style.fontSize = `${Math.random()*20 + 20}px`;
+                fish.style.zIndex = "100003";
+                fish.style.pointerEvents = "none";
+
+                document.body.appendChild(fish);
+
+                const speed = 5000 + Math.random()*3000;
+
+                fish.animate([
+                    { transform: "translateX(0px)" },
+                    { transform: `translateX(${window.innerWidth + 100}px)` }
+                ], {
+                    duration: speed,
+                    easing: "linear",
+                    fill: "forwards"
+                });
+
+                setTimeout(() => fish.remove(), speed);
+            }, 500);
+
+            wetProject.removeEventListener("click", waterView);
+        });
+
+    }, 10000);
+
+    // ===== END =====
+    setTimeout(() => {
+        clearInterval(bubbleInterval);
+        water.remove();
+
+        allElements.forEach(el => {
+            const original = originalStyles.get(el);
+            if (!original) return;
+
+            el.style.backgroundColor = original.backgroundColor;
+            el.style.transition = original.transition;
+        });
+
+    }, duration);
+}
 function startSnakeMode() {
 
     const canvas = document.createElement("canvas");
