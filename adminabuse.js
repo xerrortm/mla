@@ -135,11 +135,9 @@ function flood(duration = 60000) {
 
             document.body.appendChild(overlay);
 
-            // ===== FISH =====
-            const fishInterval = setInterval(() => {
+          const fishInterval = setInterval(() => {
     const fish = document.createElement("div");
 
-    // Different fish types
     const fishes = ["🐟", "🐠", "🐡", "🦈"];
     fish.innerHTML = fishes[Math.floor(Math.random() * fishes.length)];
 
@@ -148,7 +146,7 @@ function flood(duration = 60000) {
     const speed = 4000 + Math.random() * 4000;
 
     fish.style.position = "fixed";
-    fish.style.right = "-60px"; // start from right
+    fish.style.right = "-60px";
     fish.style.top = `${y}px`;
     fish.style.fontSize = `${size}px`;
     fish.style.zIndex = "100003";
@@ -156,10 +154,10 @@ function flood(duration = 60000) {
 
     document.body.appendChild(fish);
 
-    // Move RIGHT ➡️ LEFT
+    // ✅ RIGHT ➡️ LEFT (NO FLIP AT ALL)
     fish.animate([
-        { transform: "translateX(0px) scaleX(-1)" }, 
-        { transform: `translateX(-${window.innerWidth + 120}px) scaleX(-1)` }
+        { transform: "translateX(0px)" },
+        { transform: `translateX(-${window.innerWidth + 120}px)` }
     ], {
         duration: speed,
         easing: "linear",
@@ -168,7 +166,6 @@ function flood(duration = 60000) {
 
     setTimeout(() => fish.remove(), speed);
 }, 400);
-
             wetProject.removeEventListener("click", waterView);
         });
 
