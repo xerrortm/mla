@@ -693,7 +693,6 @@ function exportCitations(format) {
         return;
     }
 
-    // Combine all citation texts
     const content = project.citations.map(c => c.textOnly || c.formatted).join("\n\n");
 
     if (format === "txt") {
@@ -701,31 +700,19 @@ function exportCitations(format) {
         const a = document.createElement("a");
         a.href = URL.createObjectURL(blob);
         a.download = `${project.name}-citations.txt`;
-        document.body.appendChild(a);
         a.click();
-        document.body.removeChild(a);
     } 
     else if (format === "pdf") {
-        // Using jsPDF library
-        if (typeof jsPDF === "undefined") {
-            showToast("PDF export requires jsPDF library!");
-            return;
-        }
+        const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
-        const lines = doc.splitTextToSize(content, 180); // wrap text
+        const lines = doc.splitTextToSize(content, 180);
         doc.text(lines, 15, 20);
         doc.save(`${project.name}-citations.pdf`);
     } 
     else if (format === "docx") {
-        // Using docx library
-        if (typeof docx === "undefined") {
-            showToast("DOCX export requires docx library!");
-            return;
-        }
-        const { Document, Packer, Paragraph, TextRun } = docx;
+        const { Document, Packer, Paragraph, TextRun } = window.docx;
         const doc = new Document({
             sections: [{
-                properties: {},
                 children: project.citations.map(c => new Paragraph({
                     children: [new TextRun(c.textOnly || c.formatted)]
                 }))
@@ -735,9 +722,7 @@ function exportCitations(format) {
             const a = document.createElement("a");
             a.href = URL.createObjectURL(blob);
             a.download = `${project.name}-citations.docx`;
-            document.body.appendChild(a);
             a.click();
-            document.body.removeChild(a);
         });
     }
 }
