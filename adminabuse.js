@@ -1083,9 +1083,10 @@ function disco() {
                                 showToast("xerrortm: TIME TO SPAM!");
 
                                 setTimeout(() => {
-									disco();
                                     toxic();
 									strike();
+									celebrationMode();
+									flood();
                                     setTimeout(() => {
                                         showToast("xerrortm: ok nevermind that was too much. BYE GUYS!");
                                     }, 94000);
