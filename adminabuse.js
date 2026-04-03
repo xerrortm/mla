@@ -1062,39 +1062,41 @@ function disco() {
     		}, 96000);
 		}
 		function adminAbuse() {
-        showToast("xerrortm: WELCOME EVERYONE!!!!");
+        showToast("xerrortm: hey guys!");
 
         setTimeout(() => {
-            showToast("xerrortm: today ill be hosting the first ever ADMIN ABUSE");
+            showToast("xerrortm: welcome to teh EASTER ADMIN ABUSE!");
 
             setTimeout(() => {
-                showToast("xerrortm: lets start with a game...");
+                showToast("xerrortm: get hyped!");
 
                 setTimeout(() => {
-                    brickBreakerMode();
+                    strike();
 
                     setTimeout(() => {
-                        disco();
+                        toxic();
 
                         setTimeout(() => {
-                            startSnakeMode();
+                            flood();
 
                             setTimeout(() => {
-                                showToast("xerrortm: thank you everyone for joining us today!");
+                                showToast("xerrortm: TIME TO SPAM!");
 
                                 setTimeout(() => {
-                                    showToast("xerrortm: enjoy the new features and see you next time!");
+									disco();
+                                    toxic();
+									strike();
                                     setTimeout(() => {
-                                        celebrationMode("https://raw.githubusercontent.com/xerrortm/mla/refs/heads/main/party.mp3");
-                                    }, 6001);
+                                        showToast("xerrortm: ok nevermind that was too much. BYE GUYS!");
+                                    }, 94000);
 
                                 }, 6001);
 
                             }, 60000);
 
-                        }, 96000);
+                        }, 60000);
 
-                    }, 60000);
+                    }, 94000);
 
                 }, 6001);
 
