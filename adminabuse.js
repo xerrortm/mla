@@ -1,4 +1,5 @@
 function flood(duration = 60000) {
+	let stop = false;
     const allElements = document.querySelectorAll("*");
     const originalStyles = new Map();
 
@@ -34,7 +35,6 @@ function flood(duration = 60000) {
     });
 
     const bubbleInterval = setInterval(() => {
-		let stop = false;
         const b = document.createElement("div");
         const size = Math.random() * 10 + 5;
 
