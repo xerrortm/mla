@@ -710,7 +710,13 @@ function exportCitations(format) {
         doc.save(`${project.name}-citations.pdf`);
     } 
     else if (format === "docx") {
+        if (!window.docx) {
+            showToast("Docx library not loaded yet!");
+            return;
+        }
+
         const { Document, Packer, Paragraph, TextRun } = window.docx;
+
         const doc = new Document({
             sections: [{
                 children: project.citations.map(c => new Paragraph({
@@ -718,6 +724,7 @@ function exportCitations(format) {
                 }))
             }]
         });
+
         Packer.toBlob(doc).then(blob => {
             const a = document.createElement("a");
             a.href = URL.createObjectURL(blob);
