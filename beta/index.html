@@ -537,25 +537,35 @@ startQuote.addEventListener('click', () => {
     const spinInterval = setInterval(() => {
         const elapsed = Date.now() - startTime;
         if (elapsed > maxSpinDuration) {
-            clearInterval(spinInterval);
+            // Stop spinning properly
+clearInterval(spinInterval);
 
-            // After spinning stops
-startQuote.style.transition = "transform 0.5s ease-out, left 1s ease-in-out";
+// Snap to nearest full rotation
+let finalAngle = Math.round(angle / 360) * 360;
 
-// Measure GoggleTools width
-startTitle.style.opacity = 1; // temporarily reveal to measure
-const gWidth = startTitle.offsetWidth;
-startTitle.style.opacity = 0;
+startQuote.style.transition = "transform 0.4s ease-out";
+startQuote.style.transform = `rotateY(${finalAngle}deg)`;
 
-// Move only the quote left
-startQuote.style.position = "relative";
-startQuote.style.left = `-${gWidth/2}px`;
-
-// Slide in GoggleTools from right
+// Wait for spin to finish BEFORE moving anything
 setTimeout(() => {
-    startTitle.style.animation = "slideInFromRight 1s forwards";
+
+    // Measure GoggleTools width
     startTitle.style.opacity = 1;
-}, 500);
+    const gWidth = startTitle.offsetWidth;
+    startTitle.style.opacity = 0;
+
+    // Move quote left smoothly
+    startQuote.style.transition += ", left 0.8s ease-in-out";
+    startQuote.style.position = "relative";
+    startQuote.style.left = `-${gWidth/2}px`;
+
+    // Slide in text
+    setTimeout(() => {
+        startTitle.style.animation = "slideInFromRight 1s forwards";
+        startTitle.style.opacity = 1;
+    }, 200);
+
+}, 400); // wait for rotation to finish
             // Show subtitle and continue button
             setTimeout(() => {
                 startSubtitle.style.animation = "slideDown 1s forwards";
