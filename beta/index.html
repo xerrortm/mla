@@ -101,11 +101,6 @@
     position: relative;
     perspective: 1000px; /* 👈 THIS FIXES IT */
 }
-#start-quote {
-    display: inline-block;
-    transform-style: preserve-3d;
-    backface-visibility: hidden;
-}
 /* GoggleTools slides in from right */
 @keyframes slideInFromRight {
     0% { transform: translateX(100%); opacity: 0; }
@@ -123,7 +118,7 @@
 <div id="start-screen" class="fixed inset-0 bg-black flex flex-col items-center justify-center z-[9999]">
     <div id="start-container" class="relative flex items-center justify-center">
         <i id="start-quote" class="fas fa-quote-right text-white" style="font-size:6rem; cursor:pointer;"></i>
-        <h1 id="start-title" class="text-white text-5xl font-bold opacity-0 absolute left-0 top-1/2 -translate-y-1/2">GoggleTools</h1>
+        <h1 id="start-title" class="text-white text-5xl font-bold opacity-0 absolute left-0 top-1/2 -translate-y-[60%]">GoggleTools</h1>
     </div>
     <p id="start-subtitle" class="text-white text-xl mt-4 opacity-0">The future of MLA referencing starts here.</p>
     <button id="start-continue" class="mt-6 px-6 py-3 bg-blue-600 text-white rounded-xl text-lg opacity-0">Continue</button>
