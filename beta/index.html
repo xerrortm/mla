@@ -94,13 +94,8 @@
     		0%, 100% { transform: translateY(0px); }
     		50% { transform: translateY(-10px); }
 		}
-		/* Spinning animation */
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
 
-/* Background reveal animation */
+/* Background circle reveal animation */
 @keyframes bgCircle {
     0% { clip-path: circle(0% at center); }
     100% { clip-path: circle(150% at center); }
@@ -120,7 +115,7 @@
     </style>
 </head>
 <body class="bg-slate-50 min-h-screen text-slate-800">
-	<!-- START SCREEN -->
+<!-- START SCREEN -->
 <div id="start-screen" class="fixed inset-0 bg-black flex flex-col items-center justify-center z-[9999]">
     <i id="start-quote" class="fas fa-quote-right text-white" style="font-size:6rem; cursor:pointer;"></i>
     <h1 id="start-title" class="text-white text-5xl font-bold mt-4 opacity-0">GoggleTools</h1>
@@ -523,47 +518,53 @@
         console.error("Failed to decode project/email:", e);
     }
 });
-	  const startScreen = document.getElementById('start-screen');
+const startScreen = document.getElementById('start-screen');
 const startQuote = document.getElementById('start-quote');
 const startTitle = document.getElementById('start-title');
 const startSubtitle = document.getElementById('start-subtitle');
 const startContinue = document.getElementById('start-continue');
 
 startQuote.addEventListener('click', () => {
-    // Start spinning
-    let speed = 1;
-    let spinInterval = setInterval(() => {
-        speed += 0.5; // accelerate
-        startQuote.style.transform = `rotate(${speed * 10}deg)`;
-    }, 50);
+    let angle = 0;
+    let speed = 2; // initial speed
+    const acceleration = 1.3; // acceleration factor
 
-    // After a short while, stop and trigger transition
+    const spinInterval = setInterval(() => {
+        angle += speed;
+        startQuote.style.transform = `rotateY(${angle}deg)`;
+        speed *= acceleration; // speed exponentially increases
+    }, 30);
+
+    // Stop after a short while
     setTimeout(() => {
         clearInterval(spinInterval);
 
-        // Smoothly stop the spin
+        // Abrupt stop: smooth back to 0deg
         startQuote.style.transition = "transform 0.5s ease-out";
-        startQuote.style.transform = "rotate(0deg)";
+        startQuote.style.transform = "rotateY(0deg)";
 
-        // Animate background blue with circle from quote
+        // Animate background blue with a circular "wave" effect
         startScreen.style.transition = "background 1s ease-in-out";
         startScreen.style.background = "#3b82f6"; // Tailwind blue-600
 
-        // Reveal title and subtitle
+        // Quote shifts left a bit
+        startQuote.style.marginRight = "1rem";
+
+        // Reveal GoggleTools text
         setTimeout(() => {
             startTitle.style.opacity = 1;
             startTitle.style.animation = "slideInLeft 1s forwards";
-            startQuote.style.marginRight = "1rem"; // move quote left slightly
 
             setTimeout(() => {
                 startSubtitle.style.opacity = 1;
                 startSubtitle.style.animation = "slideInTop 1s forwards";
+
                 startContinue.style.opacity = 1;
                 startContinue.style.transition = "opacity 0.5s ease-in-out";
             }, 1000);
         }, 500);
 
-    }, 2000); // spin duration before stop
+    }, 2000); // spinning duration before stop
 });
 
 // Continue button hides start screen
