@@ -525,7 +525,7 @@ const startSubtitle = document.getElementById('start-subtitle');
 const startContinue = document.getElementById('start-continue');
 const startContainer = document.getElementById('start-container');
 
-startQuote.addEventListener('click', () => {
+function starthellnah () {
     let angle = 0;
     let speed = 10; // initial spin speed
     const acceleration = 1.05;
@@ -588,7 +588,7 @@ startQuote.style.left = `-${gWidth/2}px`;
         speed *= acceleration; // mild acceleration
         startQuote.style.transform = `rotateY(${angle}deg)`;
     }, 30);
-});
+}
 
 // Continue hides start screen
 startContinue.addEventListener('click', () => {
@@ -597,7 +597,8 @@ startContinue.addEventListener('click', () => {
     setTimeout(() => {
         startScreen.style.display = "none";
     }, 500);
-});
+}
+window.addEventListener('DOMContentLoaded', starthellnah);
   </script>
 </body>
 </html>
