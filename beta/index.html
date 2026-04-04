@@ -94,22 +94,21 @@
     		0%, 100% { transform: translateY(0px); }
     		50% { transform: translateY(-10px); }
 		}
-
 #start-container {
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-/* Text slide-in from left */
+/* Slide the quote left slightly */
 @keyframes slideLeft {
     0% { transform: translateX(0); }
-    100% { transform: translateX(-60px); }
+    100% { transform: translateX(-40px); }
 }
 
 /* Text fade-in from right */
 @keyframes slideInRight {
-    0% { opacity: 0; transform: translateX(50px); }
+    0% { opacity: 0; transform: translateX(40px); }
     100% { opacity: 1; transform: translateX(0); }
 }
 
@@ -117,6 +116,7 @@
 @keyframes slideInTop {
     0% { opacity: 0; transform: translateY(-30px); }
     100% { opacity: 1; transform: translateY(0); }
+}
 }
     </style>
 </head>
@@ -130,7 +130,6 @@
     <p id="start-subtitle" class="text-white text-xl mt-4 opacity-0">The future of MLA referencing starts here.</p>
     <button id="start-continue" class="mt-6 px-6 py-3 bg-blue-600 text-white rounded-xl text-lg opacity-0">Continue</button>
 </div>
-
     <!-- Navigation -->
     <nav class="sticky top-0 z-50 glass-panel border-b border-slate-200 px-6 py-3 flex justify-between items-center">
         <div class="flex items-center gap-2 cursor-pointer" onclick="showDashboard()">
@@ -535,7 +534,7 @@ const startContainer = document.getElementById('start-container');
 
 startQuote.addEventListener('click', () => {
     let angle = 0;
-    let speed = 2; // smooth starting speed
+    let speed = 2; // smooth initial speed
     const acceleration = 1.05; // mild acceleration
     const maxSpinDuration = 1500; // spin for 1.5s
 
@@ -545,19 +544,20 @@ startQuote.addEventListener('click', () => {
         const elapsed = Date.now() - startTime;
         if (elapsed > maxSpinDuration) {
             clearInterval(spinInterval);
+
             // Smooth stop
             startQuote.style.transition = "transform 0.5s ease-out";
             startQuote.style.transform = "rotateY(0deg)";
 
-            // Slide quote left
+            // Slide container slightly left so the group is centered
             startContainer.style.transition = "transform 1s ease-in-out";
-            startContainer.style.transform = "translateX(-60px)";
+            startContainer.style.transform = "translateX(-40px)";
 
-            // Reveal GoggleTools text after slide
+            // Reveal GoggleTools text
             startTitle.style.opacity = 1;
             startTitle.style.animation = "slideInRight 1s forwards";
 
-            // Reveal subtitle after 1s
+            // Reveal subtitle below after 1s
             setTimeout(() => {
                 startSubtitle.style.opacity = 1;
                 startSubtitle.style.animation = "slideInTop 1s forwards";
@@ -573,7 +573,7 @@ startQuote.addEventListener('click', () => {
         }
 
         angle += speed;
-        speed *= acceleration; // slowly accelerate
+        speed *= acceleration; // mild acceleration
         startQuote.style.transform = `rotateY(${angle}deg)`;
     }, 30);
 });
