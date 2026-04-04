@@ -94,9 +94,39 @@
     		0%, 100% { transform: translateY(0px); }
     		50% { transform: translateY(-10px); }
 		}
+		/* Spinning animation */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Background reveal animation */
+@keyframes bgCircle {
+    0% { clip-path: circle(0% at center); }
+    100% { clip-path: circle(150% at center); }
+}
+
+/* Text slide-in from left */
+@keyframes slideInLeft {
+    0% { opacity: 0; transform: translateX(-50px); }
+    100% { opacity: 1; transform: translateX(0); }
+}
+
+/* Text slide-in from top */
+@keyframes slideInTop {
+    0% { opacity: 0; transform: translateY(-30px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
     </style>
 </head>
 <body class="bg-slate-50 min-h-screen text-slate-800">
+	<!-- START SCREEN -->
+<div id="start-screen" class="fixed inset-0 bg-black flex flex-col items-center justify-center z-[9999]">
+    <i id="start-quote" class="fas fa-quote-right text-white" style="font-size:6rem; cursor:pointer;"></i>
+    <h1 id="start-title" class="text-white text-5xl font-bold mt-4 opacity-0">GoggleTools</h1>
+    <p id="start-subtitle" class="text-white text-xl mt-2 opacity-0">The future of MLA referencing starts here.</p>
+    <button id="start-continue" class="mt-6 px-6 py-3 bg-blue-600 text-white rounded-xl text-lg opacity-0">Continue</button>
+</div>
 
     <!-- Navigation -->
     <nav class="sticky top-0 z-50 glass-panel border-b border-slate-200 px-6 py-3 flex justify-between items-center">
@@ -492,6 +522,57 @@
     } catch (e) {
         console.error("Failed to decode project/email:", e);
     }
+});
+	  const startScreen = document.getElementById('start-screen');
+const startQuote = document.getElementById('start-quote');
+const startTitle = document.getElementById('start-title');
+const startSubtitle = document.getElementById('start-subtitle');
+const startContinue = document.getElementById('start-continue');
+
+startQuote.addEventListener('click', () => {
+    // Start spinning
+    let speed = 1;
+    let spinInterval = setInterval(() => {
+        speed += 0.5; // accelerate
+        startQuote.style.transform = `rotate(${speed * 10}deg)`;
+    }, 50);
+
+    // After a short while, stop and trigger transition
+    setTimeout(() => {
+        clearInterval(spinInterval);
+
+        // Smoothly stop the spin
+        startQuote.style.transition = "transform 0.5s ease-out";
+        startQuote.style.transform = "rotate(0deg)";
+
+        // Animate background blue with circle from quote
+        startScreen.style.transition = "background 1s ease-in-out";
+        startScreen.style.background = "#3b82f6"; // Tailwind blue-600
+
+        // Reveal title and subtitle
+        setTimeout(() => {
+            startTitle.style.opacity = 1;
+            startTitle.style.animation = "slideInLeft 1s forwards";
+            startQuote.style.marginRight = "1rem"; // move quote left slightly
+
+            setTimeout(() => {
+                startSubtitle.style.opacity = 1;
+                startSubtitle.style.animation = "slideInTop 1s forwards";
+                startContinue.style.opacity = 1;
+                startContinue.style.transition = "opacity 0.5s ease-in-out";
+            }, 1000);
+        }, 500);
+
+    }, 2000); // spin duration before stop
+});
+
+// Continue button hides start screen
+startContinue.addEventListener('click', () => {
+    startScreen.style.transition = "opacity 0.5s ease-in-out";
+    startScreen.style.opacity = 0;
+    setTimeout(() => {
+        startScreen.style.display = "none";
+    }, 500);
 });
   </script>
 </body>
