@@ -98,34 +98,27 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
 }
 
-/* Slide the quote left slightly */
-@keyframes slideLeft {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-40px); }
+/* GoggleTools slides in from right */
+@keyframes slideInFromRight {
+    0% { transform: translateX(100%); opacity: 0; }
+    100% { transform: translateX(0); opacity: 1; }
 }
 
-/* Text fade-in from right */
-@keyframes slideInRight {
-    0% { opacity: 0; transform: translateX(40px); }
-    100% { opacity: 1; transform: translateX(0); }
-}
-
-/* Text slide-in from top */
-@keyframes slideInTop {
-    0% { opacity: 0; transform: translateY(-30px); }
+/* Subtitle slides down */
+@keyframes slideDown {
+    0% { opacity: 0; transform: translateY(-20px); }
     100% { opacity: 1; transform: translateY(0); }
-}
 }
     </style>
 </head>
 <body class="bg-slate-50 min-h-screen text-slate-800">
-<!-- START SCREEN -->
 <div id="start-screen" class="fixed inset-0 bg-black flex flex-col items-center justify-center z-[9999]">
-    <div id="start-container" class="flex items-center gap-4">
+    <div id="start-container" class="relative flex items-center justify-center">
         <i id="start-quote" class="fas fa-quote-right text-white" style="font-size:6rem; cursor:pointer;"></i>
-        <h1 id="start-title" class="text-white text-5xl font-bold opacity-0">GoggleTools</h1>
+        <h1 id="start-title" class="text-white text-5xl font-bold opacity-0 absolute left-0 top-0">GoggleTools</h1>
     </div>
     <p id="start-subtitle" class="text-white text-xl mt-4 opacity-0">The future of MLA referencing starts here.</p>
     <button id="start-continue" class="mt-6 px-6 py-3 bg-blue-600 text-white rounded-xl text-lg opacity-0">Continue</button>
@@ -534,9 +527,9 @@ const startContainer = document.getElementById('start-container');
 
 startQuote.addEventListener('click', () => {
     let angle = 0;
-    let speed = 2; // smooth initial speed
-    const acceleration = 1.05; // mild acceleration
-    const maxSpinDuration = 1500; // spin for 1.5s
+    let speed = 1; // initial spin speed
+    const acceleration = 1.05;
+    const maxSpinDuration = 2000; // 1.5s spinning
 
     const startTime = Date.now();
 
@@ -549,23 +542,30 @@ startQuote.addEventListener('click', () => {
             startQuote.style.transition = "transform 0.5s ease-out";
             startQuote.style.transform = "rotateY(0deg)";
 
-            // Slide container slightly left so the group is centered
+            // Measure GoggleTools width
+            startTitle.style.opacity = 1; // temporarily reveal to measure
+            const gWidth = startTitle.offsetWidth;
+            startTitle.style.opacity = 0;
+
+            // Slide quote to left by half of GoggleTools width so group centers
             startContainer.style.transition = "transform 1s ease-in-out";
-            startContainer.style.transform = "translateX(-40px)";
+            startContainer.style.transform = `translateX(-${gWidth/2}px)`;
 
-            // Reveal GoggleTools text
-            startTitle.style.opacity = 1;
-            startTitle.style.animation = "slideInRight 1s forwards";
-
-            // Reveal subtitle below after 1s
+            // Slide in GoggleTools from right
             setTimeout(() => {
+                startTitle.style.animation = "slideInFromRight 1s forwards";
+                startTitle.style.opacity = 1;
+            }, 500); // after quote slides
+
+            // Show subtitle and continue button
+            setTimeout(() => {
+                startSubtitle.style.animation = "slideDown 1s forwards";
                 startSubtitle.style.opacity = 1;
-                startSubtitle.style.animation = "slideInTop 1s forwards";
                 startContinue.style.opacity = 1;
                 startContinue.style.transition = "opacity 0.5s ease-in-out";
-            }, 1000);
+            }, 1500);
 
-            // Animate background to blue
+            // Animate background
             startScreen.style.transition = "background 1s ease-in-out";
             startScreen.style.background = "#3b82f6";
 
@@ -578,7 +578,7 @@ startQuote.addEventListener('click', () => {
     }, 30);
 });
 
-// Continue button hides start screen
+// Continue hides start screen
 startContinue.addEventListener('click', () => {
     startScreen.style.transition = "opacity 0.5s ease-in-out";
     startScreen.style.opacity = 0;
