@@ -538,25 +538,23 @@ startQuote.addEventListener('click', () => {
         if (elapsed > maxSpinDuration) {
             clearInterval(spinInterval);
 
-            // Smooth stop
-            startQuote.style.transition = "transform 0.5s ease-out";
-            startQuote.style.transform = "rotateY(0deg)";
+            // After spinning stops
+startQuote.style.transition = "transform 0.5s ease-out, left 1s ease-in-out";
 
-            // Measure GoggleTools width
-            startTitle.style.opacity = 1; // temporarily reveal to measure
-            const gWidth = startTitle.offsetWidth;
-            startTitle.style.opacity = 0;
+// Measure GoggleTools width
+startTitle.style.opacity = 1; // temporarily reveal to measure
+const gWidth = startTitle.offsetWidth;
+startTitle.style.opacity = 0;
 
-            // Slide quote to left by half of GoggleTools width so group centers
-            startContainer.style.transition = "transform 1s ease-in-out";
-            startContainer.style.transform = `translateX(-${gWidth/2}px)`;
+// Move only the quote left
+startQuote.style.position = "relative";
+startQuote.style.left = `-${gWidth/2}px`;
 
-            // Slide in GoggleTools from right
-            setTimeout(() => {
-                startTitle.style.animation = "slideInFromRight 1s forwards";
-                startTitle.style.opacity = 1;
-            }, 500); // after quote slides
-
+// Slide in GoggleTools from right
+setTimeout(() => {
+    startTitle.style.animation = "slideInFromRight 1s forwards";
+    startTitle.style.opacity = 1;
+}, 500);
             // Show subtitle and continue button
             setTimeout(() => {
                 startSubtitle.style.animation = "slideDown 1s forwards";
