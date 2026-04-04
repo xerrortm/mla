@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GoggleTools | World's First Offline Referencing Web</title>
+    <title>[NOW] GoggleTools</title>
     <script src="https://cdn.tailwindcss.com"></script>
 	<script src="https://cdn.jsdelivr.net/npm/qrious/dist/qrious.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.4.4/lz-string.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/lz-string@1.4.4/libs/lz-string.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/docx/7.3.0/docx.umd.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="icon" type="image/png" href="favicon.png">
     <style>
@@ -74,6 +74,26 @@
     		flex-direction: column;
     		align-items: flex-end;
 		}
+		#island {
+    		position: fixed;
+    		bottom: 20px;
+    		left: 20px;
+    		width: 130px;
+    		z-index: 9999;
+    		cursor: pointer;
+			animation: floatUpDown 2s ease-in-out infinite;
+		}
+
+		#island img {
+    		display: block;
+    		width: 100%;
+    		height: auto;
+		}
+
+		@keyframes floatUpDown {
+    		0%, 100% { transform: translateY(0px); }
+    		50% { transform: translateY(-10px); }
+		}
     </style>
 </head>
 <body class="bg-slate-50 min-h-screen text-slate-800">
@@ -92,9 +112,6 @@
             <button onclick="location.href='/mla/about.html'" class="text-sm font-semibold text-slate-600 hover:text-blue-600 px-3 py-2">
                 About
             </button>
-			<button id="settings-btn" class="text-sm font-semibold text-slate-600 hover:text-blue-600 px-3 py-2">
-    			Settings
-			</button>
         </div>
     </nav>
 
@@ -106,47 +123,14 @@
         	oninput="filterCitations()">
 		</div>
 
-		<!-- UPDATE BANNER -->
-		<div class="mb-10 relative overflow-hidden rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white shadow-xl">
-
-    		<div class="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
-    		<div class="absolute bottom-0 left-0 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
-
-    		<div class="relative flex items-center justify-between px-6 py-5">
-
-        		<div class="flex items-center gap-4">
-            		<div class="bg-white/20 backdrop-blur-md p-3 rounded-xl text-white text-lg shadow-inner">
-                		<i class="fas fa-rocket"></i>
-            		</div>
-
-            	<div>
-                	<h3 class="font-extrabold text-lg tracking-tight">
-                   		VERSION 1.5 IS OUT!
-                	</h3>
-                	<p class="text-sm text-white/80">
-                    	Project sharing, QR code sharing, search and performance fixes are now out!
-                	</p>
-
-                	<div class="flex gap-2 mt-2 text-xs">
-                    	<span class="bg-white/20 px-2 py-1 rounded-md">Share Projects</span>
-                    	<span class="bg-white/20 px-2 py-1 rounded-md">Search Citations</span>
-                    	<span class="bg-white/20 px-2 py-1 rounded-md">100% Free</span>
-                	</div>
-            	</div>
-        	</div>
-
-        	<div class="flex items-center gap-2">
-            	<button onclick="openUpdates()" class="bg-white text-blue-700 text-sm font-bold px-4 py-2 rounded-xl hover:bg-blue-100 transition">
-                	View Updates
-            	</button>
-
-            	<button onclick="this.parentElement.parentElement.parentElement.remove()" class="text-white/70 hover:text-white text-lg">
-               		<i class="fas fa-xmark"></i>
-            	</button>
-        	</div>
-
-    	</div>
-	</div>
+        <!-- Admin Countdown Banner -->
+        <div id="admin-banner" class="mb-8 bg-red-50 border border-red-100 text-red-800 px-6 py-6 rounded-2xl flex items-center justify-center shadow-sm">
+            <div class="text-center">
+                <h3 class="font-bold text-sm mb-2">Admin abuse starts in</h3>
+                <div id="admin-countdown" class="text-5xl font-extrabold text-red-600">10</div>
+				<button id="cancel-admin-btn" class="mt-4 px-4 py-2 bg-red-600 text-white rounded-xl hover:bg-red-700">Cancel</button>
+            </div>
+        </div>
 
         <!-- Dashboard Header -->
         <div class="flex justify-between items-end mb-10">
@@ -195,14 +179,26 @@
                 <div class="bg-slate-900 rounded-2xl p-6 text-white shadow-xl">
                     <h3 class="text-xs font-bold text-blue-400 uppercase tracking-widest mb-4">Quick Export</h3>
                     <button onclick="shareProjectLink()" class="w-full bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white font-bold px-4 py-3 rounded-xl shadow-xl flex items-center justify-between hover:scale-[1.02] hover:shadow-2xl active:scale-95 transition-all duration-200">
-                        <span class="text-sm">[NEW] Share Project Link</span><i class="fas fa-share-alt text-white"></i>
+                        <span class="text-sm">Share Project Link</span><i class="fas fa-share-alt text-white"></i>
                     </button>
 					<br>
 					<button onclick="showQRCode()" class="w-full bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white font-bold px-4 py-3 rounded-xl shadow-xl flex items-center justify-between hover:scale-[1.02] hover:shadow-2xl active:scale-95 transition-all duration-200">
-                        <span class="text-sm">[NEW] Share QR Code</span><i class="fas fa-qrcode text-white"></i>
+                        <span class="text-sm">Share QR Code</span><i class="fas fa-qrcode text-white"></i>
                     </button>
 					<br>
-                    <button onclick="copyProjectToClipboard()" class="w-full py-3 px-4 bg-slate-800 border border-slate-700 rounded-xl text-left hover:bg-slate-700 flex items-center justify-between">
+					<button onclick="exportCitations('txt')" class="w-full bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white font-bold px-4 py-3 rounded-xl shadow-xl flex items-center justify-between hover:scale-[1.02] hover:shadow-2xl active:scale-95 transition-all duration-200">
+                        <span class="text-sm">[NEW] Export as TXT</span><i class="fas fa-file-alt text-white"></i>
+                    </button>
+					<br>
+					<button onclick="exportCitations('pdf')" class="w-full bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white font-bold px-4 py-3 rounded-xl shadow-xl flex items-center justify-between hover:scale-[1.02] hover:shadow-2xl active:scale-95 transition-all duration-200">
+                        <span class="text-sm">[NEW] Export as PDF</span><i class="fas fa-file-pdf text-white"></i>
+                    </button>
+					<br>
+					<button onclick="exportCitations('docx')" class="w-full bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white font-bold px-4 py-3 rounded-xl shadow-xl flex items-center justify-between hover:scale-[1.02] hover:shadow-2xl active:scale-95 transition-all duration-200">
+                        <span class="text-sm">[NEW] Export as DOCX</span><i class="fas fa-file-word text-white"></i>
+                    </button>
+					<br>
+					<button onclick="copyProjectToClipboard()" class="w-full py-3 px-4 bg-slate-800 border border-slate-700 rounded-xl text-left hover:bg-slate-700 flex items-center justify-between">
                         <span class="text-sm">Copy All</span><i class="fas fa-copy text-slate-500"></i>
                     </button>
                     <br>
@@ -417,148 +413,11 @@
     		<i id="goggle-icon" class="fas fa-quote-right text-blue-600 cursor-pointer"></i>
 		</div>
 	</div>
-	<!-- SETTINGS PANEL -->
-<div id="settings-panel" class="fixed inset-0 bg-black/40 hidden items-center justify-center z-[10000] flex">
-
-  <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 relative transform scale-95 opacity-100 transition-all">
-
-    <!-- CLOSE BUTTON -->
-    <button id="close-settings" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-xl">
-      ✕
-    </button>
-
-    <!-- HEADER -->
-    <h2 class="text-2xl font-bold mb-6 text-gray-800">Settings</h2>
-
-    <!-- BETA BUTTON -->
-    <button id="beta-btn" class="w-full bg-yellow-400 hover:bg-yellow-500 py-3 rounded-xl font-bold text-white shadow-md transition-all">
-      BETA
-    </button>
-
-  </div>
-</div>
-
-<div id="email-ui" class="fixed inset-0 bg-black/40 hidden flex items-center justify-center z-50">
-  <div id="email-box" class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 relative">
-    <button onclick="closeEmailUI()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-xl">✕</button>
-
-    <div id="step-input">
-      <h2 class="text-2xl font-bold mb-4 text-gray-800">Enter Your Email</h2>
-      <input id="email-input" class="w-full p-3 border border-slate-300 rounded-xl mb-4 outline-none" placeholder="Email">
-      <button id="send-btn" class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold hover:bg-blue-700 transition">Send Code</button>
-    </div>
-
-    <div id="step-verify" class="hidden">
-      <h2 class="text-2xl font-bold mb-4 text-gray-800">Enter Code</h2>
-      <div class="flex justify-center gap-2 mb-4">
-        <input class="otp-input w-12 h-12 text-center border border-slate-300 rounded-xl" maxlength="1">
-        <input class="otp-input w-12 h-12 text-center border border-slate-300 rounded-xl" maxlength="1">
-        <input class="otp-input w-12 h-12 text-center border border-slate-300 rounded-xl" maxlength="1">
-        <input class="otp-input w-12 h-12 text-center border border-slate-300 rounded-xl" maxlength="1">
-        <input class="otp-input w-12 h-12 text-center border border-slate-300 rounded-xl" maxlength="1">
-        <input class="otp-input w-12 h-12 text-center border border-slate-300 rounded-xl" maxlength="1">
-      </div>
-      <button id="verify-btn" class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold hover:bg-blue-700 transition">Verify</button>
-    </div>
-
-    <div id="step-success" class="hidden text-center">
-      <h2 class="text-2xl font-bold text-blue-600">Success!</h2>
-    </div>
-  </div>
-</div>
-	<script src = "main.js"></script>
-	<script src = "tutorial.js"></script>
-	<script>
-		// ===== CONFIG =====
-const SERVICE_ID = "service_zjz7o0t";
-const TEMPLATE_ID = "template_e9fbdqa";
-const PUBLIC_KEY = "yGVzllcBp2uAdb4pI";
-emailjs.init(PUBLIC_KEY);
-
-// ===== ELEMENTS =====
-const settingsBtn = document.getElementById("settings-btn");
-const settingsPanel = document.getElementById("settings-panel");
-const betaBtn = document.getElementById("beta-btn");
-const closeSettings = document.getElementById("close-settings");
-
-const emailUI = document.getElementById("email-ui");
-const sendBtn = document.getElementById("send-btn");
-const verifyBtn = document.getElementById("verify-btn");
-const inputs = document.querySelectorAll(".otp-input");
-
-let sentCode = "";
-
-// ===== SETTINGS PANEL =====
-settingsBtn.onclick = () => settingsPanel.classList.remove("hidden");
-closeSettings.onclick = () => settingsPanel.classList.add("hidden");
-
-// Clicking BETA opens the email UI
-betaBtn.onclick = () => {
-  settingsPanel.classList.add("hidden");
-  emailUI.classList.remove("hidden");
-};
-
-// ===== SEND EMAIL =====
-sendBtn.onclick = async () => {
-  const email = document.getElementById("email-input").value.trim();
-  if (!email) {
-    showToast("Enter your email!");
-    return;
-  }
-
-  // Generate OTP code
-  sentCode = Math.floor(100000 + Math.random() * 900000).toString();
-
-  // Send email via EmailJS
-  await emailjs.send(SERVICE_ID, TEMPLATE_ID, {
-    email: email,
-    code: sentCode,
-  });
-
-  // Show verification step
-  document.getElementById("step-input").classList.add("hidden");
-  document.getElementById("step-verify").classList.remove("hidden");
-};
-
-// ===== OTP AUTO-MOVE =====
-inputs.forEach((input, i) => {
-  input.addEventListener("keyup", (e) => {
-    if (e.key >= "0" && e.key <= "9" && i < inputs.length - 1) inputs[i + 1].focus();
-    if (e.key === "Backspace" && i > 0) inputs[i - 1].focus();
-  });
-});
-
-// ===== VERIFY CODE =====
-verifyBtn.onclick = () => {
-  let entered = "";
-  inputs.forEach((i) => (entered += i.value));
-
-  if (entered !== sentCode) {
-    showToast("Wrong code!");
-    return;
-  }
-
-  // Show success
-  document.getElementById("step-verify").classList.add("hidden");
-  document.getElementById("step-success").classList.remove("hidden");
-
-  const email = document.getElementById("email-input").value;
-  const encoded = LZString.compressToEncodedURIComponent(JSON.stringify(email));
-  localStorage.setItem("betaUser", encoded);
-
-  setTimeout(() => {
-    window.location.href = `/mla/beta?user=${encoded}`;
-  }, 1200);
-};
-
-// ===== CLOSE EMAIL UI =====
-function closeEmailUI() {
-  emailUI.classList.add("hidden");
-  document.getElementById("step-input").classList.remove("hidden");
-  document.getElementById("step-verify").classList.add("hidden");
-  document.getElementById("step-success").classList.add("hidden");
-  inputs.forEach(i => i.value = "");
-}
-	</script>
+	<a href="/mla/easter" id="island" target="_blank">
+    	<img src="../island.png">
+	</a>
+	<script src = "../main.js"></script>
+	<script src = "../adminabuse.js"></script>
+	<script src = "../tutorial.js"></script>
 </body>
 </html>
