@@ -519,8 +519,9 @@ const startScreen = document.getElementById('start-screen');
 const startQuote = document.getElementById('start-quote');
 const startTitle = document.getElementById('start-title');
 const startSubtitle = document.getElementById('start-subtitle');
+const startContainer = document.getElementById('start-container');
 
-function starthellnah() {
+function starthellnah () {
     let angle = 0;
     let speed = 10;
     const acceleration = 1.05;
@@ -531,40 +532,42 @@ function starthellnah() {
     const spinInterval = setInterval(() => {
         const elapsed = Date.now() - startTime;
         if (elapsed > maxSpinDuration) {
-            clearInterval(spinInterval);
+			clearInterval(spinInterval);
 
-            const finalAngle = Math.round(angle / 360) * 360;
-            startQuote.style.transition = "transform 0.4s ease-out";
-            startQuote.style.transform = `rotateY(${finalAngle}deg)`;
+			let finalAngle = Math.round(angle / 360) * 360;
 
-            setTimeout(() => {
-                startTitle.style.opacity = 1;
-                const gWidth = startTitle.offsetWidth;
-                startTitle.style.opacity = 0;
+			startQuote.style.transition = "transform 0.4s ease-out";
+			startQuote.style.transform = `rotateY(${finalAngle}deg)`;
 
-                startQuote.style.position = "relative";
-                startQuote.style.left = "0px";
-                startQuote.offsetHeight;
+			setTimeout(() => {
 
-                startQuote.style.transition += ", left 0.8s ease-in-out";
-                startQuote.style.left = `-${gWidth / 2}px`;
+    			startTitle.style.opacity = 1;
+   				const gWidth = startTitle.offsetWidth;
+				startTitle.style.opacity = 0;
 
-                setTimeout(() => {
-                    startTitle.style.animation = "slideInFromRight 1s forwards";
-                    startTitle.style.opacity = 1;
-                }, 200);
-            }, 400);
+				startQuote.style.position = "relative";
+				startQuote.style.left = "0px";
 
+				startQuote.offsetHeight;
+
+				startQuote.style.transition += ", left 0.8s ease-in-out";
+				startQuote.style.left = `-${gWidth/2}px`;
+
+    			setTimeout(() => {
+        			startTitle.style.animation = "slideInFromRight 1s forwards";
+        			startTitle.style.opacity = 1;
+    			}, 200);
+
+			}, 400);
             setTimeout(() => {
                 startSubtitle.style.animation = "slideDown 1s forwards";
                 startSubtitle.style.opacity = 1;
+
             }, 1500);
 
-            // ✅ Change start screen & body color to blue
+            startScreen.style.transition = "background-color 1s ease-in-out";
             startScreen.classList.remove("bg-black");
-            startScreen.classList.add("bg-blue-600");
-            document.body.classList.remove("bg-black");
-            document.body.classList.add("bg-blue-600");
+			startScreen.classList.add("bg-blue-600");
 
             return;
         }
@@ -573,19 +576,13 @@ function starthellnah() {
         speed *= acceleration;
         startQuote.style.transform = `rotateY(${angle}deg)`;
     }, 30);
-
-    // fade out after 6s
-    setTimeout(() => {
-        startScreen.style.transition = "opacity 0.5s ease-in-out";
-        startScreen.style.opacity = 0;
-
-        setTimeout(() => {
-            startScreen.style.display = "none";
-            // Optional: restore body to original after fade
-            document.body.classList.remove("bg-blue-600");
-            document.body.classList.add("bg-slate-50"); // your normal body bg
-        }, 500);
-    }, 6000);
+	setTimeout(() => {
+    	startScreen.style.transition = "opacity 0.5s ease-in-out";
+    	startScreen.style.opacity = 0;
+    	setTimeout(() => {
+        	startScreen.style.display = "none";
+    	}, 500);
+	}, 6000);
 }
 
 window.addEventListener('DOMContentLoaded', starthellnah);
