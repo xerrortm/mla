@@ -566,7 +566,8 @@ function starthellnah () {
             }, 1500);
 
             startScreen.style.transition = "background-color 1s ease-in-out";
-            startScreen.style.backgroundColor = "#3182ce";
+            startScreen.classList.remove("bg-black");
+			startScreen.classList.add("bg-blue-600");
 
             return;
         }
