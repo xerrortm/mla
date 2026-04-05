@@ -94,24 +94,22 @@
     		0%, 100% { transform: translateY(0px); }
     		50% { transform: translateY(-10px); }
 		}
-#start-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    perspective: 1000px; /* 👈 THIS FIXES IT */
-}
-/* GoggleTools slides in from right */
-@keyframes slideInFromRight {
-    0% { transform: translateX(100%); opacity: 0; }
-    100% { transform: translateX(0); opacity: 1; }
-}
+		#start-container {
+    		display: flex;
+    		align-items: center;
+    		justify-content: center;
+    		position: relative;
+    		perspective: 1000px;
+		}
+		@keyframes slideInFromRight {
+    		0% { transform: translateX(100%); opacity: 0; }
+    		100% { transform: translateX(-40px); opacity: 1; }
+		}
 
-/* Subtitle slides down */
-@keyframes slideDown {
-    0% { opacity: 0; transform: translateY(-20px); }
-    100% { opacity: 1; transform: translateY(0); }
-}
+		@keyframes slideDown {
+    		0% { opacity: 0; transform: translateY(-20px); }
+    		100% { opacity: 1; transform: translateY(0); }
+		}
     </style>
 </head>
 <body class="bg-slate-50 min-h-screen text-slate-800">
@@ -527,28 +525,24 @@ const startContainer = document.getElementById('start-container');
 
 function starthellnah () {
     let angle = 0;
-    let speed = 10; // initial spin speed
+    let speed = 10;
     const acceleration = 1.05;
-    const maxSpinDuration = 2000; // 1.5s spinning
+    const maxSpinDuration = 2000;
 
     const startTime = Date.now();
 
     const spinInterval = setInterval(() => {
         const elapsed = Date.now() - startTime;
         if (elapsed > maxSpinDuration) {
-            // Stop spinning properly
 clearInterval(spinInterval);
 
-// Snap to nearest full rotation
 let finalAngle = Math.round(angle / 360) * 360;
 
 startQuote.style.transition = "transform 0.4s ease-out";
 startQuote.style.transform = `rotateY(${finalAngle}deg)`;
 
-// Wait for spin to finish BEFORE moving anything
 setTimeout(() => {
 
-    // Measure GoggleTools width
     startTitle.style.opacity = 1;
     const gWidth = startTitle.offsetWidth;
     startTitle.style.opacity = 0;
@@ -556,20 +550,17 @@ setTimeout(() => {
 startQuote.style.position = "relative";
 startQuote.style.left = "0px";
 
-// force reflow (VERY IMPORTANT)
 startQuote.offsetHeight;
 
 startQuote.style.transition += ", left 0.8s ease-in-out";
 startQuote.style.left = `-${gWidth/2}px`;
 
-    // Slide in text
     setTimeout(() => {
         startTitle.style.animation = "slideInFromRight 1s forwards";
         startTitle.style.opacity = 1;
     }, 200);
 
-}, 400); // wait for rotation to finish
-            // Show subtitle and continue button
+}, 400);
             setTimeout(() => {
                 startSubtitle.style.animation = "slideDown 1s forwards";
                 startSubtitle.style.opacity = 1;
@@ -590,7 +581,6 @@ startQuote.style.left = `-${gWidth/2}px`;
     }, 30);
 }
 
-// Continue hides start screen
 startContinue.addEventListener('click', () => {
     startScreen.style.transition = "opacity 0.5s ease-in-out";
     startScreen.style.opacity = 0;
