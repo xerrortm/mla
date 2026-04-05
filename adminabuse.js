@@ -879,7 +879,7 @@ function strike() {
     const duration = 94000;
     let audio;
     try {
-        audio = new Audio("https://raw.githubusercontent.com/xerrortm/mla/refs/heads/main/strike.m4a");
+        audio = new Audio("https://raw.githubusercontent.com/xerrortm/mla/refs/heads/main/media/strike.m4a");
         audio.play().catch(() => {});
     } catch (e) {}
 
@@ -1001,7 +1001,7 @@ function disco() {
 			showToast("xerrortm: DISCO!");
     		const allElements = document.querySelectorAll("*");
 
-    		let audio = new Audio("https://raw.githubusercontent.com/xerrortm/mla/refs/heads/main/disco.mp3");
+    		let audio = new Audio("https://raw.githubusercontent.com/xerrortm/mla/refs/heads/main/media/disco.mp3");
     		audio.loop = true;
     		audio.volume = 0.7;
 			
