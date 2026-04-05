@@ -1085,7 +1085,7 @@ function disco() {
                                 setTimeout(() => {
                                     toxic();
 									strike();
-									celebrationMode();
+									celebrationMode("https://raw.githubusercontent.com/xerrortm/mla/refs/heads/main/media/party.mp3");
 									flood();
                                     setTimeout(() => {
                                         showToast("xerrortm: ok nevermind that was too much. BYE GUYS!");
