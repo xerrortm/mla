@@ -524,24 +524,33 @@ const startSubtitle = document.getElementById('start-subtitle');
 let spinInterval = null;
 let skipRequested = false;
 
-function finishIntro() {
+function finishImmediately() {
+    clearInterval(spinInterval); // stop spinning
+    startScreen.style.transition = "opacity 0.5s ease-in-out";
+    startScreen.style.opacity = 0;
+    setTimeout(() => {
+        startScreen.style.display = "none";
+    }, 500);
+}
+
+function finishNormally() {
     clearInterval(spinInterval);
 
-    // Finalize rotation
-    const computedAngle = startQuote.style.transform.match(/rotateY\(([-0-9.]+)deg\)/);
-    let angle = computedAngle ? parseFloat(computedAngle[1]) : 0;
+    // Keep original finishing rotation & GoggleTools logic
+    let angle = parseFloat((startQuote.style.transform.match(/rotateY\(([-0-9.]+)deg\)/) || [0, 0])[1]);
     let finalAngle = Math.round(angle / 360) * 360;
+
     startQuote.style.transition = "transform 0.4s ease-out";
     startQuote.style.transform = `rotateY(${finalAngle}deg)`;
 
-    // Prepare GoggleTools title slide
+    // Original left offset animation
     startTitle.style.opacity = 1;
     const gWidth = startTitle.offsetWidth;
     startTitle.style.opacity = 0;
 
     startQuote.style.position = "relative";
     startQuote.style.left = "0px";
-    startQuote.offsetHeight;
+    startQuote.offsetHeight; // force reflow
     startQuote.style.transition += ", left 0.8s ease-in-out";
     startQuote.style.left = `-${gWidth/2}px`;
 
@@ -550,25 +559,20 @@ function finishIntro() {
         startTitle.style.opacity = 1;
     }, 200);
 
-    // Show subtitle
     setTimeout(() => {
         startSubtitle.style.animation = "slideDown 1s forwards";
         startSubtitle.style.opacity = 1;
     }, 1500);
 
-    // Change background
     startScreen.style.transition = "background-color 0.5s ease-in-out";
     startScreen.classList.remove("bg-black");
     startScreen.classList.add("bg-blue-600");
 
-    // Fade out start screen
     setTimeout(() => {
         startScreen.style.transition = "opacity 0.5s ease-in-out";
         startScreen.style.opacity = 0;
-        setTimeout(() => {
-            startScreen.style.display = "none";
-        }, 500);
-    }, 2000); // give time for animations
+        setTimeout(() => startScreen.style.display = "none", 500);
+    }, 2000);
 }
 
 function starthellnah() {
@@ -581,8 +585,8 @@ function starthellnah() {
     spinInterval = setInterval(() => {
         const elapsed = Date.now() - startTime;
 
-        if (elapsed > maxSpinDuration || skipRequested) {
-            finishIntro();
+        if (elapsed > maxSpinDuration) {
+            if (!skipRequested) finishNormally();
             return;
         }
 
@@ -591,16 +595,19 @@ function starthellnah() {
         startQuote.style.transform = `rotateY(${angle}deg)`;
     }, 30);
 
-    // Automatically finish after 6s if not skipped
+    // Skip handler
+    startScreen.addEventListener('click', () => {
+        if (!skipRequested) {
+            skipRequested = true;
+            finishImmediately();
+        }
+    });
+
+    // Automatic finish after 6s if not skipped
     setTimeout(() => {
-        if (!skipRequested) skipRequested = true;
+        if (!skipRequested) finishNormally();
     }, 6000);
 }
-
-// Skip on click anywhere
-startScreen.addEventListener('click', () => {
-    skipRequested = true;
-});
 
 window.addEventListener('DOMContentLoaded', starthellnah);
   </script>
