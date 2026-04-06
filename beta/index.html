@@ -643,11 +643,14 @@ function getOrCreateUserId() {
 }
 
 async function saveProjectsToCloud() {
-    if (!cloudCheckbox.checked) return;
+    if (!cloudCheckbox.checked) {
+		localStorage.setItem('saving', 'false');
+		return;
+	}
 
     const uid = getOrCreateUserId();
     cloudUserDisplay.textContent = `Your Cloud ID: ${uid}`;
-
+	localStorage.setItem('saving', 'true');
     try {
         await db.ref(`projects/${uid}`).set(projects);
         showToast("Projects backed up to cloud!");
@@ -656,10 +659,6 @@ async function saveProjectsToCloud() {
         showToast("Failed to save to cloud. Check your connection.");
     }
 }
-
-window.addEventListener('beforeunload', () => {
-    if (cloudCheckbox.checked) saveProjectsToCloud();
-});
 
 document.getElementById('cloud-restore-btn').addEventListener('click', async () => {
     const uid = prompt("Enter your Cloud User ID:");
@@ -673,7 +672,7 @@ document.getElementById('cloud-restore-btn').addEventListener('click', async () 
         }
 
         const cloudData = snapshot.val();
-        // Merge projects: keep existing, add cloud ones
+
         const existingIds = new Set(projects.map(p => p.id));
         cloudData.forEach(p => {
             if (!existingIds.has(p.id)) projects.push(p);
@@ -690,7 +689,13 @@ document.getElementById('cloud-restore-btn').addEventListener('click', async () 
 });
 
 cloudCheckbox.addEventListener('change', () => {
-    if (cloudCheckbox.checked) saveProjectsToCloud();
+	let saving = localStorage.getItem('saving') === 'true';
+	if (saving) {
+		saveProjectsToCloud();
+		localStorage.setItem('saving', 'true');
+	} else {
+		localStorage.setItem('saving', 'false');
+	}
 });
 
 window.addEventListener('DOMContentLoaded', starthellnah);
