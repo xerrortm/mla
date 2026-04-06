@@ -672,31 +672,34 @@ document.getElementById('cloud-restore-btn').addEventListener('click', async () 
         }
 
         const cloudData = snapshot.val();
+        if (!cloudData) return;
 
-// Convert object to array safely
-const cloudProjects = Object.values(cloudData).map(p => ({
-    id: p.id || 'user_' + Math.random().toString(36).substr(2, 9),
-    citations: p.citations || [],
-    // copy other fields if needed
-    ...p
-}));
+        // Convert Firebase object to array safely
+        const cloudProjects = Object.values(cloudData).map(p => ({
+            id: p?.id || 'user_' + Math.random().toString(36).substr(2, 9),
+            citations: Array.isArray(p?.citations) ? p.citations : [],
+            name: p?.name || "Untitled Project",
+            // include any other fields you need safely
+            ...p
+        }));
 
-// Merge projects: keep existing, add cloud ones
-const existingIds = new Set(projects.map(p => p.id));
-cloudProjects.forEach(p => {
-    if (!existingIds.has(p.id)) projects.push(p);
-});
+        // Merge with local projects
+        const existingIds = new Set(projects.map(p => p?.id));
+        cloudProjects.forEach(p => {
+            if (!p) return; // skip undefined
+            if (!existingIds.has(p.id)) projects.push(p);
+        });
 
-localStorage.setItem('citeflow_projects', JSON.stringify(projects));
-localStorage.setItem('cloudUserId', uid); // sync user ID
-renderProjects();
-showToast("Projects restored from cloud!");
+        localStorage.setItem('citeflow_projects', JSON.stringify(projects));
+        localStorage.setItem('cloudUserId', uid); // sync user ID
+
+        renderProjects();
+        showToast("Projects restored from cloud!");
     } catch (err) {
         console.error(err);
-        showToast("Failed to restore. Check your connection.");
+        showToast("Failed to restore from cloud. Check your connection.");
     }
 });
-
 cloudCheckbox.addEventListener('change', () => {
 	let saving = localStorage.getItem('saving') === 'true';
 	if (saving) {
