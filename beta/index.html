@@ -633,6 +633,12 @@ const db = firebase.database();
 
 // Ensure projects array exists
 let projects = JSON.parse(localStorage.getItem('citeflow_projects')) || [];
+if (!projects || !projects.length) return; // wait until projects exist
+
+projects.forEach(p => {
+    if (!p.citations) return; // skip projects that aren’t ready
+    console.log(`Project ${p.id} has ${p.citations.length} citations`);
+});
 
 // DOM elements
 const cloudCheckbox = document.getElementById('cloud-save-checkbox');
