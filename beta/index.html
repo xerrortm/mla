@@ -675,6 +675,10 @@ document.getElementById('cloud-restore-btn').addEventListener('click', async () 
 
         const existingIds = new Set(projects.map(p => p.id));
         Object.values(cloudData).forEach(p => {
+
+    		if (!p.citations) p.citations = [];
+    		if (!p.id) p.id = 'user_' + Math.random().toString(36).substr(2, 9);
+
     		if (!existingIds.has(p.id)) projects.push(p);
 		});
 
