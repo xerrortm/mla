@@ -674,9 +674,9 @@ document.getElementById('cloud-restore-btn').addEventListener('click', async () 
         const cloudData = snapshot.val();
 
         const existingIds = new Set(projects.map(p => p.id));
-        cloudData.forEach(p => {
-            if (!existingIds.has(p.id)) projects.push(p);
-        });
+        Object.values(cloudData).forEach(p => {
+    		if (!existingIds.has(p.id)) projects.push(p);
+		});
 
         localStorage.setItem('citeflow_projects', JSON.stringify(projects));
         localStorage.setItem('cloudUserId', uid); // sync user ID
