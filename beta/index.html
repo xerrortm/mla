@@ -618,7 +618,6 @@ function starthellnah() {
     }, 6000);
 }
 
-// Firebase config
 const firebaseConfig = {
     apiKey: "AIzaSyA_XrD0M2R-V0IvU_lrxlZ82wIp_K7QoCg",
     authDomain: "error-inc.firebaseapp.com",
@@ -626,121 +625,72 @@ const firebaseConfig = {
     storageBucket: "error-inc.firebasestorage.app",
     messagingSenderId: "876188868410",
     appId: "1:876188868410:web:95e283ccefac52d15c7a03",
-    databaseURL: "https://error-inc-default-rtdb.firebaseio.com"
+	databaseURL: "https://error-inc-default-rtdb.firebaseio.com"
 };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-// Ensure projects array exists
-let projects = JSON.parse(localStorage.getItem('citeflow_projects')) || [];
-if (!projects || !projects.length) return; // wait until projects exist
-
-projects.forEach(p => {
-    if (!p.citations) return; // skip projects that aren’t ready
-    console.log(`Project ${p.id} has ${p.citations.length} citations`);
-});
-
-// DOM elements
 const cloudCheckbox = document.getElementById('cloud-save-checkbox');
 const cloudUserDisplay = document.getElementById('cloud-user-id');
-const savedChecked = localStorage.getItem('cloudCheckboxChecked');
-cloudCheckbox.checked = savedChecked === 'true';
 
-// Checkbox listener
-cloudCheckbox.addEventListener('change', () => {
-    localStorage.setItem('cloudCheckboxChecked', cloudCheckbox.checked);
-    if (cloudCheckbox.checked) saveProjectsToCloud();
-});
-
-// Generate or get Cloud User ID
 function getOrCreateUserId() {
     let uid = localStorage.getItem('cloudUserId');
     if (!uid) {
         uid = 'user_' + Math.random().toString(36).substr(2, 9);
         localStorage.setItem('cloudUserId', uid);
     }
-    if (cloudUserDisplay) cloudUserDisplay.textContent = `Your Cloud ID: ${uid}`;
     return uid;
 }
 
-// Save to cloud
 async function saveProjectsToCloud() {
     if (!cloudCheckbox.checked) return;
+
     const uid = getOrCreateUserId();
+    cloudUserDisplay.textContent = `Your Cloud ID: ${uid}`;
+
     try {
         await db.ref(`projects/${uid}`).set(projects);
         showToast("Projects backed up to cloud!");
     } catch (err) {
         console.error(err);
-        showToast("Failed to save to cloud: ${err}");
+        showToast("Failed to save to cloud. Check your connection.");
     }
 }
 
-// Restore from cloud
-async function restoreProjectsFromCloud(uid) {
+window.addEventListener('beforeunload', () => {
+    if (cloudCheckbox.checked) saveProjectsToCloud();
+});
+
+document.getElementById('cloud-restore-btn').addEventListener('click', async () => {
+    const uid = prompt("Enter your Cloud User ID:");
     if (!uid) return;
+
     try {
         const snapshot = await db.ref(`projects/${uid}`).get();
         if (!snapshot.exists()) {
-            showToast("No cloud data found for this ID");
+            showToast("No data found for this User ID");
             return;
         }
 
         const cloudData = snapshot.val();
-        if (!Array.isArray(cloudData)) {
-            console.warn("Cloud data is not an array", cloudData);
-            return;
-        }
-
+        // Merge projects: keep existing, add cloud ones
         const existingIds = new Set(projects.map(p => p.id));
         cloudData.forEach(p => {
             if (!existingIds.has(p.id)) projects.push(p);
         });
 
         localStorage.setItem('citeflow_projects', JSON.stringify(projects));
-        localStorage.setItem('cloudUserId', uid);
+        localStorage.setItem('cloudUserId', uid); // sync user ID
         renderProjects();
         showToast("Projects restored from cloud!");
     } catch (err) {
         console.error(err);
-        showToast("Failed to restore cloud data: ${err}");
+        showToast("Failed to restore. Check your connection.");
     }
-}
-
-// Restore button
-document.getElementById('cloud-restore-btn').addEventListener('click', async () => {
-    const uid = prompt("Enter your Cloud User ID:");
-    if (!uid) return;
-    restoreProjectsFromCloud(uid);
 });
 
-// Add a new project locally and optionally to cloud
-function addProjectToCloud(newProject) {
-    projects.push(newProject);
-    localStorage.setItem('citeflow_projects', JSON.stringify(projects));
+cloudCheckbox.addEventListener('change', () => {
     if (cloudCheckbox.checked) saveProjectsToCloud();
-}
-
-// Listen to cloud changes
-function listenToCloudChanges() {
-    const uid = getOrCreateUserId();
-    db.ref(`projects/${uid}`).on('value', snapshot => {
-        if (!snapshot.exists()) return;
-        const cloudData = snapshot.val();
-        if (!Array.isArray(cloudData)) return;
-        const existingIds = new Set(projects.map(p => p.id));
-        cloudData.forEach(p => {
-            if (!existingIds.has(p.id)) projects.push(p);
-        });
-        localStorage.setItem('citeflow_projects', JSON.stringify(projects));
-        renderProjects();
-    });
-}
-
-// On page load
-window.addEventListener('DOMContentLoaded', () => {
-    getOrCreateUserId();
-    listenToCloudChanges();
 });
 
 window.addEventListener('DOMContentLoaded', starthellnah);
