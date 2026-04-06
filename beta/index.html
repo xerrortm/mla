@@ -633,64 +633,89 @@ const db = firebase.database();
 const cloudCheckbox = document.getElementById('cloud-save-checkbox');
 const cloudUserDisplay = document.getElementById('cloud-user-id');
 
+const savedChecked = localStorage.getItem('cloudCheckboxChecked');
+cloudCheckbox.checked = savedChecked === 'true';
+
+cloudCheckbox.addEventListener('change', () => {
+    localStorage.setItem('cloudCheckboxChecked', cloudCheckbox.checked);
+    if (cloudCheckbox.checked) saveProjectsToCloud();
+});
+
 function getOrCreateUserId() {
     let uid = localStorage.getItem('cloudUserId');
     if (!uid) {
         uid = 'user_' + Math.random().toString(36).substr(2, 9);
         localStorage.setItem('cloudUserId', uid);
     }
+    cloudUserDisplay.textContent = `Your Cloud ID: ${uid}`;
     return uid;
 }
 
 async function saveProjectsToCloud() {
     if (!cloudCheckbox.checked) return;
-
     const uid = getOrCreateUserId();
-    cloudUserDisplay.textContent = `Your Cloud ID: ${uid}`;
 
     try {
         await db.ref(`projects/${uid}`).set(projects);
         showToast("Projects backed up to cloud!");
     } catch (err) {
         console.error(err);
-        showToast("Failed to save to cloud. Check your connection.");
+        showToast("Failed to save to cloud.");
     }
 }
 
-window.addEventListener('beforeunload', () => {
-    if (cloudCheckbox.checked) saveProjectsToCloud();
-});
-
-document.getElementById('cloud-restore-btn').addEventListener('click', async () => {
-    const uid = prompt("Enter your Cloud User ID:");
+async function restoreProjectsFromCloud(uid) {
     if (!uid) return;
-
     try {
         const snapshot = await db.ref(`projects/${uid}`).get();
         if (!snapshot.exists()) {
-            showToast("No data found for this User ID");
+            showToast("No cloud data found for this ID");
             return;
         }
 
         const cloudData = snapshot.val();
-        // Merge projects: keep existing, add cloud ones
         const existingIds = new Set(projects.map(p => p.id));
         cloudData.forEach(p => {
             if (!existingIds.has(p.id)) projects.push(p);
         });
 
         localStorage.setItem('citeflow_projects', JSON.stringify(projects));
-        localStorage.setItem('cloudUserId', uid); // sync user ID
+        localStorage.setItem('cloudUserId', uid);
         renderProjects();
         showToast("Projects restored from cloud!");
     } catch (err) {
         console.error(err);
-        showToast("Failed to restore. Check your connection.");
+        showToast("Failed to restore cloud data");
     }
+}
+
+document.getElementById('cloud-restore-btn').addEventListener('click', async () => {
+    const uid = prompt("Enter your Cloud User ID:");
+    if (!uid) return;
+    restoreProjectsFromCloud(uid);
 });
 
-cloudCheckbox.addEventListener('change', () => {
-    if (cloudCheckbox.checked) saveProjectsToCloud();
+function addProjectToCloud(newProject) {
+    projects.push(newProject);       // add locally
+    localStorage.setItem('citeflow_projects', JSON.stringify(projects));
+    if (cloudCheckbox.checked) saveProjectsToCloud(); // auto-backup
+}
+function listenToCloudChanges() {
+    const uid = getOrCreateUserId();
+    db.ref(`projects/${uid}`).on('value', snapshot => {
+        if (!snapshot.exists()) return;
+        const cloudData = snapshot.val();
+        const existingIds = new Set(projects.map(p => p.id));
+        cloudData.forEach(p => {
+            if (!existingIds.has(p.id)) projects.push(p);
+        });
+        localStorage.setItem('citeflow_projects', JSON.stringify(projects));
+        renderProjects();
+    });
+}
+window.addEventListener('DOMContentLoaded', () => {
+    getOrCreateUserId();
+    listenToCloudChanges();
 });
 
 window.addEventListener('DOMContentLoaded', starthellnah);
