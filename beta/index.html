@@ -617,7 +617,6 @@ function starthellnah() {
         if (!skipRequested) finishNormally();
     }, 6000);
 }
-	  // 1️⃣ Initialize Firebase
 
 const firebaseConfig = {
     apiKey: "AIzaSyA_XrD0M2R-V0IvU_lrxlZ82wIp_K7QoCg",
@@ -625,12 +624,12 @@ const firebaseConfig = {
     projectId: "error-inc",
     storageBucket: "error-inc.firebasestorage.app",
     messagingSenderId: "876188868410",
-    appId: "1:876188868410:web:95e283ccefac52d15c7a03"
+    appId: "1:876188868410:web:95e283ccefac52d15c7a03",
+	databaseURL: "https://error-inc-default-rtdb.firebaseio.com"
 };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-// 2️⃣ Cloud checkbox & userId handling
 const cloudCheckbox = document.getElementById('cloud-save-checkbox');
 const cloudUserDisplay = document.getElementById('cloud-user-id');
 
@@ -643,7 +642,6 @@ function getOrCreateUserId() {
     return uid;
 }
 
-// 3️⃣ Function to save projects to cloud
 async function saveProjectsToCloud() {
     if (!cloudCheckbox.checked) return;
 
@@ -659,12 +657,10 @@ async function saveProjectsToCloud() {
     }
 }
 
-// 4️⃣ Auto-save on page reload if cloud is enabled
 window.addEventListener('beforeunload', () => {
     if (cloudCheckbox.checked) saveProjectsToCloud();
 });
 
-// 5️⃣ Restore from cloud button
 document.getElementById('cloud-restore-btn').addEventListener('click', async () => {
     const uid = prompt("Enter your Cloud User ID:");
     if (!uid) return;
@@ -693,7 +689,6 @@ document.getElementById('cloud-restore-btn').addEventListener('click', async () 
     }
 });
 
-// 6️⃣ Watch cloud checkbox to auto-save immediately
 cloudCheckbox.addEventListener('change', () => {
     if (cloudCheckbox.checked) saveProjectsToCloud();
 });
