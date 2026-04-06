@@ -617,6 +617,86 @@ function starthellnah() {
         if (!skipRequested) finishNormally();
     }, 6000);
 }
+	  // 1️⃣ Initialize Firebase
+
+const firebaseConfig = {
+    apiKey: "AIzaSyA_XrD0M2R-V0IvU_lrxlZ82wIp_K7QoCg",
+    authDomain: "error-inc.firebaseapp.com",
+    projectId: "error-inc",
+    storageBucket: "error-inc.firebasestorage.app",
+    messagingSenderId: "876188868410",
+    appId: "1:876188868410:web:95e283ccefac52d15c7a03"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+// 2️⃣ Cloud checkbox & userId handling
+const cloudCheckbox = document.getElementById('cloud-save-checkbox');
+const cloudUserDisplay = document.getElementById('cloud-user-id');
+
+function getOrCreateUserId() {
+    let uid = localStorage.getItem('cloudUserId');
+    if (!uid) {
+        uid = 'user_' + Math.random().toString(36).substr(2, 9);
+        localStorage.setItem('cloudUserId', uid);
+    }
+    return uid;
+}
+
+// 3️⃣ Function to save projects to cloud
+async function saveProjectsToCloud() {
+    if (!cloudCheckbox.checked) return;
+
+    const uid = getOrCreateUserId();
+    cloudUserDisplay.textContent = `Your Cloud ID: ${uid}`;
+
+    try {
+        await db.ref(`projects/${uid}`).set(projects);
+        showToast("Projects backed up to cloud!");
+    } catch (err) {
+        console.error(err);
+        showToast("Failed to save to cloud. Check your connection.");
+    }
+}
+
+// 4️⃣ Auto-save on page reload if cloud is enabled
+window.addEventListener('beforeunload', () => {
+    if (cloudCheckbox.checked) saveProjectsToCloud();
+});
+
+// 5️⃣ Restore from cloud button
+document.getElementById('cloud-restore-btn').addEventListener('click', async () => {
+    const uid = prompt("Enter your Cloud User ID:");
+    if (!uid) return;
+
+    try {
+        const snapshot = await db.ref(`projects/${uid}`).get();
+        if (!snapshot.exists()) {
+            showToast("No data found for this User ID");
+            return;
+        }
+
+        const cloudData = snapshot.val();
+        // Merge projects: keep existing, add cloud ones
+        const existingIds = new Set(projects.map(p => p.id));
+        cloudData.forEach(p => {
+            if (!existingIds.has(p.id)) projects.push(p);
+        });
+
+        localStorage.setItem('citeflow_projects', JSON.stringify(projects));
+        localStorage.setItem('cloudUserId', uid); // sync user ID
+        renderProjects();
+        showToast("Projects restored from cloud!");
+    } catch (err) {
+        console.error(err);
+        showToast("Failed to restore. Check your connection.");
+    }
+});
+
+// 6️⃣ Watch cloud checkbox to auto-save immediately
+cloudCheckbox.addEventListener('change', () => {
+    if (cloudCheckbox.checked) saveProjectsToCloud();
+});
 
 window.addEventListener('DOMContentLoaded', starthellnah);
   </script>
