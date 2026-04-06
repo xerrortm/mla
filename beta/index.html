@@ -673,19 +673,24 @@ document.getElementById('cloud-restore-btn').addEventListener('click', async () 
 
         const cloudData = snapshot.val();
 
-        const existingIds = new Set(projects.map(p => p.id));
-        Object.values(cloudData).forEach(p => {
+// Convert object to array safely
+const cloudProjects = Object.values(cloudData).map(p => ({
+    id: p.id || 'user_' + Math.random().toString(36).substr(2, 9),
+    citations: p.citations || [],
+    // copy other fields if needed
+    ...p
+}));
 
-    		if (!p.citations) p.citations = [];
-    		if (!p.id) p.id = 'user_' + Math.random().toString(36).substr(2, 9);
+// Merge projects: keep existing, add cloud ones
+const existingIds = new Set(projects.map(p => p.id));
+cloudProjects.forEach(p => {
+    if (!existingIds.has(p.id)) projects.push(p);
+});
 
-    		if (!existingIds.has(p.id)) projects.push(p);
-		});
-
-        localStorage.setItem('citeflow_projects', JSON.stringify(projects));
-        localStorage.setItem('cloudUserId', uid); // sync user ID
-        renderProjects();
-        showToast("Projects restored from cloud!");
+localStorage.setItem('citeflow_projects', JSON.stringify(projects));
+localStorage.setItem('cloudUserId', uid); // sync user ID
+renderProjects();
+showToast("Projects restored from cloud!");
     } catch (err) {
         console.error(err);
         showToast("Failed to restore. Check your connection.");
