@@ -94,6 +94,22 @@
     		0%, 100% { transform: translateY(0px); }
     		50% { transform: translateY(-10px); }
 		}
+		#start-container {
+    		display: flex;
+    		align-items: center;
+    		justify-content: center;
+    		position: relative;
+    		perspective: 1000px;
+		}
+		@keyframes slideInFromRight {
+    		0% { transform: translateX(100%); opacity: 0; }
+    		100% { transform: translateX(-40px); opacity: 1; }
+		}
+
+		@keyframes slideDown {
+    		0% { opacity: 0; transform: translateY(-20px); }
+    		100% { opacity: 1; transform: translateY(0); }
+		}
     </style>
 </head>
 <body class="bg-slate-50 min-h-screen text-slate-800">
