@@ -733,3 +733,40 @@ function exportCitations(format) {
         });
     }
 }
+
+const profilePopup = document.getElementById('profile-popup');
+const profileImage = document.getElementById('profile-image');
+const profileUpload = document.getElementById('profile-upload');
+const profileUsername = document.getElementById('profile-username');
+
+window.addEventListener('DOMContentLoaded', () => {
+    const savedImage = localStorage.getItem('profileImage');
+    const savedUsername = localStorage.getItem('profileUsername');
+    if (savedImage) profileImage.src = savedImage;
+    else profileImage.src = 'https://via.placeholder.com/150?text=User';
+    if (savedUsername) profileUsername.value = savedUsername;
+});
+
+function openProfile() {
+    profilePopup.classList.remove('hidden');
+}
+function closeProfile() {
+    profilePopup.classList.add('hidden');
+}
+
+profileImage.addEventListener('click', () => profileUpload.click());
+profileUpload.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function() {
+        profileImage.src = reader.result;
+        localStorage.setItem('profileImage', reader.result);
+    };
+    reader.readAsDataURL(file);
+});
+
+function saveProfile() {
+    localStorage.setItem('profileUsername', profileUsername.value);
+    showToast('Profile saved!');
+}
