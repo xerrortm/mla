@@ -770,3 +770,95 @@ function saveProfile() {
     localStorage.setItem('profileUsername', profileUsername.value);
     showToast('Profile saved!');
 }
+const startScreen = document.getElementById('start-screen');
+const startQuote = document.getElementById('start-quote');
+const startTitle = document.getElementById('start-title');
+const startSubtitle = document.getElementById('start-subtitle');
+
+let spinInterval = null;
+let skipRequested = false;
+
+function finishImmediately() {
+    clearInterval(spinInterval); // stop spinning
+    startScreen.style.transition = "opacity 0.5s ease-in-out";
+    startScreen.style.opacity = 0;
+    setTimeout(() => {
+        startScreen.style.display = "none";
+    }, 500);
+}
+
+function finishNormally() {
+    clearInterval(spinInterval);
+
+    // Keep original finishing rotation & GoggleTools logic
+    let angle = parseFloat((startQuote.style.transform.match(/rotateY\(([-0-9.]+)deg\)/) || [0, 0])[1]);
+    let finalAngle = Math.round(angle / 360) * 360;
+
+    startQuote.style.transition = "transform 0.4s ease-out";
+    startQuote.style.transform = `rotateY(${finalAngle}deg)`;
+
+    // Original left offset animation
+    startTitle.style.opacity = 1;
+    const gWidth = startTitle.offsetWidth;
+    startTitle.style.opacity = 0;
+
+    startQuote.style.position = "relative";
+    startQuote.style.left = "0px";
+    startQuote.offsetHeight; // force reflow
+    startQuote.style.transition += ", left 0.8s ease-in-out";
+    startQuote.style.left = `-${gWidth/2}px`;
+
+    setTimeout(() => {
+        startTitle.style.animation = "slideInFromRight 1s forwards";
+        startTitle.style.opacity = 1;
+    }, 200);
+
+    setTimeout(() => {
+        startSubtitle.style.animation = "slideDown 1s forwards";
+        startSubtitle.style.opacity = 1;
+    }, 1500);
+
+    startScreen.style.transition = "background-color 0.5s ease-in-out";
+    startScreen.classList.remove("bg-black");
+    startScreen.classList.add("bg-blue-600");
+
+    setTimeout(() => {
+        startScreen.style.transition = "opacity 0.5s ease-in-out";
+        startScreen.style.opacity = 0;
+        setTimeout(() => startScreen.style.display = "none", 500);
+    }, 2000);
+}
+
+function starthellnah() {
+    let angle = 0;
+    let speed = 10;
+    const acceleration = 1.05;
+    const maxSpinDuration = 2000;
+    const startTime = Date.now();
+
+    spinInterval = setInterval(() => {
+        const elapsed = Date.now() - startTime;
+
+        if (elapsed > maxSpinDuration) {
+            if (!skipRequested) finishNormally();
+            return;
+        }
+
+        angle += speed;
+        speed *= acceleration;
+        startQuote.style.transform = `rotateY(${angle}deg)`;
+    }, 30);
+
+    startScreen.addEventListener('click', () => {
+        if (!skipRequested) {
+            skipRequested = true;
+            finishImmediately();
+        }
+    });
+
+    setTimeout(() => {
+        if (!skipRequested) finishNormally();
+    }, 6000);
+}
+
+window.addEventListener('DOMContentLoaded', starthellnah);
