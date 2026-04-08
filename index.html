@@ -381,6 +381,10 @@
     </div>
 
     <div id="profile-settings" class="w-full space-y-4 text-slate-900">
+		<div class="flex items-center justify-between p-4 border border-orange-200 rounded-xl">
+            <span>Update Log</span>
+            <button onclick="openUpdates()" class="bg-orange-600 text-white px-6 py-2 rounded-xl font-bold hover:bg-orange-700 transition">Open</button>
+        </div>
         <div class="flex items-center justify-between p-4 border border-slate-200 rounded-xl">
             <span>Tutorial</span>
             <button onclick="localStorage.setItem('newUser', 'true'); location.reload();" class="bg-blue-600 text-white px-6 py-2 rounded-xl font-bold hover:bg-blue-700 transition">Replay</button>
