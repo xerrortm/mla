@@ -10,7 +10,7 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 	<script src="https://unpkg.com/docx@8.2.2/build/index.umd.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link rel="icon" type="image/png" href="../favicon.png?v=5">
+    <link rel="icon" type="image/png" href="../favicon.png">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital@0;1&family=JetBrains+Mono&display=swap');
         
@@ -78,7 +78,7 @@
     		position: fixed;
     		bottom: 20px;
     		left: 20px;
-    		width: 160px;
+    		width: 130px;
     		z-index: 9999;
     		cursor: pointer;
 			animation: floatUpDown 2s ease-in-out infinite;
@@ -94,10 +94,32 @@
     		0%, 100% { transform: translateY(0px); }
     		50% { transform: translateY(-10px); }
 		}
+		#start-container {
+    		display: flex;
+    		align-items: center;
+    		justify-content: center;
+    		position: relative;
+    		perspective: 1000px;
+		}
+		@keyframes slideInFromRight {
+    		0% { transform: translateX(100%); opacity: 0; }
+    		100% { transform: translateX(-40px); opacity: 1; }
+		}
+
+		@keyframes slideDown {
+    		0% { opacity: 0; transform: translateY(-20px); }
+    		100% { opacity: 1; transform: translateY(0); }
+		}
     </style>
 </head>
 <body class="bg-slate-50 min-h-screen text-slate-800">
-
+<div id="start-screen" class="fixed inset-0 bg-black flex flex-col items-center justify-center z-[9999]">
+    <div id="start-container" class="relative flex items-center justify-center">
+        <i id="start-quote" class="fas fa-quote-right text-white" style="font-size:6rem; cursor:pointer;"></i>
+        <h1 id="start-title" class="text-white text-5xl font-bold opacity-0 absolute left-0">GoggleTools</h1>
+    </div>
+    <p id="start-subtitle" class="text-white text-xl mt-4 opacity-0">The future of MLA referencing starts here.</p>
+</div>
     <!-- Navigation -->
     <nav class="sticky top-0 z-50 glass-panel border-b border-slate-200 px-6 py-3 flex justify-between items-center">
         <div class="flex items-center gap-2 cursor-pointer" onclick="showDashboard()">
@@ -122,6 +144,56 @@
         	class="w-full p-3 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" 
         	oninput="filterCitations()">
 		</div>
+
+		<!-- UPDATE BANNER -->
+		<div class="mb-10 relative overflow-hidden rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white shadow-xl">
+
+    		<div class="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
+    		<div class="absolute bottom-0 left-0 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
+
+    		<div class="relative flex items-center justify-between px-6 py-5">
+
+        		<div class="flex items-center gap-4">
+            		<div class="bg-white/20 backdrop-blur-md p-3 rounded-xl text-white text-lg shadow-inner">
+                		<i class="fas fa-flask"></i>
+            		</div>
+
+            	<div>
+                	<h3 class="font-extrabold text-lg tracking-tight">
+                   		VERSION 1.5 IS PUBLIC
+                	</h3>
+                	<p class="text-sm text-white/80">
+                    	Project sharing, QR code sharing and search are now public! Visit the official website to check out!
+                	</p>
+
+                	<div class="flex gap-2 mt-2 text-xs">
+                    	<span class="bg-white/20 px-2 py-1 rounded-md">Share Projects</span>
+                    	<span class="bg-white/20 px-2 py-1 rounded-md">Search Citations</span>
+                    	<span class="bg-white/20 px-2 py-1 rounded-md">100% Free</span>
+                	</div>
+            	</div>
+        	</div>
+
+        	<div class="flex items-center gap-2">
+            	<button onclick="toxic()" class="bg-white text-blue-700 text-sm font-bold px-4 py-2 rounded-xl hover:bg-blue-100 transition">
+                	Toxic Raid
+            	</button>
+				<button onclick="strike()" class="bg-white text-blue-700 text-sm font-bold px-4 py-2 rounded-xl hover:bg-blue-100 transition">
+                	Strike
+            	</button>
+				<button onclick="disco()" class="bg-white text-blue-700 text-sm font-bold px-4 py-2 rounded-xl hover:bg-blue-100 transition">
+                	Disco
+            	</button>
+				<button onclick="celebrationMode()" class="bg-white text-blue-700 text-sm font-bold px-4 py-2 rounded-xl hover:bg-blue-100 transition">
+                	Celebration
+            	</button>
+				<button onclick="flood()" class="bg-white text-blue-700 text-sm font-bold px-4 py-2 rounded-xl hover:bg-blue-100 transition">
+                	Flood
+            	</button>
+        	</div>
+
+    	</div>
+	</div>
 
         <!-- Admin Countdown Banner -->
         <div id="admin-banner" class="mb-8 bg-red-50 border border-red-100 text-red-800 px-6 py-6 rounded-2xl flex items-center justify-center shadow-sm">
@@ -356,22 +428,11 @@
       <!-- Update Log -->
       <div class="bg-orange-50 border border-orange-100 rounded-xl p-4">
         <p class="text-xs text-orange-500 font-bold mb-1">LATEST</p>
-        <h3 class="font-semibold text-gray-800">Version 1.6 (EASTER UPDATE)</h3>
-        <ul class="text-sm text-gray-600 mt-2 list-disc list-inside space-y-1">
-		  <li>Interactive easter island!</li>
-          <li>Export as TXT</li>
-          <li>Export as PDF</li>
-          <li>Export as DOCX</li>
-		  <li>Bug and performance fixes</li>
-        </ul>
-      </div>
-	  <div>
         <h3 class="font-semibold text-gray-800">Version 1.5</h3>
         <ul class="text-sm text-gray-600 mt-2 list-disc list-inside space-y-1">
           <li>Supports project sharing!</li>
           <li>Added search bar to search for citations!</li>
-          <li>Supports sharing with QR code!</li>
-		  <li>Bug and performance fixes</li>
+          <li>Bug and performance fixes</li>
         </ul>
       </div>
 	  <div>
@@ -430,5 +491,123 @@
 	<script src = "../main.js"></script>
 	<script src = "../adminabuse.js"></script>
 	<script src = "../tutorial.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(window.location.search);
+    const encoded = params.get('user');
+
+    if (!encoded) {
+		window.location.href = "/mla"
+        return;
+    }
+
+    try {
+        const decodedEmail = decodeProject(encoded);
+
+        showToast(`Welcome ${decodedEmail}!`);
+
+        console.log("Decoded email:", decodedEmail);
+
+        document.getElementById("email-input").value = decodedEmail;
+		return;
+
+    } catch (e) {
+        console.error("Failed to decode project/email:", e);
+    }
+});
+
+const startScreen = document.getElementById('start-screen');
+const startQuote = document.getElementById('start-quote');
+const startTitle = document.getElementById('start-title');
+const startSubtitle = document.getElementById('start-subtitle');
+
+let spinInterval = null;
+let skipRequested = false;
+
+function finishImmediately() {
+    clearInterval(spinInterval); // stop spinning
+    startScreen.style.transition = "opacity 0.5s ease-in-out";
+    startScreen.style.opacity = 0;
+    setTimeout(() => {
+        startScreen.style.display = "none";
+    }, 500);
+}
+
+function finishNormally() {
+    clearInterval(spinInterval);
+
+    // Keep original finishing rotation & GoggleTools logic
+    let angle = parseFloat((startQuote.style.transform.match(/rotateY\(([-0-9.]+)deg\)/) || [0, 0])[1]);
+    let finalAngle = Math.round(angle / 360) * 360;
+
+    startQuote.style.transition = "transform 0.4s ease-out";
+    startQuote.style.transform = `rotateY(${finalAngle}deg)`;
+
+    // Original left offset animation
+    startTitle.style.opacity = 1;
+    const gWidth = startTitle.offsetWidth;
+    startTitle.style.opacity = 0;
+
+    startQuote.style.position = "relative";
+    startQuote.style.left = "0px";
+    startQuote.offsetHeight; // force reflow
+    startQuote.style.transition += ", left 0.8s ease-in-out";
+    startQuote.style.left = `-${gWidth/2}px`;
+
+    setTimeout(() => {
+        startTitle.style.animation = "slideInFromRight 1s forwards";
+        startTitle.style.opacity = 1;
+    }, 200);
+
+    setTimeout(() => {
+        startSubtitle.style.animation = "slideDown 1s forwards";
+        startSubtitle.style.opacity = 1;
+    }, 1500);
+
+    startScreen.style.transition = "background-color 0.5s ease-in-out";
+    startScreen.classList.remove("bg-black");
+    startScreen.classList.add("bg-blue-600");
+
+    setTimeout(() => {
+        startScreen.style.transition = "opacity 0.5s ease-in-out";
+        startScreen.style.opacity = 0;
+        setTimeout(() => startScreen.style.display = "none", 500);
+    }, 2000);
+}
+
+function starthellnah() {
+    let angle = 0;
+    let speed = 10;
+    const acceleration = 1.05;
+    const maxSpinDuration = 2000;
+    const startTime = Date.now();
+
+    spinInterval = setInterval(() => {
+        const elapsed = Date.now() - startTime;
+
+        if (elapsed > maxSpinDuration) {
+            if (!skipRequested) finishNormally();
+            return;
+        }
+
+        angle += speed;
+        speed *= acceleration;
+        startQuote.style.transform = `rotateY(${angle}deg)`;
+    }, 30);
+
+    startScreen.addEventListener('click', () => {
+        if (!skipRequested) {
+            skipRequested = true;
+            finishImmediately();
+        }
+    });
+
+    setTimeout(() => {
+        if (!skipRequested) finishNormally();
+    }, 6000);
+}
+
+window.addEventListener('DOMContentLoaded', starthellnah);
+  </script>
 </body>
 </html>
