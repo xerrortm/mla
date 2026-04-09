@@ -765,11 +765,10 @@ profileUpload.addEventListener('change', (e) => {
     };
     reader.readAsDataURL(file);
 });
-
-function saveProfile() {
+profileUsername.addEventListener('blur', () => {
     localStorage.setItem('profileUsername', profileUsername.value);
-    showToast('Profile saved!');
-}
+    showToast('Username saved!');
+});
 const startScreen = document.getElementById('start-screen');
 const startQuote = document.getElementById('start-quote');
 const startTitle = document.getElementById('start-title');
