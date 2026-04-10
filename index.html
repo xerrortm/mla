@@ -130,22 +130,25 @@
 
 #redeem-beam {
     position: fixed;
-    top: -120%;
-    left: 50%;
-    width: 140px;
-    height: 250vh;
-    transform: translateX(-50%);
-    background: linear-gradient(
-        to bottom,
-        #ffffff,
-        #93c5fd,
-        #60a5fa,
-        #818cf8,
-        #c084fc,
-        #f472b6
-    );
-    filter: blur(25px);
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 0%;
+
     opacity: 0;
+
+    background:
+        radial-gradient(
+            ellipse at top,
+            rgba(255,255,255,1) 0%,
+            rgba(191,219,254,0.9) 15%,
+            rgba(96,165,250,0.55) 40%,
+            rgba(129,140,248,0.25) 70%,
+            transparent 100%
+        );
+
+    filter: blur(25px);
+    transform-origin: top;
 }
 
 #redeem-shockwave {
