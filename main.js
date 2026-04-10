@@ -881,46 +881,78 @@ function redeemCode() {
 	}
     showToast("Invalid redeem code!");
 }
+
 function explodeProjectCard(projectId) {
     const cards = document.querySelectorAll(".project-card");
 
     cards.forEach(card => {
         if (card.getAttribute("onclick")?.includes(projectId)) {
             const rect = card.getBoundingClientRect();
+            const flash = document.createElement("div");
+            flash.style.position = "fixed";
+            flash.style.inset = "0";
+            flash.style.background = "white";
+            flash.style.opacity = "0.85";
+            flash.style.pointerEvents = "none";
+            flash.style.zIndex = "99998";
+            flash.style.transition = "opacity 0.35s ease";
+            document.body.appendChild(flash);
 
-            for (let i = 0; i < 25; i++) {
+            requestAnimationFrame(() => {
+                flash.style.opacity = "0";
+            });
+
+            setTimeout(() => flash.remove(), 350);
+            document.body.animate([
+                { transform: "translate(0px,0px)" },
+                { transform: "translate(-12px,8px)" },
+                { transform: "translate(10px,-10px)" },
+                { transform: "translate(-8px,12px)" },
+                { transform: "translate(6px,-6px)" },
+                { transform: "translate(0px,0px)" }
+            ], {
+                duration: 500,
+                easing: "ease-out"
+            });
+            for (let i = 0; i < 60; i++) {
                 const particle = document.createElement("div");
+
+                const size = 6 + Math.random() * 16;
 
                 particle.style.position = "fixed";
                 particle.style.left = rect.left + rect.width / 2 + "px";
                 particle.style.top = rect.top + rect.height / 2 + "px";
-                particle.style.width = "10px";
-                particle.style.height = "10px";
+                particle.style.width = size + "px";
+                particle.style.height = size + "px";
                 particle.style.borderRadius = "999px";
-                particle.style.background = `hsl(${Math.random()*360}, 100%, 50%)`;
+                particle.style.background = `hsl(${Math.random()*360},100%,50%)`;
+                particle.style.boxShadow = "0 0 12px currentColor";
                 particle.style.pointerEvents = "none";
                 particle.style.zIndex = "99999";
-                particle.style.transition = "all 0.7s ease-out";
+                particle.style.transition = "all 1s cubic-bezier(.2,.8,.2,1)";
 
                 document.body.appendChild(particle);
 
                 requestAnimationFrame(() => {
-                    const x = (Math.random() - 0.5) * 300;
-                    const y = (Math.random() - 0.5) * 300;
+                    const x = (Math.random() - 0.5) * 700;
+                    const y = (Math.random() - 0.5) * 700;
 
-                    particle.style.transform = `translate(${x}px, ${y}px) scale(0)`;
+                    particle.style.transform =
+                        `translate(${x}px, ${y}px) rotate(${Math.random()*1080}deg) scale(0)`;
+
                     particle.style.opacity = "0";
                 });
 
-                setTimeout(() => particle.remove(), 700);
+                setTimeout(() => particle.remove(), 1000);
             }
-
-            card.style.transition = "all 0.4s ease";
-            card.style.transform = "scale(1.25) rotate(15deg)";
+            card.style.transition = "all 0.6s cubic-bezier(.2,.8,.2,1)";
+            card.style.transform = "scale(2) rotate(720deg)";
             card.style.opacity = "0";
+            card.style.filter = "blur(8px)";
         }
     });
 }
+
 const startScreen = document.getElementById('start-screen');
 const startQuote = document.getElementById('start-quote');
 const startTitle = document.getElementById('start-title');
@@ -930,7 +962,7 @@ let spinInterval = null;
 let skipRequested = false;
 
 function finishImmediately() {
-    clearInterval(spinInterval); // stop spinning
+    clearInterval(spinInterval);
     startScreen.style.transition = "opacity 0.5s ease-in-out";
     startScreen.style.opacity = 0;
     setTimeout(() => {
@@ -940,15 +972,12 @@ function finishImmediately() {
 
 function finishNormally() {
     clearInterval(spinInterval);
-
-    // Keep original finishing rotation & GoggleTools logic
     let angle = parseFloat((startQuote.style.transform.match(/rotateY\(([-0-9.]+)deg\)/) || [0, 0])[1]);
     let finalAngle = Math.round(angle / 360) * 360;
 
     startQuote.style.transition = "transform 0.4s ease-out";
     startQuote.style.transform = `rotateY(${finalAngle}deg)`;
 
-    // Original left offset animation
     startTitle.style.opacity = 1;
     const gWidth = startTitle.offsetWidth;
     startTitle.style.opacity = 0;
