@@ -1033,50 +1033,47 @@ function playRedeemCinematic(callback) {
     setTimeout(() => {
         clearInterval(trailInterval);
 
-        document.body.animate([
-            { transform: "translate(0,0) scale(1)" },
-            { transform: "translate(-18px,12px) scale(1.03)" },
-            { transform: "translate(14px,-14px) scale(1.05)" },
-            { transform: "translate(-10px,10px) scale(1.03)" },
-            { transform: "translate(0,0) scale(1)" }
-        ], {
-            duration: 850
-        });
+        // HEAVEN "DOOR OPENING" EFFECT
 
-        // Beam crashes down dramatically
-        beam.style.transition = "all 0.35s cubic-bezier(.15,.9,.2,1)";
-        beam.style.opacity = "1";
-        beam.style.top = "-5%";
-        beam.style.transform = "translateX(-50%) rotate(0deg)";
+beam.style.transition = "none";
+beam.style.opacity = "0";
+beam.style.height = "0%";
+beam.style.top = "0";
 
-        // Beam expands wider after impact
-        setTimeout(() => {
-            beam.style.transition = "all 0.65s ease";
-            beam.style.width = "260vw";
-        }, 250);
+setTimeout(() => {
+    // small crack of light appears at top
+    beam.style.transition = "all 0.4s ease-out";
+    beam.style.opacity = "1";
+    beam.style.height = "10%";
+}, 50);
 
-        // Shockwave
-        shockwave.style.opacity = "1";
-        shockwave.style.transition = "all 0.9s ease-out";
-        shockwave.style.transform = "translate(-50%, -50%) scale(42)";
-        shockwave.style.opacity = "0";
+setTimeout(() => {
+    beam.style.transition = "all 0.8s cubic-bezier(.2,.9,.2,1)";
+    beam.style.height = "45%";
 
-        // Flash impact
-        const flash = document.createElement("div");
-        flash.style.position = "fixed";
-        flash.style.inset = "0";
-        flash.style.background = "white";
-        flash.style.opacity = "0.9";
-        flash.style.pointerEvents = "none";
-        flash.style.zIndex = "99998";
-        flash.style.transition = "opacity 0.5s ease";
-        cinematic.appendChild(flash);
+    document.body.animate([
+        { filter: "brightness(1)" },
+        { filter: "brightness(1.6)" },
+        { filter: "brightness(1.2)" },
+        { filter: "brightness(1)" }
+    ], {
+        duration: 1200,
+        easing: "ease-out"
+    });
 
-        requestAnimationFrame(() => {
-            flash.style.opacity = "0";
-        });
+}, 450);
 
-        setTimeout(() => flash.remove(), 500);
+setTimeout(() => {
+    // full divine opening
+    beam.style.transition = "all 1.2s cubic-bezier(.16,1,.3,1)";
+    beam.style.height = "100%";
+}, 1100);
+
+setTimeout(() => {
+    // soft “settling glow” so it feels like light is filling space
+    beam.style.transition = "all 1.5s ease";
+    beam.style.opacity = "0.95";
+}, 1700);
 
     }, 1850);
 
