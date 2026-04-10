@@ -639,7 +639,7 @@ function celebrationMode(mp3Url, bpm = 120) {
     let audio;
     if (mp3Url) {
         audio = new Audio(mp3Url);
-        audio.loop = true; // optional: loop
+        audio.loop = false; // optional: loop
         audio.play().catch(err => console.warn("MP3 could not be played:", err));
     }
 
@@ -1002,7 +1002,7 @@ function disco() {
     		const allElements = document.querySelectorAll("*");
 
     		let audio = new Audio("https://raw.githubusercontent.com/xerrortm/mla/refs/heads/main/media/disco.mp3");
-    		audio.loop = true;
+    		audio.loop = false;
     		audio.volume = 0.7;
 			
     		audio.play().catch(() => {
@@ -1069,13 +1069,11 @@ function FINAL_CALL() {
     if (finalCallActive) return;
     finalCallActive = true;
 
-    // 🎵 MUSIC
     finalCallAudio = new Audio("https://dn710207.ca.archive.org/0/items/gdps-2.2-song-986811/986811.mp3");
-    finalCallAudio.loop = true;
+    finalCallAudio.loop = false;
     finalCallAudio.volume = 0.7;
     finalCallAudio.play();
 
-    // 🧠 SAVE ORIGINAL STYLES (same logic as toxic)
     const allElements = document.querySelectorAll("*");
     const originalStyles = new Map();
 
@@ -1092,7 +1090,6 @@ function FINAL_CALL() {
         el.style.borderColor = "rgba(180, 80, 255, 0.8)";
     });
 
-    // 🌌 FULL SCREEN PARTICLE LAYER
     const particleDiv = document.createElement("div");
     particleDiv.style.position = "fixed";
     particleDiv.style.top = "0";
@@ -1103,7 +1100,6 @@ function FINAL_CALL() {
     particleDiv.style.zIndex = "99999";
     document.body.appendChild(particleDiv);
 
-    // 💜 PURPLE CHAOS PARTICLES
     particleInterval = setInterval(() => {
         const p = document.createElement("div");
 
@@ -1115,7 +1111,6 @@ function FINAL_CALL() {
         p.style.left = `${Math.random() * window.innerWidth}px`;
         p.style.top = `${Math.random() * window.innerHeight}px`;
 
-        // 💜 purple corrupted glow
         const hue = 270 + Math.random() * 30;
         p.style.background = `hsl(${hue}, 100%, 65%)`;
         p.style.boxShadow = `0 0 12px 5px hsl(${hue}, 100%, 60%)`;
@@ -1140,14 +1135,11 @@ function FINAL_CALL() {
         setTimeout(() => p.remove(), 6000);
     }, 120);
 
-    // ⏳ STOP AFTER 60 SECONDS
     setTimeout(() => {
 
-        // stop particles
         clearInterval(particleInterval);
         particleDiv.remove();
 
-        // restore styles (same system as toxic)
         allElements.forEach(el => {
             const saved = originalStyles.get(el);
             if (!saved) return;
@@ -1157,7 +1149,6 @@ function FINAL_CALL() {
             el.style.transition = saved.transition;
         });
 
-        // stop music
         if (finalCallAudio) {
             finalCallAudio.pause();
             finalCallAudio.currentTime = 0;
