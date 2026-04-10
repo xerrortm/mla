@@ -885,7 +885,14 @@ function redeemCode() {
 		});
     	return;
 	}
-    input.value = "";
+	if (code === "FINAL CALL") {
+		playRedeemCinematic(() => {
+    		showToast("Redeemed successfully!");
+		});
+		FINAL_CALL()
+		return;
+	}
+	input.value = "";
 
     playRedeemFailCinematic(() => {
         showToast("Invalid code!");
