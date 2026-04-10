@@ -23,17 +23,26 @@ let projects = JSON.parse(localStorage.getItem('citeflow_projects')) || [{ id: 1
 
         function openProject(id) {
     		currentProjectId = id;
-    		const project = projects.find(p => p.id === id);
+   			const project = projects.find(p => p.id === id);
+    		if (!project) return;
+    		if (project.explosive) {
+        		explodeProjectCard(id);
+        		projects = projects.filter(p => p.id !== id);
+        		saveToDisk();
 
+        		setTimeout(() => {
+            		renderProjects();
+            		showToast("BOOM");
+        		}, 700);
+        		return;
+    		}
     		if (project.redirectUrl) {
         		window.open(project.redirectUrl, "_blank");
         		return;
     		}
-
     		document.getElementById('current-project-name').innerText = project.name;
-
     		hideAllViews();
-   			document.getElementById('view-project-details').classList.remove('view-hidden');
+    		document.getElementById('view-project-details').classList.remove('view-hidden');
 
     		if (project.name.toLowerCase() === "google") {
         		showGoogleEasterEgg();
@@ -775,6 +784,7 @@ profileUsername.addEventListener('blur', () => {
     localStorage.setItem('profileUsername', profileUsername.value);
     showToast('Username saved!');
 });
+
 function redeemCode() {
     const input = document.getElementById("redeem-code-input");
     const code = input.value.trim().toUpperCase();
@@ -783,9 +793,7 @@ function redeemCode() {
         showToast("Enter a code first!");
         return;
     }
-
     if (code === "NOODLETOOLS") {
-
         const alreadyRedeemed = projects.some(
             p => p.name === "Noodle Tools" && p.redirectUrl === "https://my.noodletools.com"
         );
@@ -805,13 +813,113 @@ function redeemCode() {
 
         saveToDisk();
         renderProjects();
-
         input.value = "";
         showToast("Redeemed successfully!");
         return;
     }
 
+    if (code === "FAMILY PACK") {
+        const alreadyRedeemed = projects.some(
+            p => p.name === "[VALUE PACK]"
+        );
+
+        if (alreadyRedeemed) {
+            showToast("Code already redeemed!");
+            return;
+        }
+
+        projects.unshift({
+            id: Date.now(),
+            name: "[VALUE PACK]",
+            createdAt: Date.now(),
+            citations: [
+                {
+                    id: Date.now() + 1,
+                    formatted: 'Last name, First name. "Artcle title." Name of website, Publisher of website, 1 Jan. Year, URL. Accessed 1 Jan. Year',
+                    textOnly: 'Last name, First name. "Artcle title." Name of website, Publisher of website, 1 Jan. Year, URL. Accessed 1 Jan. Year'
+                },
+                {
+                    id: Date.now() + 2,
+                    formatted: '67',
+                    textOnly: '67'
+                },
+                {
+                    id: Date.now() + 3,
+                    formatted: 'Google',
+                    textOnly: 'Google'
+                }
+            ]
+        });
+
+        saveToDisk();
+        renderProjects();
+        input.value = "";
+        showToast("Redeemed successfully!");
+        return;
+    }
+    if (code === "67") {
+    	const alreadyRedeemed = projects.some(p => p.name === "67" && p.explosive);
+
+    	if (alreadyRedeemed) {
+        	showToast("Code already redeemed!");
+        	return;
+    	}
+
+    	projects.unshift({
+        	id: Date.now(),
+        	name: "67",
+        	citations: [],
+        	createdAt: Date.now(),
+        	explosive: true
+    	});
+
+    	saveToDisk();
+    	renderProjects();
+    	input.value = "";
+    	showToast("Redeemed successfully!");
+    	return;
+	}
     showToast("Invalid redeem code!");
+}
+function explodeProjectCard(projectId) {
+    const cards = document.querySelectorAll(".project-card");
+
+    cards.forEach(card => {
+        if (card.getAttribute("onclick")?.includes(projectId)) {
+            const rect = card.getBoundingClientRect();
+
+            for (let i = 0; i < 25; i++) {
+                const particle = document.createElement("div");
+
+                particle.style.position = "fixed";
+                particle.style.left = rect.left + rect.width / 2 + "px";
+                particle.style.top = rect.top + rect.height / 2 + "px";
+                particle.style.width = "10px";
+                particle.style.height = "10px";
+                particle.style.borderRadius = "999px";
+                particle.style.background = `hsl(${Math.random()*360}, 100%, 50%)`;
+                particle.style.pointerEvents = "none";
+                particle.style.zIndex = "99999";
+                particle.style.transition = "all 0.7s ease-out";
+
+                document.body.appendChild(particle);
+
+                requestAnimationFrame(() => {
+                    const x = (Math.random() - 0.5) * 300;
+                    const y = (Math.random() - 0.5) * 300;
+
+                    particle.style.transform = `translate(${x}px, ${y}px) scale(0)`;
+                    particle.style.opacity = "0";
+                });
+
+                setTimeout(() => particle.remove(), 700);
+            }
+
+            card.style.transition = "all 0.4s ease";
+            card.style.transform = "scale(1.25) rotate(15deg)";
+            card.style.opacity = "0";
+        }
+    });
 }
 const startScreen = document.getElementById('start-screen');
 const startQuote = document.getElementById('start-quote');
