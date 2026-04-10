@@ -965,6 +965,12 @@ function playRedeemCinematic(callback) {
     const shockwave = document.getElementById("redeem-shockwave");
     const text = document.getElementById("redeem-text");
 
+    const redeemBtn = document.querySelector('[onclick="redeemCode()"]');
+    const rect = redeemBtn.getBoundingClientRect();
+
+    const startX = rect.left + rect.width / 2;
+    const startY = rect.top + rect.height / 2;
+
     cinematic.classList.remove("hidden");
     cinematic.style.opacity = "1";
 
@@ -973,13 +979,17 @@ function playRedeemCinematic(callback) {
     shockwave.style.transition = "none";
     text.style.transition = "none";
 
+    // Start from redeem button
+    spirit.style.left = startX + "px";
+    spirit.style.top = startY + "px";
     spirit.style.opacity = "1";
-    spirit.style.top = "50%";
-    spirit.style.transform = "translate(-50%, -50%) scale(1)";
+    spirit.style.transform = "translate(-50%, -50%) scale(0.7)";
 
     beam.style.opacity = "0";
-    beam.style.top = "-120%";
+    beam.style.top = "-140%";
+    beam.style.left = "50%";
     beam.style.width = "140px";
+    beam.style.transform = "translateX(-50%) rotate(8deg)";
 
     text.style.opacity = "0";
     text.style.transform = "scale(0.5) rotate(-4deg)";
@@ -988,68 +998,91 @@ function playRedeemCinematic(callback) {
     const trailInterval = setInterval(() => {
         const p = document.createElement("div");
         p.style.position = "fixed";
-        p.style.left = "50%";
+        p.style.left = spirit.style.left;
         p.style.top = spirit.style.top;
-        p.style.width = "20px";
-        p.style.height = "20px";
+        p.style.width = "18px";
+        p.style.height = "18px";
         p.style.borderRadius = "999px";
         p.style.background = `hsl(${Math.random()*360},100%,70%)`;
         p.style.filter = "blur(4px)";
         p.style.pointerEvents = "none";
         p.style.zIndex = "99999";
-        p.style.transition = "all 0.8s ease-out";
+        p.style.transition = "all 1s ease-out";
         cinematic.appendChild(p);
 
         requestAnimationFrame(() => {
-            p.style.transform = `translate(${(Math.random()-0.5)*120}px, ${(Math.random()-0.5)*120}px) scale(0)`;
+            p.style.transform = `
+                translate(${(Math.random()-0.5)*100}px, ${(Math.random()-0.5)*100}px)
+                scale(0)
+            `;
             p.style.opacity = "0";
         });
 
-        setTimeout(() => p.remove(), 800);
-    }, 40);
+        setTimeout(() => p.remove(), 1000);
+    }, 45);
 
-    // SPIRIT ASCENDS
+    // SLOWER ASCENT
     setTimeout(() => {
-        spirit.style.transition = "all 1s cubic-bezier(.2,.8,.2,1)";
-        spirit.style.top = "-20%";
-        spirit.style.transform = "translate(-50%, -50%) scale(0.2)";
+        spirit.style.transition = "all 1.6s cubic-bezier(.15,.85,.2,1)";
+        spirit.style.top = "-15%";
+        spirit.style.transform = "translate(-50%, -50%) scale(0.15)";
         spirit.style.opacity = "0";
-    }, 50);
+    }, 100);
 
-    // BEAM RETURN
+    // MASSIVE BEAM DESCENT
     setTimeout(() => {
         clearInterval(trailInterval);
 
         document.body.animate([
             { transform: "translate(0,0) scale(1)" },
-            { transform: "translate(-15px,10px) scale(1.02)" },
-            { transform: "translate(12px,-12px) scale(1.03)" },
-            { transform: "translate(-8px,8px) scale(1.02)" },
+            { transform: "translate(-18px,12px) scale(1.03)" },
+            { transform: "translate(14px,-14px) scale(1.05)" },
+            { transform: "translate(-10px,10px) scale(1.03)" },
             { transform: "translate(0,0) scale(1)" }
         ], {
-            duration: 700
+            duration: 850
         });
 
-        beam.style.transition = "all 0.25s ease-out";
+        // Beam crashes down dramatically
+        beam.style.transition = "all 0.35s cubic-bezier(.15,.9,.2,1)";
         beam.style.opacity = "1";
-        beam.style.top = "-10%";
+        beam.style.top = "-5%";
+        beam.style.transform = "translateX(-50%) rotate(0deg)";
 
+        // Beam expands wider after impact
         setTimeout(() => {
-            beam.style.transition = "all 0.5s ease";
-            beam.style.width = "250vw";
-        }, 200);
+            beam.style.transition = "all 0.65s ease";
+            beam.style.width = "260vw";
+        }, 250);
 
-        // SHOCKWAVE
+        // Shockwave
         shockwave.style.opacity = "1";
-        shockwave.style.transition = "all 0.7s ease-out";
-        shockwave.style.transform = "translate(-50%, -50%) scale(35)";
+        shockwave.style.transition = "all 0.9s ease-out";
+        shockwave.style.transform = "translate(-50%, -50%) scale(42)";
         shockwave.style.opacity = "0";
 
-    }, 1100);
+        // Flash impact
+        const flash = document.createElement("div");
+        flash.style.position = "fixed";
+        flash.style.inset = "0";
+        flash.style.background = "white";
+        flash.style.opacity = "0.9";
+        flash.style.pointerEvents = "none";
+        flash.style.zIndex = "99998";
+        flash.style.transition = "opacity 0.5s ease";
+        cinematic.appendChild(flash);
 
-    // TEXT ENTRANCE
+        requestAnimationFrame(() => {
+            flash.style.opacity = "0";
+        });
+
+        setTimeout(() => flash.remove(), 500);
+
+    }, 1850);
+
+    // TEXT
     setTimeout(() => {
-        text.style.transition = "all 0.6s cubic-bezier(.2,.9,.2,1)";
+        text.style.transition = "all 0.65s cubic-bezier(.2,.9,.2,1)";
         text.style.opacity = "1";
         text.style.transform = "scale(1.15) rotate(0deg)";
 
@@ -1057,7 +1090,7 @@ function playRedeemCinematic(callback) {
             text.style.transform = "scale(1)";
         }, 150);
 
-    }, 1600);
+    }, 2450);
 
     // FADE OUT
     setTimeout(() => {
@@ -1072,7 +1105,7 @@ function playRedeemCinematic(callback) {
             if (callback) callback();
         }, 800);
 
-    }, 3600);
+    }, 4500);
 }
 const startScreen = document.getElementById('start-screen');
 const startQuote = document.getElementById('start-quote');
