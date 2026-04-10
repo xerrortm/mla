@@ -994,7 +994,6 @@ function playRedeemCinematic(callback) {
     text.style.opacity = "0";
     text.style.transform = "scale(0.5) rotate(-4deg)";
 
-    // PARTICLE TRAIL
     const trailInterval = setInterval(() => {
         const p = document.createElement("div");
         p.style.position = "fixed";
@@ -1021,7 +1020,6 @@ function playRedeemCinematic(callback) {
         setTimeout(() => p.remove(), 1000);
     }, 45);
 
-    // SLOWER ASCENT
     setTimeout(() => {
         spirit.style.transition = "all 1.6s cubic-bezier(.15,.85,.2,1)";
         spirit.style.top = "-15%";
@@ -1029,34 +1027,50 @@ function playRedeemCinematic(callback) {
         spirit.style.opacity = "0";
     }, 100);
 
-    // MASSIVE BEAM DESCENT
     setTimeout(() => {
         clearInterval(trailInterval);
 
-beam.style.transition = "none";
-beam.style.opacity = "1";
-beam.style.clipPath = "inset(0 0 100% 0)";
+        document.body.animate([
+            { transform: "translate(0,0) scale(1)" },
+            { transform: "translate(-18px,12px) scale(1.03)" },
+            { transform: "translate(14px,-14px) scale(1.05)" },
+            { transform: "translate(-10px,10px) scale(1.03)" },
+            { transform: "translate(0,0) scale(1)" }
+        ], {
+            duration: 850
+        });
 
-setTimeout(() => {
- 
-    beam.style.transition = "clip-path 0.5s ease-out";
-    beam.style.clipPath = "inset(0 0 85% 0)";
-}, 50);
+        beam.style.transition = "all 0.35s cubic-bezier(.15,.9,.2,1)";
+        beam.style.opacity = "1";
+        beam.style.top = "-5%";
+        beam.style.transform = "translateX(-50%) rotate(0deg)";
 
-setTimeout(() => {
+        setTimeout(() => {
+            beam.style.transition = "all 0.65s ease";
+            beam.style.width = "260vw";
+        }, 250);
 
-    beam.style.transition = "clip-path 0.9s cubic-bezier(.2,.9,.2,1)";
-    beam.style.clipPath = "inset(0 0 40% 0)";
-}, 450);
+        shockwave.style.opacity = "1";
+        shockwave.style.transition = "all 0.9s ease-out";
+        shockwave.style.transform = "translate(-50%, -50%) scale(42)";
+        shockwave.style.opacity = "0";
 
-setTimeout(() => {
-    beam.style.transition = "clip-path 1.2s cubic-bezier(.15,1,.3,1)";
-    beam.style.clipPath = "inset(0 0 0% 0)";
-}, 1100);
+        const flash = document.createElement("div");
+        flash.style.position = "fixed";
+        flash.style.inset = "0";
+        flash.style.background = "white";
+        flash.style.opacity = "0.9";
+        flash.style.pointerEvents = "none";
+        flash.style.zIndex = "99998";
+        flash.style.transition = "opacity 0.5s ease";
+        cinematic.appendChild(flash);
 
-setTimeout(() => {
-    beam.style.opacity = "0.98";
-}, 1800);
+        requestAnimationFrame(() => {
+            flash.style.opacity = "0";
+        });
+
+        setTimeout(() => flash.remove(), 500);
+
     }, 1850);
 
     setTimeout(() => {
