@@ -178,6 +178,14 @@
         0 0 70px #818cf8,
         0 0 120px #c084fc;
 }
+		#redeem-fail-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(255, 0, 0, 0.35);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 99999;
+}
     </style>
 </head>
 <body class="bg-slate-50 min-h-screen text-slate-800">
@@ -564,6 +572,7 @@
     	<img src="media/island.png">
 	</a>
 	<div id="redeem-cinematic" class="fixed inset-0 pointer-events-none z-[99999] hidden overflow-hidden">
+		<div id="redeem-fail-overlay"></div>
     	<div id="redeem-spirit"></div>
     	<div id="redeem-beam"></div>
     	<div id="redeem-shockwave"></div>
