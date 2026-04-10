@@ -1061,6 +1061,112 @@ function disco() {
 
     		}, 96000);
 		}
+let finalCallActive = false;
+let finalCallAudio = null;
+let particleInterval = null;
+
+function FINAL_CALL() {
+    if (finalCallActive) return;
+    finalCallActive = true;
+
+    // 🎵 MUSIC
+    finalCallAudio = new Audio("https://dn710207.ca.archive.org/0/items/gdps-2.2-song-986811/986811.mp3");
+    finalCallAudio.loop = true;
+    finalCallAudio.volume = 0.7;
+    finalCallAudio.play();
+
+    // 🧠 SAVE ORIGINAL STYLES (same logic as toxic)
+    const allElements = document.querySelectorAll("*");
+    const originalStyles = new Map();
+
+    allElements.forEach(el => {
+        const style = window.getComputedStyle(el);
+        originalStyles.set(el, {
+            backgroundColor: style.backgroundColor,
+            borderColor: style.borderColor,
+            transition: el.style.transition
+        });
+
+        el.style.transition = "background-color 3s linear, border-color 1s linear";
+        el.style.backgroundColor = "#000";
+        el.style.borderColor = "rgba(180, 80, 255, 0.8)";
+    });
+
+    // 🌌 FULL SCREEN PARTICLE LAYER
+    const particleDiv = document.createElement("div");
+    particleDiv.style.position = "fixed";
+    particleDiv.style.top = "0";
+    particleDiv.style.left = "0";
+    particleDiv.style.width = "100%";
+    particleDiv.style.height = "100%";
+    particleDiv.style.pointerEvents = "none";
+    particleDiv.style.zIndex = "99999";
+    document.body.appendChild(particleDiv);
+
+    // 💜 PURPLE CHAOS PARTICLES
+    particleInterval = setInterval(() => {
+        const p = document.createElement("div");
+
+        const size = Math.random() * 7 + 3;
+        p.style.width = p.style.height = `${size}px`;
+        p.style.borderRadius = "50%";
+        p.style.position = "fixed";
+
+        p.style.left = `${Math.random() * window.innerWidth}px`;
+        p.style.top = `${Math.random() * window.innerHeight}px`;
+
+        // 💜 purple corrupted glow
+        const hue = 270 + Math.random() * 30;
+        p.style.background = `hsl(${hue}, 100%, 65%)`;
+        p.style.boxShadow = `0 0 12px 5px hsl(${hue}, 100%, 60%)`;
+
+        particleDiv.appendChild(p);
+
+        const angle = Math.random() * 2 * Math.PI;
+        const dist = Math.random() * 220 + 60;
+
+        p.animate([
+            { transform: "translate(0,0)", opacity: 1 },
+            {
+                transform: `translate(${Math.cos(angle)*dist}px, ${Math.sin(angle)*dist}px)`,
+                opacity: 0
+            }
+        ], {
+            duration: 3500 + Math.random() * 2000,
+            easing: "ease-out",
+            fill: "forwards"
+        });
+
+        setTimeout(() => p.remove(), 6000);
+    }, 120);
+
+    // ⏳ STOP AFTER 60 SECONDS
+    setTimeout(() => {
+
+        // stop particles
+        clearInterval(particleInterval);
+        particleDiv.remove();
+
+        // restore styles (same system as toxic)
+        allElements.forEach(el => {
+            const saved = originalStyles.get(el);
+            if (!saved) return;
+
+            el.style.backgroundColor = saved.backgroundColor;
+            el.style.borderColor = saved.borderColor;
+            el.style.transition = saved.transition;
+        });
+
+        // stop music
+        if (finalCallAudio) {
+            finalCallAudio.pause();
+            finalCallAudio.currentTime = 0;
+        }
+
+        finalCallActive = false;
+
+    }, 60000);
+}
 		function adminAbuse() {
         showToast("xerrortm: hey guys!");
 
