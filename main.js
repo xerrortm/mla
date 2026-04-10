@@ -1032,28 +1032,29 @@ function playRedeemCinematic(callback) {
     // MASSIVE BEAM DESCENT
     setTimeout(() => {
         clearInterval(trailInterval);
+
 beam.style.transition = "none";
-beam.style.opacity = "0";
-beam.style.transform = "scaleY(0)";
+beam.style.opacity = "1";
+beam.style.clipPath = "inset(0 0 100% 0)";
 
 setTimeout(() => {
-    beam.style.transition = "all 0.5s ease-out";
-    beam.style.opacity = "1";
-    beam.style.transform = "scaleY(0.1)";
+ 
+    beam.style.transition = "clip-path 0.5s ease-out";
+    beam.style.clipPath = "inset(0 0 85% 0)";
 }, 50);
 
 setTimeout(() => {
-    beam.style.transition = "all 0.9s cubic-bezier(.2,.9,.2,1)";
-    beam.style.transform = "scaleY(0.6)";
-}, 400);
+
+    beam.style.transition = "clip-path 0.9s cubic-bezier(.2,.9,.2,1)";
+    beam.style.clipPath = "inset(0 0 40% 0)";
+}, 450);
 
 setTimeout(() => {
-    beam.style.transition = "all 1.2s cubic-bezier(.15,1,.3,1)";
-    beam.style.transform = "scaleY(1)";
+    beam.style.transition = "clip-path 1.2s cubic-bezier(.15,1,.3,1)";
+    beam.style.clipPath = "inset(0 0 0% 0)";
 }, 1100);
 
 setTimeout(() => {
-    beam.style.transition = "all 0.8s ease";
     beam.style.opacity = "0.98";
 }, 1800);
     }, 1850);
