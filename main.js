@@ -1108,6 +1108,7 @@ function playRedeemFailCinematic(callback) {
     const spirit = document.getElementById("redeem-spirit");
     const shockwave = document.getElementById("redeem-shockwave");
     const text = document.getElementById("redeem-text");
+	const overlay = document.getElementById("redeem-fail-overlay");
 
     const redeemBtn = document.querySelector('[onclick="redeemCode()"]');
     const rect = redeemBtn.getBoundingClientRect();
@@ -1122,7 +1123,6 @@ function playRedeemFailCinematic(callback) {
     shockwave.style.transition = "none";
     text.style.transition = "none";
 
-    // Start from redeem button
     spirit.style.left = startX + "px";
     spirit.style.top = startY + "px";
     spirit.style.opacity = "1";
@@ -1166,8 +1166,6 @@ function playRedeemFailCinematic(callback) {
 
     setTimeout(() => {
         clearInterval(trailInterval);
-    	const overlay = document.getElementById("redeem-fail-overlay");
-
     	overlay.style.transition = "none";
     	overlay.style.opacity = "0";
 
