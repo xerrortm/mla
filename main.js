@@ -1109,16 +1109,20 @@ function playRedeemFailCinematic(callback) {
     const shockwave = document.getElementById("redeem-shockwave");
     const text = document.getElementById("redeem-text");
 	const overlay = document.getElementById("redeem-fail-overlay");
-
+    const beam = document.getElementById("redeem-beam");
     const redeemBtn = document.querySelector('[onclick="redeemCode()"]');
     const rect = redeemBtn.getBoundingClientRect();
 
     const startX = rect.left + rect.width / 2;
     const startY = rect.top + rect.height / 2;
-
+   
     cinematic.classList.remove("hidden");
     cinematic.style.opacity = "1";
-
+    beam.style.transition = "none";
+	beam.style.opacity = "0";
+	beam.style.width = "140px";
+	beam.style.top = "-140%";
+	beam.style.transform = "translateX(-50%) rotate(8deg)";
     spirit.style.transition = "none";
     shockwave.style.transition = "none";
     text.style.transition = "none";
