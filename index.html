@@ -384,6 +384,25 @@
             <span>Tutorial</span>
             <button onclick="localStorage.setItem('newUser', 'true'); location.reload();" class="bg-blue-600 text-white px-6 py-2 rounded-xl font-bold hover:bg-blue-700 transition">Replay</button>
         </div>
+		<div class="p-4 border border-blue-200 rounded-xl">
+    		<p class="font-semibold mb-3">Redeem Code</p>
+
+    		<div class="flex gap-2">
+        		<input
+            		type="text"
+            		id="redeem-code-input"
+            		placeholder="Enter code..."
+            		class="flex-1 px-4 py-2 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+        		>
+
+        		<button
+            		onclick="redeemCode()"
+            		class="bg-blue-600 text-white px-5 py-2 rounded-xl font-bold hover:bg-blue-700 transition"
+        		>
+            		Redeem
+        		</button>
+    		</div>
+		</div>
     </div>
   </div>
 </div>
