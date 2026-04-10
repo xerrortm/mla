@@ -885,7 +885,11 @@ function redeemCode() {
 		});
     	return;
 	}
-    showToast("Invalid redeem code!");
+    input.value = "";
+
+    playRedeemFailCinematic(() => {
+        showToast("Invalid code!");
+    });
 }
 
 function explodeProjectCard(projectId) {
@@ -1098,6 +1102,96 @@ function playRedeemCinematic(callback) {
         }, 800);
 
     }, 4500);
+}
+function playRedeemFailCinematic(callback) {
+    const cinematic = document.getElementById("redeem-cinematic");
+    const spirit = document.getElementById("redeem-spirit");
+    const shockwave = document.getElementById("redeem-shockwave");
+    const text = document.getElementById("redeem-text");
+
+    const redeemBtn = document.querySelector('[onclick="redeemCode()"]');
+    const rect = redeemBtn.getBoundingClientRect();
+
+    const startX = rect.left + rect.width / 2;
+    const startY = rect.top + rect.height / 2;
+
+    cinematic.classList.remove("hidden");
+    cinematic.style.opacity = "1";
+
+    spirit.style.transition = "none";
+    shockwave.style.transition = "none";
+    text.style.transition = "none";
+
+    // Start from redeem button
+    spirit.style.left = startX + "px";
+    spirit.style.top = startY + "px";
+    spirit.style.opacity = "1";
+    spirit.style.transform = "translate(-50%, -50%) scale(0.7)";
+
+    text.style.opacity = "0";
+    text.style.transform = "scale(0.5) rotate(-4deg)";
+
+    const trailInterval = setInterval(() => {
+        const p = document.createElement("div");
+        p.style.position = "fixed";
+        p.style.left = spirit.style.left;
+        p.style.top = spirit.style.top;
+        p.style.width = "18px";
+        p.style.height = "18px";
+        p.style.borderRadius = "999px";
+        p.style.background = `hsl(${Math.random()*360},100%,70%)`;
+        p.style.filter = "blur(4px)";
+        p.style.pointerEvents = "none";
+        p.style.zIndex = "99999";
+        p.style.transition = "all 1s ease-out";
+        cinematic.appendChild(p);
+
+        requestAnimationFrame(() => {
+            p.style.transform = `
+                translate(${(Math.random()-0.5)*100}px, ${(Math.random()-0.5)*100}px)
+                scale(0)
+            `;
+            p.style.opacity = "0";
+        });
+
+        setTimeout(() => p.remove(), 1000);
+    }, 45);
+
+    setTimeout(() => {
+        spirit.style.transition = "all 1.6s cubic-bezier(.15,.85,.2,1)";
+        spirit.style.top = "-15%";
+        spirit.style.transform = "translate(-50%, -50%) scale(0.15)";
+        spirit.style.opacity = "0";
+    }, 100);
+
+    setTimeout(() => {
+        clearInterval(trailInterval);
+    	const overlay = document.getElementById("redeem-fail-overlay");
+
+    	overlay.style.transition = "none";
+    	overlay.style.opacity = "0";
+
+        overlay.style.transition = "opacity 0.25s ease";
+        overlay.style.opacity = "1";
+
+        document.body.animate([
+            { transform: "translate(0px,0px)" },
+            { transform: "translate(-18px,6px)" },
+            { transform: "translate(20px,-10px)" },
+            { transform: "translate(-16px,12px)" },
+            { transform: "translate(14px,-8px)" },
+            { transform: "translate(0px,0px)" }
+        ], {
+            duration: 500,
+            easing: "ease-in-out"
+        });
+
+    }, 900);
+
+    setTimeout(() => {
+        overlay.style.opacity = "0";
+        if (callback) callback();
+    }, 1800);
 }
 const startScreen = document.getElementById('start-screen');
 const startQuote = document.getElementById('start-quote');
