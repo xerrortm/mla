@@ -1032,52 +1032,32 @@ function playRedeemCinematic(callback) {
     // MASSIVE BEAM DESCENT
     setTimeout(() => {
         clearInterval(trailInterval);
-
-        // HEAVEN "DOOR OPENING" EFFECT
-
 beam.style.transition = "none";
 beam.style.opacity = "0";
-beam.style.height = "0%";
-beam.style.top = "0";
+beam.style.transform = "scaleY(0)";
 
 setTimeout(() => {
-    // small crack of light appears at top
-    beam.style.transition = "all 0.4s ease-out";
+    beam.style.transition = "all 0.5s ease-out";
     beam.style.opacity = "1";
-    beam.style.height = "10%";
+    beam.style.transform = "scaleY(0.1)";
 }, 50);
 
 setTimeout(() => {
-    beam.style.transition = "all 0.8s cubic-bezier(.2,.9,.2,1)";
-    beam.style.height = "45%";
-
-    document.body.animate([
-        { filter: "brightness(1)" },
-        { filter: "brightness(1.6)" },
-        { filter: "brightness(1.2)" },
-        { filter: "brightness(1)" }
-    ], {
-        duration: 1200,
-        easing: "ease-out"
-    });
-
-}, 450);
+    beam.style.transition = "all 0.9s cubic-bezier(.2,.9,.2,1)";
+    beam.style.transform = "scaleY(0.6)";
+}, 400);
 
 setTimeout(() => {
-    // full divine opening
-    beam.style.transition = "all 1.2s cubic-bezier(.16,1,.3,1)";
-    beam.style.height = "100%";
+    beam.style.transition = "all 1.2s cubic-bezier(.15,1,.3,1)";
+    beam.style.transform = "scaleY(1)";
 }, 1100);
 
 setTimeout(() => {
-    // soft “settling glow” so it feels like light is filling space
-    beam.style.transition = "all 1.5s ease";
-    beam.style.opacity = "0.95";
-}, 1700);
-
+    beam.style.transition = "all 0.8s ease";
+    beam.style.opacity = "0.98";
+}, 1800);
     }, 1850);
 
-    // TEXT
     setTimeout(() => {
         text.style.transition = "all 0.65s cubic-bezier(.2,.9,.2,1)";
         text.style.opacity = "1";
