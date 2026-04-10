@@ -24,10 +24,16 @@ let projects = JSON.parse(localStorage.getItem('citeflow_projects')) || [{ id: 1
         function openProject(id) {
     		currentProjectId = id;
     		const project = projects.find(p => p.id === id);
+
+    		if (project.redirectUrl) {
+        		window.open(project.redirectUrl, "_blank");
+        		return;
+    		}
+
     		document.getElementById('current-project-name').innerText = project.name;
 
-   			hideAllViews();
-    		document.getElementById('view-project-details').classList.remove('view-hidden');
+    		hideAllViews();
+   			document.getElementById('view-project-details').classList.remove('view-hidden');
 
     		if (project.name.toLowerCase() === "google") {
         		showGoogleEasterEgg();
@@ -769,6 +775,44 @@ profileUsername.addEventListener('blur', () => {
     localStorage.setItem('profileUsername', profileUsername.value);
     showToast('Username saved!');
 });
+function redeemCode() {
+    const input = document.getElementById("redeem-code-input");
+    const code = input.value.trim().toUpperCase();
+
+    if (!code) {
+        showToast("Enter a code first!");
+        return;
+    }
+
+    if (code === "NOODLETOOLS") {
+
+        const alreadyRedeemed = projects.some(
+            p => p.name === "Noodle Tools" && p.redirectUrl === "https://my.noodletools.com"
+        );
+
+        if (alreadyRedeemed) {
+            showToast("Code already redeemed!");
+            return;
+        }
+
+        projects.unshift({
+            id: Date.now(),
+            name: "Noodle Tools",
+            citations: [],
+            createdAt: Date.now(),
+            redirectUrl: "https://my.noodletools.com"
+        });
+
+        saveToDisk();
+        renderProjects();
+
+        input.value = "";
+        showToast("Redeemed successfully!");
+        return;
+    }
+
+    showToast("Invalid redeem code!");
+}
 const startScreen = document.getElementById('start-screen');
 const startQuote = document.getElementById('start-quote');
 const startTitle = document.getElementById('start-title');
