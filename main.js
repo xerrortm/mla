@@ -814,7 +814,9 @@ function redeemCode() {
         saveToDisk();
         renderProjects();
         input.value = "";
-        showToast("Redeemed successfully!");
+        playRedeemCinematic(() => {
+    		showToast("Redeemed successfully!");
+		});
         return;
     }
 
@@ -854,7 +856,9 @@ function redeemCode() {
         saveToDisk();
         renderProjects();
         input.value = "";
-        showToast("Redeemed successfully!");
+        playRedeemCinematic(() => {
+    		showToast("Redeemed successfully!");
+		});
         return;
     }
     if (code === "67") {
@@ -876,7 +880,9 @@ function redeemCode() {
     	saveToDisk();
     	renderProjects();
     	input.value = "";
-    	showToast("Redeemed successfully!");
+    	playRedeemCinematic(() => {
+    		showToast("Redeemed successfully!");
+		});
     	return;
 	}
     showToast("Invalid redeem code!");
@@ -952,7 +958,122 @@ function explodeProjectCard(projectId) {
         }
     });
 }
+function playRedeemCinematic(callback) {
+    const cinematic = document.getElementById("redeem-cinematic");
+    const spirit = document.getElementById("redeem-spirit");
+    const beam = document.getElementById("redeem-beam");
+    const shockwave = document.getElementById("redeem-shockwave");
+    const text = document.getElementById("redeem-text");
 
+    cinematic.classList.remove("hidden");
+    cinematic.style.opacity = "1";
+
+    spirit.style.transition = "none";
+    beam.style.transition = "none";
+    shockwave.style.transition = "none";
+    text.style.transition = "none";
+
+    spirit.style.opacity = "1";
+    spirit.style.top = "50%";
+    spirit.style.transform = "translate(-50%, -50%) scale(1)";
+
+    beam.style.opacity = "0";
+    beam.style.top = "-120%";
+    beam.style.width = "140px";
+
+    text.style.opacity = "0";
+    text.style.transform = "scale(0.5) rotate(-4deg)";
+
+    // PARTICLE TRAIL
+    const trailInterval = setInterval(() => {
+        const p = document.createElement("div");
+        p.style.position = "fixed";
+        p.style.left = "50%";
+        p.style.top = spirit.style.top;
+        p.style.width = "20px";
+        p.style.height = "20px";
+        p.style.borderRadius = "999px";
+        p.style.background = `hsl(${Math.random()*360},100%,70%)`;
+        p.style.filter = "blur(4px)";
+        p.style.pointerEvents = "none";
+        p.style.zIndex = "99999";
+        p.style.transition = "all 0.8s ease-out";
+        cinematic.appendChild(p);
+
+        requestAnimationFrame(() => {
+            p.style.transform = `translate(${(Math.random()-0.5)*120}px, ${(Math.random()-0.5)*120}px) scale(0)`;
+            p.style.opacity = "0";
+        });
+
+        setTimeout(() => p.remove(), 800);
+    }, 40);
+
+    // SPIRIT ASCENDS
+    setTimeout(() => {
+        spirit.style.transition = "all 1s cubic-bezier(.2,.8,.2,1)";
+        spirit.style.top = "-20%";
+        spirit.style.transform = "translate(-50%, -50%) scale(0.2)";
+        spirit.style.opacity = "0";
+    }, 50);
+
+    // BEAM RETURN
+    setTimeout(() => {
+        clearInterval(trailInterval);
+
+        document.body.animate([
+            { transform: "translate(0,0) scale(1)" },
+            { transform: "translate(-15px,10px) scale(1.02)" },
+            { transform: "translate(12px,-12px) scale(1.03)" },
+            { transform: "translate(-8px,8px) scale(1.02)" },
+            { transform: "translate(0,0) scale(1)" }
+        ], {
+            duration: 700
+        });
+
+        beam.style.transition = "all 0.25s ease-out";
+        beam.style.opacity = "1";
+        beam.style.top = "-10%";
+
+        setTimeout(() => {
+            beam.style.transition = "all 0.5s ease";
+            beam.style.width = "250vw";
+        }, 200);
+
+        // SHOCKWAVE
+        shockwave.style.opacity = "1";
+        shockwave.style.transition = "all 0.7s ease-out";
+        shockwave.style.transform = "translate(-50%, -50%) scale(35)";
+        shockwave.style.opacity = "0";
+
+    }, 1100);
+
+    // TEXT ENTRANCE
+    setTimeout(() => {
+        text.style.transition = "all 0.6s cubic-bezier(.2,.9,.2,1)";
+        text.style.opacity = "1";
+        text.style.transform = "scale(1.15) rotate(0deg)";
+
+        setTimeout(() => {
+            text.style.transform = "scale(1)";
+        }, 150);
+
+    }, 1600);
+
+    // FADE OUT
+    setTimeout(() => {
+        cinematic.style.transition = "opacity 0.8s ease";
+        cinematic.style.opacity = "0";
+
+        setTimeout(() => {
+            cinematic.classList.add("hidden");
+            cinematic.style.opacity = "1";
+            shockwave.style.transform = "translate(-50%, -50%) scale(0)";
+
+            if (callback) callback();
+        }, 800);
+
+    }, 3600);
+}
 const startScreen = document.getElementById('start-screen');
 const startQuote = document.getElementById('start-quote');
 const startTitle = document.getElementById('start-title');
