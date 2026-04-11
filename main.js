@@ -594,6 +594,7 @@ END:VCALENDAR`;
         window.onload = () => {
     		showDashboard();
     		startAdminCountdown();
+			updateStats();
 		};
 
 const icon = document.getElementById("goggle-icon");
@@ -1325,15 +1326,13 @@ function updateStats() {
         });
     });
 
-    totalProjects = totalProjects || 0;
-    totalCitations = totalCitations || 0;
-    totalChars = totalChars || 0;
-    adminAttended = adminAttended || 0;
+    totalProjects = totalProjects;
+    totalCitations = totalCitations;
+    totalChars = totalChars;
+    adminAttended = adminAttended;
 
     document.getElementById("stat-projects").innerText = totalProjects;
     document.getElementById("stat-citations").innerText = totalCitations;
     document.getElementById("stat-characters").innerText = totalChars;
     document.getElementById("stat-admin").innerText = adminAttended;
 }
-
-window.addEventListener('DOMContentLoaded', updateStats);
