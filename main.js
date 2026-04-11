@@ -592,6 +592,7 @@ END:VCALENDAR`;
 		}
 
         window.onload = () => {
+			localStorage.setItem("update_attended", "2");
     		showDashboard();
     		startAdminCountdown();
 			updateStats();
