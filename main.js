@@ -1289,5 +1289,51 @@ function starthellnah() {
         if (!skipRequested) finishNormally();
     }, 6000);
 }
-
 window.addEventListener('DOMContentLoaded', starthellnah);
+function updateStats() {
+    let projectsData = [];
+    let adminAttended = 0;
+
+    try {
+        const stored = localStorage.getItem('citeflow_projects');
+        projectsData = stored ? JSON.parse(stored) : [];
+        if (!Array.isArray(projectsData)) projectsData = [];
+    } catch {
+        projectsData = [];
+    }
+
+    try {
+        const storedAdmin = localStorage.getItem('update_attended');
+        adminAttended = storedAdmin ? parseInt(storedAdmin) : 0;
+        if (isNaN(adminAttended)) adminAttended = 0;
+    } catch {
+        adminAttended = 0;
+    }
+
+    let totalProjects = projectsData.length || 0;
+    let totalCitations = 0;
+    let totalChars = 0;
+
+    projectsData.forEach(p => {
+        if (!p || !Array.isArray(p.citations)) return;
+
+        totalCitations += p.citations.length;
+
+        p.citations.forEach(c => {
+            const text = c?.textOnly || c?.formatted || "";
+            totalChars += text.length;
+        });
+    });
+
+    totalProjects = totalProjects || 0;
+    totalCitations = totalCitations || 0;
+    totalChars = totalChars || 0;
+    adminAttended = adminAttended || 0;
+
+    document.getElementById("stat-projects").innerText = totalProjects;
+    document.getElementById("stat-citations").innerText = totalCitations;
+    document.getElementById("stat-characters").innerText = totalChars;
+    document.getElementById("stat-admin").innerText = adminAttended;
+}
+
+window.addEventListener('DOMContentLoaded', updateStats);
