@@ -346,7 +346,7 @@ let projects = JSON.parse(localStorage.getItem('citeflow_projects')) || [{ id: 1
         }
         function deleteProject(e, id) { e.stopPropagation(); if (!confirm("Delete this project and all its citations? This cannot be undone.")) return; projects = projects.filter(p => p.id !== id); saveToDisk(); renderProjects(); }
         function saveToDisk() { localStorage.setItem('citeflow_projects', JSON.stringify(projects)); }
-        function showToast(m) { const t = document.getElementById('toast'); t.innerText = m; t.classList.add('opacity-100'); setTimeout(() => t.classList.remove('opacity-100'), 6000); }
+        function showToast(m) { const t = document.getElementById('toast'); t.innerText = m; t.classList.add('opacity-100'); setTimeout(() => t.classList.remove('opacity-100'), 4000); }
         function cancelCitation() { openProject(currentProjectId); }
         function copyProjectToClipboard() {
             const citations = document.querySelectorAll("#citation-list .mla-preview");
