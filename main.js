@@ -393,47 +393,32 @@ let projects = JSON.parse(localStorage.getItem('citeflow_projects')) || [{ id: 1
         function openComparison() {
             document.getElementById("comparison-popup").classList.remove("hidden");
             document.getElementById("comparison-popup").classList.add("flex");
-
-    		setTimeout(() => {
-        		document.getElementById("comparison-popup").style.opacity = "1";
-        		document.getElementById("comparison-popup").style.transform = "scale(1)";
-   		 	}, 50);
         }
 
         function closeComparison() {
             document.getElementById("comparison-popup").classList.add("hidden");
-			
-    		document.getElementById("comparison-popup").style.opacity = "0";
-    		document.getElementById("comparison-popup").style.transform = "scale(0.95)";
-
-    		setTimeout(() => {
-        		document.getElementById("comparison-popup").classList.add("hidden");
-        		document.getElementById("comparison-popup").classList.remove("flex");
-    		}, 50);
         }
         function openUpdates() {
     		const popup = document.getElementById("updates-popup");
     		const box = document.getElementById("updates-box");
 
     		popup.classList.remove("hidden");
-			popup.classList.add("flex");
-    		
+
     		setTimeout(() => {
-        		popup.style.opacity = "1";
-        		popup.style.transform = "scale(1)";
-   		 	}, 50);
+        		box.classList.remove("scale-95", "opacity-0");
+        		box.classList.add("scale-100", "opacity-100");
+    		}, 10);
 		}
 
 		function closeUpdates() {
     		const popup = document.getElementById("updates-popup");
     		const box = document.getElementById("updates-box");
-    		popup.style.opacity = "0";
-    		popup.style.transform = "scale(0.95)";
+
+    		box.classList.add("scale-95", "opacity-0");
 
     		setTimeout(() => {
         		popup.classList.add("hidden");
-        		popup.classList.remove("flex");
-    		}, 50);
+    		}, 200);
 		}
 		
 		let adminCountdownInterval = null; // Store interval so we can clear it
