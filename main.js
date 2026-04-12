@@ -402,6 +402,14 @@ let projects = JSON.parse(localStorage.getItem('citeflow_projects')) || [{ id: 1
 
         function closeComparison() {
             document.getElementById("comparison-popup").classList.add("hidden");
+			
+    		document.getElementById("comparison-popup").style.opacity = "0";
+    		document.getElementById("comparison-popup").style.transform = "scale(0.95)";
+
+    		setTimeout(() => {
+        		document.getElementById("comparison-popup").classList.add("hidden");
+        		document.getElementById("comparison-popup").classList.remove("flex");
+    		}, 50);
         }
         function openUpdates() {
     		const popup = document.getElementById("updates-popup");
@@ -419,12 +427,13 @@ let projects = JSON.parse(localStorage.getItem('citeflow_projects')) || [{ id: 1
 		function closeUpdates() {
     		const popup = document.getElementById("updates-popup");
     		const box = document.getElementById("updates-box");
-
-    		box.classList.add("scale-95", "opacity-0");
+    		popup.style.opacity = "0";
+    		popup.style.transform = "scale(0.95)";
 
     		setTimeout(() => {
         		popup.classList.add("hidden");
-    		}, 200);
+        		popup.classList.remove("flex");
+    		}, 50);
 		}
 		
 		let adminCountdownInterval = null; // Store interval so we can clear it
