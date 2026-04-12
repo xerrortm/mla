@@ -393,6 +393,11 @@ let projects = JSON.parse(localStorage.getItem('citeflow_projects')) || [{ id: 1
         function openComparison() {
             document.getElementById("comparison-popup").classList.remove("hidden");
             document.getElementById("comparison-popup").classList.add("flex");
+
+    		setTimeout(() => {
+        		document.getElementById("comparison-popup").style.opacity = "1";
+        		document.getElementById("comparison-popup").style.transform = "scale(1)";
+   		 	}, 50);
         }
 
         function closeComparison() {
@@ -403,11 +408,12 @@ let projects = JSON.parse(localStorage.getItem('citeflow_projects')) || [{ id: 1
     		const box = document.getElementById("updates-box");
 
     		popup.classList.remove("hidden");
-
+			popup.classList.add("flex");
+    		
     		setTimeout(() => {
-        		box.classList.remove("scale-95", "opacity-0");
-        		box.classList.add("scale-100", "opacity-100");
-    		}, 10);
+        		popup.style.opacity = "1";
+        		popup.style.transform = "scale(1)";
+   		 	}, 50);
 		}
 
 		function closeUpdates() {
