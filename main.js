@@ -401,24 +401,13 @@ let projects = JSON.parse(localStorage.getItem('citeflow_projects')) || [{ id: 1
         function openUpdates() {
     		const popup = document.getElementById("updates-popup");
     		const box = document.getElementById("updates-box");
-
     		popup.classList.remove("hidden");
-
-    		setTimeout(() => {
-        		box.classList.remove("scale-95", "opacity-0");
-        		box.classList.add("scale-100", "opacity-100");
-    		}, 10);
 		}
 
 		function closeUpdates() {
     		const popup = document.getElementById("updates-popup");
     		const box = document.getElementById("updates-box");
-
-    		box.classList.add("scale-95", "opacity-0");
-
-    		setTimeout(() => {
-        		popup.classList.add("hidden");
-    		}, 200);
+			popup.classList.add("hidden");
 		}
 		
 		let adminCountdownInterval = null; // Store interval so we can clear it
