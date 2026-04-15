@@ -142,25 +142,13 @@
                         <span class="text-sm">Share QR Code</span><i class="fas fa-qrcode text-white"></i>
                     </button>
 					<br>
-					<button onclick="exportCitations('txt')" class="w-full bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white font-bold px-4 py-3 rounded-xl shadow-xl flex items-center justify-between hover:scale-[1.02] hover:shadow-2xl active:scale-95 transition-all duration-200">
-                        <span class="text-sm">[NEW] Export as TXT</span><i class="fas fa-file-alt text-white"></i>
-                    </button>
-					<br>
-					<button onclick="exportCitations('pdf')" class="w-full bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white font-bold px-4 py-3 rounded-xl shadow-xl flex items-center justify-between hover:scale-[1.02] hover:shadow-2xl active:scale-95 transition-all duration-200">
-                        <span class="text-sm">[NEW] Export as PDF</span><i class="fas fa-file-pdf text-white"></i>
-                    </button>
-					<br>
-					<button onclick="exportCitations('docx')" class="w-full bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white font-bold px-4 py-3 rounded-xl shadow-xl flex items-center justify-between hover:scale-[1.02] hover:shadow-2xl active:scale-95 transition-all duration-200">
-                        <span class="text-sm">[NEW] Export as DOCX</span><i class="fas fa-file-word text-white"></i>
+					<button onclick="openExportPopup()" class="w-full bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white font-bold px-4 py-3 rounded-xl shadow-xl flex items-center justify-between hover:scale-[1.02] hover:shadow-2xl active:scale-95 transition-all duration-200">
+                        <span class="text-sm">[NEW] Export as...</span><i class="fas fa-file-export text-white"></i>
                     </button>
 					<br>
 					<button onclick="copyProjectToClipboard()" class="w-full py-3 px-4 bg-slate-800 border border-slate-700 rounded-xl text-left hover:bg-slate-700 flex items-center justify-between">
                         <span class="text-sm">Copy All</span><i class="fas fa-copy text-slate-500"></i>
-                    </button>
-                    <br>
-                    <button onclick="exportToGoogleDocs()" class="w-full py-3 px-4 bg-slate-800 border border-slate-700 rounded-xl text-left hover:bg-slate-700 flex items-center justify-between">
-                        <span class="text-sm">Export to Google Docs</span><i class="fas fa-share-from-square text-slate-500"></i>
-                    </button>
+					</button>
                 </div>
             </div>
         </div>
@@ -351,6 +339,34 @@
 		</div>
     </div>
 	</div>
+  </div>
+</div>
+	<div id="export-popup" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50 hidden">
+  <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 relative">
+    <button onclick="closeExportPopup()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-xl">
+      ✕
+    </button>
+    <h2 class="text-2xl font-bold mb-6 text-slate-900">
+      Export Project
+    </h2>
+    <div class="space-y-3">
+      <button onclick="exportCitations('txt')" class="w-full flex items-center justify-between p-4 border rounded-xl hover:bg-slate-50 transition">
+        <span>Export as TXT</span>
+        <i class="fas fa-file-alt text-slate-500"></i>
+      </button>
+      <button onclick="exportCitations('pdf')" class="w-full flex items-center justify-between p-4 border rounded-xl hover:bg-slate-50 transition">
+        <span>Export as PDF</span>
+        <i class="fas fa-file-pdf text-slate-500"></i>
+      </button>
+      <button onclick="exportCitations('docx')" class="w-full flex items-center justify-between p-4 border rounded-xl hover:bg-slate-50 transition">
+        <span>Export as DOCX</span>
+        <i class="fas fa-file-word text-slate-500"></i>
+      </button>
+      <button onclick="exportToGoogleDocs()" class="w-full flex items-center justify-between p-4 border rounded-xl hover:bg-slate-50 transition">
+        <span>Export to Google Docs</span>
+        <i class="fas fa-share-from-square text-slate-500"></i>
+      </button>
+    </div>
   </div>
 </div>
 <div id="updates-popup" class="fixed inset-0 bg-black/40 items-center justify-center z-50 flex hidden">
