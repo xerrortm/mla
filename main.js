@@ -409,8 +409,13 @@ let projects = JSON.parse(localStorage.getItem('citeflow_projects')) || [{ id: 1
     		const box = document.getElementById("updates-box");
 			popup.classList.add("hidden");
 		}
-		
-		let adminCountdownInterval = null; // Store interval so we can clear it
+		function openExportPopup() {
+    		document.getElementById("export-popup").classList.remove("hidden");
+		}
+		function closeExportPopup() {
+   			document.getElementById("export-popup").classList.add("hidden");
+		}
+		let adminCountdownInterval = null;
 
 		function startAdminCountdown() {
     		let timeLeft = 10;
@@ -446,7 +451,6 @@ let projects = JSON.parse(localStorage.getItem('citeflow_projects')) || [{ id: 1
     		const old = document.getElementById('google-easter-egg');
     		if (old) old.remove();
 
-    		// Create Easter egg div
     		const easterDiv = document.createElement('div');
     		easterDiv.id = 'google-easter-egg';
     		easterDiv.className = 'flex flex-col items-center justify-center py-16';
