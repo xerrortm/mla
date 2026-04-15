@@ -1330,3 +1330,32 @@ function updateStats() {
     document.getElementById("stat-characters").innerText = totalChars;
     document.getElementById("stat-admin").innerText = adminAttended;
 }
+const targetDate = new Date("2026-06-01T00:00:00+04:00").getTime(); 
+function updateCountdown() {
+    const now = new Date().getTime();
+    const diff = targetDate - now;
+    if (diff <= 0) {
+        document.getElementById("countdown-display").innerHTML = "NOW PUBLIC";
+        return;
+    }
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const mins = Math.floor((diff / (1000 * 60)) % 60);
+    const secs = Math.floor((diff / 1000) % 60);
+    document.getElementById("countdown-display").innerHTML =
+        `${days} Day ${hours} Hour ${mins} Min ${secs} Sec`;
+}
+setInterval(updateCountdown, 500);
+updateCountdown();
+
+setInterval(updateCountdown, 500);
+updateCountdown();
+function openLaunchPopup() {
+    document.getElementById("launch-popup").classList.remove("hidden");
+    document.getElementById("launch-popup").classList.add("flex");
+}
+
+function closeLaunchPopup() {
+    document.getElementById("launch-popup").classList.add("hidden");
+    document.getElementById("launch-popup").classList.remove("flex");
+}
