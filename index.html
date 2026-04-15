@@ -12,180 +12,39 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="icon" type="image/png" href="favicon.png">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        :root { --mla-font: 'Inter', sans-serif; }
-        body { font-family: 'Inter', sans-serif; }
-        .mla-preview { font-family: var(--mla-font); line-height: 2; padding-left: 2rem; text-indent: -2rem; }
-        .glass-panel { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(229, 231, 235, 0.5); }
-        .view-hidden { display: none !important; }
-        .grid-select-btn { border: 1px solid #e2e8f0; padding: 4px; border-radius: 4px; font-size: 11px; text-align: center; transition: all 0.2s; background: white; }
-        .grid-select-btn:hover { background: #eff6ff; border-color: #3b82f6; }
-        .grid-select-btn.active { background: #3b82f6; color: white; border-color: #2563eb; }
-        .project-card:hover .project-actions { opacity: 1; }
-		#goggle-container {
-    		display: inline-block;
-    		animation: goggleFloat 2s ease-in-out infinite;
-		}
-		@keyframes goggleFloat {
-    		0%, 100% { transform: translateY(0); }
-    		50% { transform: translateY(-6px); }
-		}
-		#goggle-icon.active {
-    		transform: translateY(-25px) rotate(10deg);
-    		transition: transform 0.3s ease-in-out;
-		}
-		#goggle-icon.deactivate {
-    		transform: translateY(0) rotate(0deg);
-    		transition: transform 0.3s ease-in-out;
-		}
-		#goggle-icon {
-    		font-size: 3em;
-		}
-		#goggle-panel.show {
-    		display: flex;
-    		animation: slideIn 0.5s ease forwards;
-		}
-		@keyframes slideIn {
-    		from { opacity: 0; transform: translateX(20px); }
-    		to { opacity: 1; transform: translateX(0); }
-		}
-		.goggle-suggest {
-    		padding: 0.75rem 1rem;
-    		font-size: 0.95rem;
-		}
-		#goggle-reply {
-    		margin-right: 3rem;
-    		display: none;
-    		white-space: nowrap;
-    		overflow-x: auto;
-    		max-width: none;
-		}
-		#goggle-reply.show {
-    		display: block;
-    		animation: slideIn 0.5s ease forwards;
-		}
-		@keyframes fadeIn {
-    		from { opacity: 0; transform: translateY(6px); }
-    		to { opacity: 1; transform: translateY(0); }
-		}
-		#goggle-panel {
-    		margin-right: 3rem;
-    		flex-direction: column;
-    		align-items: flex-end;
-		}
-		#island {
-    		position: fixed;
-    		bottom: 20px;
-    		left: 20px;
-    		width: 160px;
-    		z-index: 9999;
-    		cursor: pointer;
-			animation: floatUpDown 2s ease-in-out infinite;
-		}
-
-		#island img {
-    		display: block;
-    		width: 100%;
-    		height: auto;
-		}
-
-		@keyframes floatUpDown {
-    		0%, 100% { transform: translateY(0px); }
-    		50% { transform: translateY(-10px); }
-		}
-		#start-container {
-    		display: flex;
-    		align-items: center;
-    		justify-content: center;
-    		position: relative;
-    		perspective: 1000px;
-		}
-		@keyframes slideInFromRight {
-    		0% { transform: translateX(100%); opacity: 0; }
-    		100% { transform: translateX(-40px); opacity: 1; }
-		}
-
-		@keyframes slideDown {
-    		0% { opacity: 0; transform: translateY(-20px); }
-    		100% { opacity: 1; transform: translateY(0); }
-		}
-		#redeem-spirit {
-    position: fixed;
-    width: 140px;
-    height: 60px;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    background: radial-gradient(circle,
-        #ffffff 0%,
-        #93c5fd 20%,
-        #60a5fa 40%,
-        #2563eb 70%,
-        transparent 100%);
-    filter: blur(12px);
-    border-radius: 999px;
-    opacity: 0;
-    box-shadow: 0 0 50px #60a5fa;
-}
-
-#redeem-beam {
-    position: fixed;
-    top: -120%;
-    left: 50%;
-    width: 140px;
-    height: 250vh;
-    transform: translateX(-50%);
-    background: linear-gradient(
-        to bottom,
-        #ffffff,
-        #93c5fd,
-        #60a5fa,
-        #818cf8,
-        #c084fc,
-        #f472b6
-    );
-    filter: blur(25px);
-    opacity: 0;
-}
-
-#redeem-shockwave {
-    position: fixed;
-    left: 50%;
-    top: 50%;
-    width: 50px;
-    height: 50px;
-    border: 6px solid rgba(255,255,255,0.8);
-    border-radius: 999px;
-    transform: translate(-50%, -50%) scale(0);
-    opacity: 0;
-}
-
-#redeem-text {
-    position: fixed;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 5rem;
-    font-weight: 900;
-    color: white;
-    letter-spacing: 5px;
-    opacity: 0;
-    transform: scale(0.5) rotate(-4deg);
-    text-shadow:
-        0 0 15px #fff,
-        0 0 35px #60a5fa,
-        0 0 70px #818cf8,
-        0 0 120px #c084fc;
-}
-		#redeem-fail-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(255, 0, 0, 0.35);
-    opacity: 0;
-    pointer-events: none;
-    z-index: 99999;
-}
+		@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+		:root { --mla-font: 'Inter', sans-serif; }
+		body { font-family: 'Inter', sans-serif; }
+		.mla-preview { font-family: var(--mla-font); line-height: 2; padding-left: 2rem; text-indent: -2rem; }
+		.glass-panel { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(229, 231, 235, 0.5); }
+		.view-hidden { display: none !important; }
+		.grid-select-btn { border: 1px solid #e2e8f0; padding: 4px; border-radius: 4px; font-size: 11px; text-align: center; transition: all 0.2s; background: white; }
+		.grid-select-btn:hover { background: #eff6ff; border-color: #3b82f6; }
+		.grid-select-btn.active { background: #3b82f6; color: white; border-color: #2563eb; }
+		.project-card:hover .project-actions { opacity: 1; }
+		#goggle-container { display: inline-block; animation: goggleFloat 2s ease-in-out infinite; }
+		@keyframes goggleFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+		#goggle-icon.active { transform: translateY(-25px) rotate(10deg); transition: transform 0.3s ease-in-out; }
+		#goggle-icon.deactivate { transform: translateY(0) rotate(0deg); transition: transform 0.3s ease-in-out; }
+		#goggle-icon { font-size: 3em; }
+		#goggle-panel.show { display: flex; animation: slideIn 0.5s ease forwards; }
+		@keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+		.goggle-suggest { padding: 0.75rem 1rem; font-size: 0.95rem; }
+		#goggle-reply { margin-right: 3rem; display: none; white-space: nowrap; overflow-x: auto; max-width: none; }
+		#goggle-reply.show { display: block; animation: slideIn 0.5s ease forwards; }
+		@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+		#goggle-panel { margin-right: 3rem; flex-direction: column; align-items: flex-end; }
+		#island { position: fixed; bottom: 20px; left: 20px; width: 160px; z-index: 9999; cursor: pointer; animation: floatUpDown 2s ease-in-out infinite; }
+		#island img { display: block; width: 100%; height: auto; }
+		@keyframes floatUpDown { 0%,100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
+		#start-container { display: flex; align-items: center; justify-content: center; position: relative; perspective: 1000px; }
+		@keyframes slideInFromRight { 0% { transform: translateX(100%); opacity: 0; } 100% { transform: translateX(-40px); opacity: 1; } }
+		@keyframes slideDown { 0% { opacity: 0; transform: translateY(-20px); } 100% { opacity: 1; transform: translateY(0); } }
+		#redeem-spirit { position: fixed; width: 140px; height: 60px; left: 50%; top: 50%; transform: translate(-50%, -50%); background: radial-gradient(circle, #ffffff 0%, #93c5fd 20%, #60a5fa 40%, #2563eb 70%, transparent 100%); filter: blur(12px); border-radius: 999px; opacity: 0; box-shadow: 0 0 50px #60a5fa; }
+		#redeem-beam { position: fixed; top: -120%; left: 50%; width: 140px; height: 250vh; transform: translateX(-50%); background: linear-gradient(to bottom, #ffffff, #93c5fd, #60a5fa, #818cf8, #c084fc, #f472b6); filter: blur(25px); opacity: 0; }
+		#redeem-shockwave { position: fixed; left: 50%; top: 50%; width: 50px; height: 50px; border: 6px solid rgba(255,255,255,0.8); border-radius: 999px; transform: translate(-50%, -50%) scale(0); opacity: 0; }
+		#redeem-text { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 5rem; font-weight: 900; color: white; letter-spacing: 5px; opacity: 0; transform: scale(0.5) rotate(-4deg); text-shadow: 0 0 15px #fff, 0 0 35px #60a5fa, 0 0 70px #818cf8, 0 0 120px #c084fc; }
+		#redeem-fail-overlay { position: fixed; inset: 0; background: rgba(255, 0, 0, 0.35); opacity: 0; pointer-events: none; z-index: 99999; }
     </style>
 </head>
 <body class="bg-slate-50 min-h-screen text-slate-800">
