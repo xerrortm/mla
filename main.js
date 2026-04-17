@@ -1411,3 +1411,39 @@ window.addEventListener("load", () => {
         document.getElementById("passcode-lock").classList.remove("hidden");
     }
 });
+async function forgotPasscode() {
+	const SERVICE_ID = "service_zjz7o0t";
+	const TEMPLATE_ID = "template_hyhsf5n";
+	const PUBLIC_KEY = "yGVzllcBp2uAdb4pI";
+	emailjs.init(PUBLIC_KEY);
+    const email = prompt("Enter your email to receive your passcode:");
+
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        showToast("Invalid email");
+        return;
+    }
+    const passcode = localStorage.getItem("passcode");
+    if (!passcode) {
+        showToast("No passcode is set!");
+        return;
+    }
+    const sendBtnState = document.getElementById("forgot-btn");
+    if (sendBtnState) sendBtnState.disabled = true;
+    try {
+        const templateParams = {
+            to_email: email,
+            email: email,
+            from_name: "GoggleTools",
+            user_email: email,
+            code: passcode,
+            reply_to: "helloxerrortm@gmail.com"
+        };
+        await emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams);
+        showToast("Passcode sent to email");
+    } catch (err) {
+        console.error(err);
+        showToast("Failed to send email");
+    } finally {
+        if (sendBtnState) sendBtnState.disabled = false;
+    }
+}
