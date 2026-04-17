@@ -1394,7 +1394,6 @@ function checkPasscode(value) {
 
     if (value === saved) {
         document.getElementById("passcode-lock").classList.add("hidden");
-        error.classList.add("hidden");
     } else {
         const input = document.getElementById("passcode-input");
         input.value = "";
