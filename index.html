@@ -48,15 +48,15 @@
     </style>
 </head>
 <body class="bg-slate-50 min-h-screen text-slate-800">
-	<div id="biometric-lock" class="fixed inset-0 bg-black text-white flex items-center justify-center z-[99999] hidden">
-    <div class="text-center">
-        <i class="fas fa-fingerprint text-6xl mb-6"></i>
-        <h2 class="text-2xl font-bold mb-2">Unlock GoggleTools</h2>
-        <p class="text-slate-300 mb-6">Use Touch ID / Face ID</p>
-        <button onclick="bio()" class="bg-blue-600 px-6 py-3 rounded-xl font-bold">
-            Unlock
-        </button>
-    </div>
+<div id="passcode-lock" class="fixed inset-0 bg-black text-white flex items-center justify-center z-[99999] hidden">
+  <div class="text-center w-[300px]">
+    <i class="fas fa-lock text-4xl mb-4"></i>
+    <h2 class="text-xl font-bold mb-2">Unlock GoggleTools</h2>
+    <input id="passcode-input" type="password" maxlength="4" inputmode="numeric" placeholder="••••" class="w-full text-center text-2xl tracking-[10px] px-4 py-3 rounded-xl bg-slate-800 border border-slate-600 outline-none" oninput="handlePasscodeInput()">
+    <p id="passcode-error" class="text-red-400 text-sm mt-2 hidden">
+      Wrong passcode
+    </p>
+  </div>
 </div>
 	<div id="start-screen" class="fixed inset-0 bg-black flex flex-col items-center justify-center z-[9999]">
     	<div id="start-container" class="relative flex items-center justify-center">
@@ -375,8 +375,8 @@
             <button onclick="localStorage.setItem('newUser', 'true'); location.reload();" class="bg-blue-600 text-white px-6 py-2 rounded-xl font-bold hover:bg-blue-700 transition">Replay</button>
         </div>
 		<div class="flex items-center justify-between p-4 border border-blue-200 rounded-xl">
-            <span>Biometric Lock</span>
-            <button id="biometric-btn" onclick="togBio()" class="bg-blue-600 text-white px-6 py-2 rounded-xl font-bold hover:bg-blue-700 transition">Enable</button>
+            <span>Passcode Lock</span>
+            <button id="biometric-btn" onclick="setPass()" class="bg-blue-600 text-white px-6 py-2 rounded-xl font-bold hover:bg-blue-700 transition">Enable</button>
         </div>
 		<div class="p-4 border border-blue-200 rounded-xl">
     		<p class="font-semibold mb-3">Redeem Code</p>
