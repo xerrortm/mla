@@ -9,6 +9,7 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.4.4/lz-string.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 	<script src="https://unpkg.com/docx@8.2.2/build/index.umd.js"></script>
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="icon" type="image/png" href="favicon.png">
     <style>
@@ -53,6 +54,7 @@
     <i class="fas fa-lock text-4xl mb-4"></i>
     <h2 class="text-xl font-bold mb-2">Unlock GoggleTools</h2>
     <input id="passcode-input" type="password" maxlength="4" inputmode="numeric" placeholder="••••" class="w-full text-center text-xl tracking-[10px] px-4 py-3 rounded-xl bg-slate-800 border border-slate-600 outline-none" oninput="handlePasscodeInput()">
+	<button id="forgot-btn" onclick="forgotPasscode()" class="bg-red-600 text-white px-4 py-2 rounded-xl font-bold mt-2">Forgot Passcode?</button>
   </div>
 </div>
 	<div id="start-screen" class="fixed inset-0 bg-black flex flex-col items-center justify-center z-[9999]">
