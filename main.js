@@ -1360,19 +1360,23 @@ function closeLaunchPopup() {
     document.getElementById("launch-popup").classList.remove("flex");
 }
 function setPass() {
-	const local = localStorage.getItem("passcode");
-	if (!local) {
-    	const code = prompt("Enter 4-digit passcode:");
-    	if (code && /^\d{4}$/.test(code)) {
-        	localStorage.setItem("passcode", code);
-        	showToast("Passcode set!");
-    	} else {
-        	alert("Must be exactly 4 numbers");
-    	}
-	} else {
-		localStorage.removeItem("passcode");
-		showToast("Passcode removed!");
-	}
+    const btn = document.getElementById("pass-btn");
+    const local = localStorage.getItem("passcode");
+    if (!local) {
+        const code = prompt("Enter 4-digit passcode:");
+        if (code && /^\d{4}$/.test(code)) {
+            localStorage.setItem("passcode", code);
+            showToast("Passcode set!");
+            btn.textContent = "Disable";
+        } else {
+            alert("Must be exactly 4 numbers");
+        }
+
+    } else {
+        localStorage.removeItem("passcode");
+        showToast("Passcode removed!");
+        btn.textContent = "Enable";
+    }
 }
 
 function handlePasscodeInput() {
