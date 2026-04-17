@@ -48,6 +48,16 @@
     </style>
 </head>
 <body class="bg-slate-50 min-h-screen text-slate-800">
+	<div id="biometric-lock" class="fixed inset-0 bg-black text-white flex items-center justify-center z-[99999] hidden">
+    <div class="text-center">
+        <i class="fas fa-fingerprint text-6xl mb-6"></i>
+        <h2 class="text-2xl font-bold mb-2">Unlock GoggleTools</h2>
+        <p class="text-slate-300 mb-6">Use Touch ID / Face ID</p>
+        <button onclick="bio()" class="bg-blue-600 px-6 py-3 rounded-xl font-bold">
+            Unlock
+        </button>
+    </div>
+</div>
 	<div id="start-screen" class="fixed inset-0 bg-black flex flex-col items-center justify-center z-[9999]">
     	<div id="start-container" class="relative flex items-center justify-center">
         	<i id="start-quote" class="fas fa-quote-right text-white" style="font-size:6rem; cursor:pointer;"></i>
