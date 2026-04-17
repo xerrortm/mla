@@ -1359,33 +1359,52 @@ function closeLaunchPopup() {
     document.getElementById("launch-popup").classList.add("hidden");
     document.getElementById("launch-popup").classList.remove("flex");
 }
-function togBio() {
-    const enabled = localStorage.getItem("biometricEnabled") === "true";
-
-    localStorage.setItem("biometricEnabled", !enabled);
-
-    document.getElementById("biometric-btn").textContent = 
-        !enabled ? "Disable" : "Enable";
+function setPass() {
+	const local = localStorage.getItem("passcode");
+	if (!local) {
+    	const code = prompt("Enter 4-digit passcode:");
+    	if (code && /^\d{4}$/.test(code)) {
+        	localStorage.setItem("passcode", code);
+        	showToast("Passcode set!");
+    	} else {
+        	alert("Must be exactly 4 numbers");
+    	}
+	} else {
+		localStorage.removeItem("passcode");
+		showToast("Passcode removed!");
+	}
 }
-async function bio() {
-    try {
-        await navigator.credentials.get({
-            publicKey: {
-                challenge: new Uint8Array(32),
-                userVerification: "required",
-                timeout: 60000
-            }
-        });
 
-        // success
-        document.getElementById("biometric-lock").classList.add("hidden");
+function handlePasscodeInput() {
+    const input = document.getElementById("passcode-input");
+    
+    // allow only numbers
+    input.value = input.value.replace(/\D/g, "");
 
-    } catch (err) {
-        alert("Authentication failed or cancelled");
+    if (input.value.length === 4) {
+        checkPasscode(input.value);
+    }
+}
+function checkPasscode(value) {
+    const saved = localStorage.getItem("passcode");
+
+    if (value === saved) {
+        document.getElementById("passcode-lock").classList.add("hidden");
+        error.classList.add("hidden");
+    } else {
+        const input = document.getElementById("passcode-input");
+        input.value = "";
+
+        input.animate([
+            { transform: "translateX(0)" },
+            { transform: "translateX(-6px)" },
+            { transform: "translateX(6px)" },
+            { transform: "translateX(0)" }
+        ], { duration: 200 });
     }
 }
 window.addEventListener("load", () => {
-    if (localStorage.getItem("biometricEnabled") === "true") {
-        document.getElementById("biometric-lock").classList.remove("hidden");
+    if (localStorage.getItem("passcode")) {
+        document.getElementById("passcode-lock").classList.remove("hidden");
     }
 });
