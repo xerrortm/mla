@@ -1359,3 +1359,33 @@ function closeLaunchPopup() {
     document.getElementById("launch-popup").classList.add("hidden");
     document.getElementById("launch-popup").classList.remove("flex");
 }
+function togBio() {
+    const enabled = localStorage.getItem("biometricEnabled") === "true";
+
+    localStorage.setItem("biometricEnabled", !enabled);
+
+    document.getElementById("biometric-btn").textContent = 
+        !enabled ? "Disable" : "Enable";
+}
+async function bio() {
+    try {
+        await navigator.credentials.get({
+            publicKey: {
+                challenge: new Uint8Array(32),
+                userVerification: "required",
+                timeout: 60000
+            }
+        });
+
+        // success
+        document.getElementById("biometric-lock").classList.add("hidden");
+
+    } catch (err) {
+        alert("Authentication failed or cancelled");
+    }
+}
+window.addEventListener("load", () => {
+    if (localStorage.getItem("biometricEnabled") === "true") {
+        document.getElementById("biometric-lock").classList.remove("hidden");
+    }
+});
