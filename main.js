@@ -783,7 +783,6 @@ profileUsername.addEventListener('blur', () => {
 function redeemCode() {
     const input = document.getElementById("redeem-code-input");
     const code = input.value.trim().toUpperCase();
-
     if (!code) {
         showToast("Enter a code first!");
         return;
@@ -792,12 +791,12 @@ function redeemCode() {
         const alreadyRedeemed = projects.some(
             p => p.name === "Noodle Tools" && p.redirectUrl === "https://my.noodletools.com"
         );
-
         if (alreadyRedeemed) {
-            showToast("Code already redeemed!");
+            playRedeemFailCinematic(() => {
+        		showToast("Invalid code!");
+    		});
             return;
         }
-
         projects.unshift({
             id: Date.now(),
             name: "Noodle Tools",
@@ -805,49 +804,6 @@ function redeemCode() {
             createdAt: Date.now(),
             redirectUrl: "https://my.noodletools.com"
         });
-
-        saveToDisk();
-        renderProjects();
-        input.value = "";
-        playRedeemCinematic(() => {
-    		showToast("Redeemed successfully!");
-		});
-        return;
-    }
-
-    if (code === "FAMILY PACK") {
-        const alreadyRedeemed = projects.some(
-            p => p.name === "[VALUE PACK]"
-        );
-
-        if (alreadyRedeemed) {
-            showToast("Code already redeemed!");
-            return;
-        }
-
-        projects.unshift({
-            id: Date.now(),
-            name: "[VALUE PACK]",
-            createdAt: Date.now(),
-            citations: [
-                {
-                    id: Date.now() + 1,
-                    formatted: 'Last name, First name. "Artcle title." Name of website, Publisher of website, 1 Jan. Year, URL. Accessed 1 Jan. Year',
-                    textOnly: 'Last name, First name. "Artcle title." Name of website, Publisher of website, 1 Jan. Year, URL. Accessed 1 Jan. Year'
-                },
-                {
-                    id: Date.now() + 2,
-                    formatted: '67',
-                    textOnly: '67'
-                },
-                {
-                    id: Date.now() + 3,
-                    formatted: 'Google',
-                    textOnly: 'Google'
-                }
-            ]
-        });
-
         saveToDisk();
         renderProjects();
         input.value = "";
@@ -860,10 +816,11 @@ function redeemCode() {
     	const alreadyRedeemed = projects.some(p => p.name === "67" && p.explosive);
 
     	if (alreadyRedeemed) {
-        	showToast("Code already redeemed!");
+        	playRedeemFailCinematic(() => {
+        		showToast("Invalid code!");
+    		});
         	return;
     	}
-
     	projects.unshift({
         	id: Date.now(),
         	name: "67",
@@ -893,10 +850,8 @@ function redeemCode() {
         showToast("Invalid code!");
     });
 }
-
 function explodeProjectCard(projectId) {
     const cards = document.querySelectorAll(".project-card");
-
     cards.forEach(card => {
         if (card.getAttribute("onclick")?.includes(projectId)) {
             const rect = card.getBoundingClientRect();
@@ -909,11 +864,9 @@ function explodeProjectCard(projectId) {
             flash.style.zIndex = "99998";
             flash.style.transition = "opacity 0.35s ease";
             document.body.appendChild(flash);
-
             requestAnimationFrame(() => {
                 flash.style.opacity = "0";
             });
-
             setTimeout(() => flash.remove(), 350);
             document.body.animate([
                 { transform: "translate(0px,0px)" },
@@ -928,9 +881,8 @@ function explodeProjectCard(projectId) {
             });
             for (let i = 0; i < 60; i++) {
                 const particle = document.createElement("div");
-
                 const size = 6 + Math.random() * 16;
-
+				
                 particle.style.position = "fixed";
                 particle.style.left = rect.left + rect.width / 2 + "px";
                 particle.style.top = rect.top + rect.height / 2 + "px";
@@ -942,19 +894,14 @@ function explodeProjectCard(projectId) {
                 particle.style.pointerEvents = "none";
                 particle.style.zIndex = "99999";
                 particle.style.transition = "all 1s cubic-bezier(.2,.8,.2,1)";
-
                 document.body.appendChild(particle);
-
                 requestAnimationFrame(() => {
                     const x = (Math.random() - 0.5) * 700;
                     const y = (Math.random() - 0.5) * 700;
-
                     particle.style.transform =
                         `translate(${x}px, ${y}px) rotate(${Math.random()*1080}deg) scale(0)`;
-
                     particle.style.opacity = "0";
                 });
-
                 setTimeout(() => particle.remove(), 1000);
             }
             card.style.transition = "all 0.6s cubic-bezier(.2,.8,.2,1)";
@@ -970,36 +917,28 @@ function playRedeemCinematic(callback) {
     const beam = document.getElementById("redeem-beam");
     const shockwave = document.getElementById("redeem-shockwave");
     const text = document.getElementById("redeem-text");
-
     const redeemBtn = document.querySelector('[onclick="redeemCode()"]');
     const rect = redeemBtn.getBoundingClientRect();
-
     const startX = rect.left + rect.width / 2;
     const startY = rect.top + rect.height / 2;
-
     cinematic.classList.remove("hidden");
     cinematic.style.opacity = "1";
-
     spirit.style.transition = "none";
     beam.style.transition = "none";
     shockwave.style.transition = "none";
     text.style.transition = "none";
 
-    // Start from redeem button
     spirit.style.left = startX + "px";
     spirit.style.top = startY + "px";
     spirit.style.opacity = "1";
     spirit.style.transform = "translate(-50%, -50%) scale(0.7)";
-
     beam.style.opacity = "0";
     beam.style.top = "-140%";
     beam.style.left = "50%";
     beam.style.width = "140px";
     beam.style.transform = "translateX(-50%) rotate(8deg)";
-
     text.style.opacity = "0";
     text.style.transform = "scale(0.5) rotate(-4deg)";
-
     const trailInterval = setInterval(() => {
         const p = document.createElement("div");
         p.style.position = "fixed";
@@ -1014,7 +953,6 @@ function playRedeemCinematic(callback) {
         p.style.zIndex = "99999";
         p.style.transition = "all 1s ease-out";
         cinematic.appendChild(p);
-
         requestAnimationFrame(() => {
             p.style.transform = `
                 translate(${(Math.random()-0.5)*100}px, ${(Math.random()-0.5)*100}px)
@@ -1022,20 +960,16 @@ function playRedeemCinematic(callback) {
             `;
             p.style.opacity = "0";
         });
-
         setTimeout(() => p.remove(), 1000);
     }, 45);
-
     setTimeout(() => {
         spirit.style.transition = "all 1.6s cubic-bezier(.15,.85,.2,1)";
         spirit.style.top = "-15%";
         spirit.style.transform = "translate(-50%, -50%) scale(0.15)";
         spirit.style.opacity = "0";
     }, 100);
-
     setTimeout(() => {
         clearInterval(trailInterval);
-
         document.body.animate([
             { transform: "translate(0,0) scale(1)" },
             { transform: "translate(-18px,12px) scale(1.03)" },
@@ -1045,22 +979,18 @@ function playRedeemCinematic(callback) {
         ], {
             duration: 850
         });
-
         beam.style.transition = "all 0.35s cubic-bezier(.15,.9,.2,1)";
         beam.style.opacity = "1";
         beam.style.top = "-5%";
         beam.style.transform = "translateX(-50%) rotate(0deg)";
-
         setTimeout(() => {
             beam.style.transition = "all 0.65s ease";
             beam.style.width = "260vw";
         }, 250);
-
         shockwave.style.opacity = "1";
         shockwave.style.transition = "all 0.9s ease-out";
         shockwave.style.transform = "translate(-50%, -50%) scale(42)";
         shockwave.style.opacity = "0";
-
         const flash = document.createElement("div");
         flash.style.position = "fixed";
         flash.style.inset = "0";
@@ -1070,13 +1000,10 @@ function playRedeemCinematic(callback) {
         flash.style.zIndex = "99998";
         flash.style.transition = "opacity 0.5s ease";
         cinematic.appendChild(flash);
-
         requestAnimationFrame(() => {
             flash.style.opacity = "0";
         });
-
         setTimeout(() => flash.remove(), 500);
-
     }, 1850);
 
     setTimeout(() => {
