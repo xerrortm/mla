@@ -2,6 +2,7 @@ let projects = JSON.parse(localStorage.getItem('citeflow_projects')) || [];
 let currentProjectId = null;
 let currentSourceType = 'website';
 let webVersion = 'V1.6.8C';
+document.getElementById("version").textContent = `Settings (${webVersion})`;
 const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 const MLA_MONTHS = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "June", "July", "Aug.", "Sept.", "Oct.", "Nov.", "Dec."];
 
