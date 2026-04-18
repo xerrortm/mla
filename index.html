@@ -10,6 +10,7 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 	<script src="https://unpkg.com/docx@8.2.2/build/index.umd.js"></script>
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2747186016364644" crossorigin="anonymous"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="icon" type="image/png" href="favicon.png">
     <style>
@@ -403,6 +404,18 @@
     </div>
   </div>
 </div>
+	<div id="ad-popup" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50 hidden">
+  		<div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 relative">
+    		<button onclick="closeAdPopup()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-xl">
+      			✕
+    		</button>
+    		<h2 class="text-2xl font-bold mb-6 text-slate-900">
+      			Ad
+    		</h2>
+    		<div id="ad-container"class="space-y-3">
+    		</div>
+  		</div>
+	</div>
 <div id="updates-popup" class="fixed inset-0 bg-black/40 items-center justify-center z-50 flex hidden">
   <div id="updates-box" class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full p-6 relative">
     <button onclick="closeUpdates()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-xl">
