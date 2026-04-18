@@ -1,8 +1,9 @@
-let projects = JSON.parse(localStorage.getItem('citeflow_projects')) || [{ id: 1, name: 'My Project', citations: [], createdAt: Date.now() }];
-        let currentProjectId = null;
-        let currentSourceType = 'website';
-        const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-        const MLA_MONTHS = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "June", "July", "Aug.", "Sept.", "Oct.", "Nov.", "Dec."];
+let projects = JSON.parse(localStorage.getItem('citeflow_projects')) || [];
+let currentProjectId = null;
+let currentSourceType = 'website';
+let webVersion = 'V1.6.8C';
+const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+const MLA_MONTHS = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "June", "July", "Aug.", "Sept.", "Oct.", "Nov.", "Dec."];
 
 		function encodeProject(project) {
     		return LZString.compressToEncodedURIComponent(JSON.stringify(project));
@@ -1306,23 +1307,18 @@ function setPass() {
 
 function handlePasscodeInput() {
     const input = document.getElementById("passcode-input");
-    
-    // allow only numbers
     input.value = input.value.replace(/\D/g, "");
-
     if (input.value.length === 4) {
         checkPasscode(input.value);
     }
 }
 function checkPasscode(value) {
     const saved = localStorage.getItem("passcode");
-
     if (value === saved) {
         document.getElementById("passcode-lock").classList.add("hidden");
     } else {
         const input = document.getElementById("passcode-input");
         input.value = "";
-
         input.animate([
             { transform: "translateX(0)" },
             { transform: "translateX(-6px)" },
@@ -1334,6 +1330,7 @@ function checkPasscode(value) {
 window.addEventListener("load", () => {
     if (localStorage.getItem("passcode")) {
         document.getElementById("passcode-lock").classList.remove("hidden");
+		document.getElementById("pass-btn").textContent="Disable";
     }
 });
 async function forgotPasscode() {
