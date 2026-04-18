@@ -1128,10 +1128,8 @@ const startScreen = document.getElementById('start-screen');
 const startQuote = document.getElementById('start-quote');
 const startTitle = document.getElementById('start-title');
 const startSubtitle = document.getElementById('start-subtitle');
-
 let spinInterval = null;
 let skipRequested = false;
-
 function finishImmediately() {
     clearInterval(spinInterval);
     startScreen.style.transition = "opacity 0.5s ease-in-out";
@@ -1139,8 +1137,10 @@ function finishImmediately() {
     setTimeout(() => {
         startScreen.style.display = "none";
     }, 500);
+	setTimeout(() => {
+        startScreen.remove();
+    }, 500);
 }
-
 function finishNormally() {
     clearInterval(spinInterval);
     let angle = parseFloat((startQuote.style.transform.match(/rotateY\(([-0-9.]+)deg\)/) || [0, 0])[1]);
@@ -1148,11 +1148,9 @@ function finishNormally() {
 
     startQuote.style.transition = "transform 0.4s ease-out";
     startQuote.style.transform = `rotateY(${finalAngle}deg)`;
-
     startTitle.style.opacity = 1;
     const gWidth = startTitle.offsetWidth;
     startTitle.style.opacity = 0;
-
     startQuote.style.position = "relative";
     startQuote.style.left = "0px";
     startQuote.offsetHeight; // force reflow
@@ -1163,21 +1161,21 @@ function finishNormally() {
         startTitle.style.animation = "slideInFromRight 1s forwards";
         startTitle.style.opacity = 1;
     }, 200);
-
     setTimeout(() => {
         startSubtitle.style.animation = "slideDown 1s forwards";
         startSubtitle.style.opacity = 1;
     }, 1500);
-
     startScreen.style.transition = "background-color 0.5s ease-in-out";
     startScreen.classList.remove("bg-black");
     startScreen.classList.add("bg-blue-600");
-
     setTimeout(() => {
         startScreen.style.transition = "opacity 0.5s ease-in-out";
         startScreen.style.opacity = 0;
         setTimeout(() => startScreen.style.display = "none", 500);
     }, 2000);
+	setTimeout(() => {
+        startScreen.remove();
+    }, 500);
 }
 
 function starthellnah() {
