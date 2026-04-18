@@ -846,6 +846,13 @@ function redeemCode() {
 		FINAL_CALL()
 		return;
 	}
+	if (code === "GIMMEAD") {
+		playRedeemCinematic(() => {
+    		showToast("Redeemed successfully!");
+		});
+		showAdPopup()
+		return;
+	}
 	input.value = "";
 
     playRedeemFailCinematic(() => {
@@ -1369,4 +1376,24 @@ async function forgotPasscode() {
     } finally {
         if (sendBtnState) sendBtnState.disabled = false;
     }
+}
+function openAdPopup() {
+  const popup = document.getElementById("ad-popup");
+  const container = document.getElementById("ad-container");
+  popup.classList.remove("hidden");
+
+  container.innerHTML = `
+    <ins class="adsbygoogle"
+      style="display:block"
+      data-ad-client="ca-pub-2747186016364644"
+      data-ad-slot="6807402378"
+      data-ad-format="auto"
+      data-full-width-responsive="true"></ins>
+  `;
+
+  (adsbygoogle = window.adsbygoogle || []).push({});
+}
+function closeAdPopup() {
+	const popup = document.getElementById("ad-popup");
+	popup.classList.add("hidden");
 }
