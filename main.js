@@ -1388,9 +1388,10 @@ function showAdPopup() {
     "media/ad4.png"
   ];
   const randomAd = ads[Math.floor(Math.random() * ads.length)];
-  container.innerHTML = `
-    <img src="${randomAd}" class="w-full rounded-xl shadow-lg" />
-  `;
+  setTimeout(() => {
+	container.innerHTML = `<img src="${randomAd}" class="w-full rounded-xl shadow-lg" />`;
+  }, 5000);
+
 }
 function closeAdPopup() {
 	const popup = document.getElementById("ad-popup");
