@@ -1377,10 +1377,20 @@ async function forgotPasscode() {
         if (sendBtnState) sendBtnState.disabled = false;
     }
 }
-function showAdPopup() {
+function openAdPopup() {
   const popup = document.getElementById("ad-popup");
   const container = document.getElementById("ad-container");
   popup.classList.remove("hidden");
+  const ads = [
+    "media/ad1.png",
+    "media/ad2.png",
+    "media/ad3.png",
+    "media/ad4.png"
+  ];
+  const randomAd = ads[Math.floor(Math.random() * ads.length)];
+  container.innerHTML = `
+    <img src="${randomAd}" class="w-full rounded-xl shadow-lg" />
+  `;
 }
 function closeAdPopup() {
 	const popup = document.getElementById("ad-popup");
