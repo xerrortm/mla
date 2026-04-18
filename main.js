@@ -1377,7 +1377,7 @@ async function forgotPasscode() {
         if (sendBtnState) sendBtnState.disabled = false;
     }
 }
-function openAdPopup() {
+function showAdPopup() {
   const popup = document.getElementById("ad-popup");
   const container = document.getElementById("ad-container");
   popup.classList.remove("hidden");
