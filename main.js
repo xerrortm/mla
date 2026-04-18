@@ -1141,7 +1141,7 @@ function finishImmediately() {
     }, 500);
 	setTimeout(() => {
         startScreen.remove();
-    }, 500);
+    }, 2000);
 }
 function finishNormally() {
     clearInterval(spinInterval);
@@ -1177,7 +1177,7 @@ function finishNormally() {
     }, 2000);
 	setTimeout(() => {
         startScreen.remove();
-    }, 500);
+    }, 4000);
 }
 
 function starthellnah() {
