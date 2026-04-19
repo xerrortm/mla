@@ -403,18 +403,54 @@
     </div>
   </div>
 </div>
-	<div id="ad-popup" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50 hidden">
-  		<div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 relative">
-    		<button onclick="closeAdPopup()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-xl">
+<div id="ad-popup" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50 hidden">
+  	<div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 relative">
+    	<button onclick="closeAdPopup()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-xl">
       			✕
-    		</button>
-    		<h2 class="text-2xl font-bold mb-6 text-slate-900">
-      			Ad
-    		</h2>
-    		<div id="ad-container"class="space-y-3">
-    		</div>
-  		</div>
-	</div>
+    	</button>
+    	<h2 class="text-2xl font-bold mb-6 text-slate-900">
+      		Ad
+    	</h2>
+    	<div id="ad-container"class="space-y-3">
+    	</div>
+  	</div>
+</div>
+<div id="code-popup" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50 hidden">
+  	<div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 relative">
+    	<button onclick="closeCodePopup()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-xl">
+      		✕
+    	</button>
+    	<h2 class="text-2xl font-bold mb-6 text-slate-900">
+      		Sign in with GoggleTools
+    	</h2>
+		<h2 class="mb-6 text-slate-800">
+      		Paste the code snippet below into your website to sign in with GoggleTools.
+    	</h2>
+    	<div id="code-container"class="space-y-3">
+			<pre id="code-block" class="whitespace-pre-wrap">
+				&lt;button onclick="login()"&gt;Sign in with GoggleTools&lt;/button&gt;
+				&lt;script&gt;
+				function login() {
+					window.location.href = "https://xerrortm.github.io/mla/signin/?user=" + encodeURIComponent(window.location.origin);
+				}
+				const params = new URLSearchParams(window.location.search);
+				const verified = params.get("verified");
+				const user = params.get("user");
+				if (verified === "true" && user) {
+
+					//Put what you would like to do with 'user' here
+					
+  					alert("Logged in as " + decodeURIComponent(user));
+				}
+				&lt;/script&gt;
+
+ 			</pre>
+  			<button onclick="copyCode()" class="absolute top-2 right-2 bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-1 rounded-lg">
+				Copy
+			</button>
+    	</div>
+  	</div>
+</div>
 <div id="updates-popup" class="fixed inset-0 bg-black/40 items-center justify-center z-50 flex hidden">
   <div id="updates-box" class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full p-6 relative">
     <button onclick="closeUpdates()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-xl">
