@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoggleTools</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="icon" type="image/png" href="favicon.png?v=5">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+
+<body class="bg-slate-50 text-slate-800 min-h-screen flex items-center justify-center">
+    <div class="text-center px-6">
+        <h1 class="text-[100px] md:text-[140px] font-extrabold text-slate-200 leading-none">
+            403
+        </h1>
+        <h2 class="text-2xl font-bold mb-2">
+            Forbidden
+        </h2>
+        <p class="text-slate-500 mb-6">
+            The page you’re looking for cannot be accessed.
+        </p>
+        <p class="text-xs text-slate-400 mb-6" id="bad-url"></p>
+        <button onclick="location.href='/mla/'"
+            class="bg-blue-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-blue-700 transition">
+            Go back home
+        </button>
+    </div>
+    <script>
+        document.getElementById("bad-url").innerText = window.location.pathname;
+    </script>
+</body>
+</html>
