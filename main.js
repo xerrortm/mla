@@ -1037,10 +1037,14 @@ function playRedeemFailCinematic(callback) {
 	const overlay = document.getElementById("redeem-fail-overlay");
     const redeemBtn = document.querySelector('[onclick="redeemCode()"]');
     const rect = redeemBtn.getBoundingClientRect();
-
+	const beam = document.getElementById("redeem-beam");
     const startX = rect.left + rect.width / 2;
     const startY = rect.top + rect.height / 2;
-   
+   	beam.style.transition = "none";
+	beam.style.opacity = "0";
+	beam.style.width = "140px";
+	beam.style.top = "-140%";
+	beam.style.transform = "translateX(-50%) rotate(8deg)";
     cinematic.classList.remove("hidden");
     cinematic.style.opacity = "1";
     spirit.style.transition = "none";
