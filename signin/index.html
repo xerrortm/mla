@@ -35,14 +35,14 @@
 
   <script>
     const params = new URLSearchParams(window.location.search);
-    const param = params.get("user") || "unknown";
+    const param = params.get("user");
     const user = localStorage.getItem("profileUsername") || "unknown"
 
     document.getElementById("user").innerText = param;
 
     function confirmLogin() {
       window.location.href =
-        "https://xerrortm.github.io/" + param + "/?user=" + encodeURIComponent(user) + "&verified=true";
+        param + "?user=" + encodeURIComponent(user) + "&verified=true";
     }
   </script>
 </body>
