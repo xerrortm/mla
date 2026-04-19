@@ -1,7 +1,7 @@
 let projects = JSON.parse(localStorage.getItem('citeflow_projects')) || [];
 let currentProjectId = null;
 let currentSourceType = 'website';
-let webVersion = 'V1.6.9A';
+let webVersion = 'V1.6.9B';
 document.getElementById("version").textContent = `Settings (${webVersion})`;
 const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 const MLA_MONTHS = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "June", "July", "Aug.", "Sept.", "Oct.", "Nov.", "Dec."];
@@ -1372,4 +1372,17 @@ function showAdPopup() {
 function closeAdPopup() {
 	const popup = document.getElementById("ad-popup");
 	popup.classList.add("hidden");
+}
+function openCodePopup() {
+	const popup = document.getElementById("code-popup");
+	popup.classList.remove("hidden");
+}
+function closeCodePopup() {
+	const popup = document.getElementById("code-popup");
+	popup.classList.add("hidden");
+}
+function copyCode() {
+  const code = document.getElementById("code-block").innerText;
+  navigator.clipboard.writeText(code);
+  showToast("Copied!");
 }
