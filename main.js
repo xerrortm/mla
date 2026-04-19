@@ -382,7 +382,6 @@ const MLA_MONTHS = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "June", "July", "Aug.
     		const encodedContent = encodeURIComponent(content);
 
     		const project = projects.find(p => p.id === currentProjectId);
-			const url = `https://docs.google.com/document/create?usp=docs_home&title=${encodeURIComponent(project.name)}&body=${encodedContent}`;
 			showToast("Opening Google Docs, press paste after opening.");
             
             setTimeout(() => {
@@ -402,13 +401,11 @@ const MLA_MONTHS = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "June", "July", "Aug.
         }
         function openUpdates() {
     		const popup = document.getElementById("updates-popup");
-    		const box = document.getElementById("updates-box");
     		popup.classList.remove("hidden");
 		}
 
 		function closeUpdates() {
     		const popup = document.getElementById("updates-popup");
-    		const box = document.getElementById("updates-box");
 			popup.classList.add("hidden");
 		}
 		function openExportPopup() {
@@ -979,15 +976,6 @@ function playRedeemCinematic(callback) {
     }, 100);
     setTimeout(() => {
         clearInterval(trailInterval);
-        document.body.animate([
-            { transform: "translate(0,0) scale(1)" },
-            { transform: "translate(-18px,12px) scale(1.03)" },
-            { transform: "translate(14px,-14px) scale(1.05)" },
-            { transform: "translate(-10px,10px) scale(1.03)" },
-            { transform: "translate(0,0) scale(1)" }
-        ], {
-            duration: 850
-        });
         beam.style.transition = "all 0.35s cubic-bezier(.15,.9,.2,1)";
         beam.style.opacity = "1";
         beam.style.top = "-5%";
@@ -1047,7 +1035,6 @@ function playRedeemFailCinematic(callback) {
     const shockwave = document.getElementById("redeem-shockwave");
     const text = document.getElementById("redeem-text");
 	const overlay = document.getElementById("redeem-fail-overlay");
-    const beam = document.getElementById("redeem-beam");
     const redeemBtn = document.querySelector('[onclick="redeemCode()"]');
     const rect = redeemBtn.getBoundingClientRect();
 
@@ -1056,11 +1043,6 @@ function playRedeemFailCinematic(callback) {
    
     cinematic.classList.remove("hidden");
     cinematic.style.opacity = "1";
-    beam.style.transition = "none";
-	beam.style.opacity = "0";
-	beam.style.width = "140px";
-	beam.style.top = "-140%";
-	beam.style.transform = "translateX(-50%) rotate(8deg)";
     spirit.style.transition = "none";
     shockwave.style.transition = "none";
     text.style.transition = "none";
@@ -1125,7 +1107,6 @@ function playRedeemFailCinematic(callback) {
             duration: 500,
             easing: "ease-in-out"
         });
-
     }, 900);
 
     setTimeout(() => {
@@ -1253,12 +1234,6 @@ function updateStats() {
             totalChars += text.length;
         });
     });
-
-    totalProjects = totalProjects;
-    totalCitations = totalCitations;
-    totalChars = totalChars;
-    adminAttended = adminAttended;
-
     document.getElementById("stat-projects").innerText = totalProjects;
     document.getElementById("stat-citations").innerText = totalCitations;
     document.getElementById("stat-characters").innerText = totalChars;
@@ -1279,9 +1254,6 @@ function updateCountdown() {
     document.getElementById("countdown-display").innerHTML =
         `${days} Day ${hours} Hour ${mins} Min ${secs} Sec`;
 }
-setInterval(updateCountdown, 500);
-updateCountdown();
-
 setInterval(updateCountdown, 500);
 updateCountdown();
 function openLaunchPopup() {
