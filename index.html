@@ -362,6 +362,10 @@
             <span>Passcode Lock</span>
             <button id="pass-btn" onclick="setPass()" class="bg-blue-600 text-white px-6 py-2 rounded-xl font-bold hover:bg-blue-700 transition">Enable</button>
         </div>
+		<div class="flex items-center justify-between p-4 border border-blue-200 rounded-xl">
+            <span>Sign in with GoggleTools</span>
+            <button id="pass-btn" onclick="openCodePopup()" class="bg-blue-600 text-white px-6 py-2 rounded-xl font-bold hover:bg-blue-700 transition">Try</button>
+        </div>
 		<div class="p-4 border border-blue-200 rounded-xl">
     		<p class="font-semibold mb-3">Redeem Code</p>
     		<div class="flex gap-2">
@@ -416,7 +420,7 @@
   	</div>
 </div>
 <div id="code-popup" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50 hidden">
-  	<div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 relative">
+  	<div class="bg-white rounded-2xl shadow-2xl w-full max-w-3xl p-6 relative">
     	<button onclick="closeCodePopup()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-xl">
       		✕
     	</button>
@@ -427,23 +431,22 @@
       		Paste the code snippet below into your website to sign in with GoggleTools.
     	</h2>
     	<div id="code-container"class="space-y-3">
-			<pre id="code-block" class="whitespace-pre-wrap">
-				&lt;button onclick="login()"&gt;Sign in with GoggleTools&lt;/button&gt;
-				&lt;script&gt;
-				function login() {
-					window.location.href = "https://xerrortm.github.io/mla/signin/?user=" + encodeURIComponent(window.location.origin);
-				}
-				const params = new URLSearchParams(window.location.search);
-				const verified = params.get("verified");
-				const user = params.get("user");
-				if (verified === "true" && user) {
+			<pre id="code-block" class="whitespace-pre overflow-auto bg-slate-100 text-slate-800 rounded-xl p-4">
+&lt;button onclick="login()"&gt;Sign in with GoggleTools&lt;/button&gt;
+&lt;script&gt;
+	function login() {
+		window.location.href = "https://xerrortm.github.io/mla/signin/?user=" + encodeURIComponent(window.location.origin);
+	}
+	const params = new URLSearchParams(window.location.search);
+	const verified = params.get("verified");
+	const user = params.get("user");
+	if (verified === "true" && user) {
 
-					//Put what you would like to do with 'user' here
+		//Put what you would like to do with 'user' here
 					
-  					alert("Logged in as " + decodeURIComponent(user));
-				}
-				&lt;/script&gt;
-
+  		alert("Logged in as " + decodeURIComponent(user));
+	}
+	&lt;/script&gt;
  			</pre>
   			<button onclick="copyCode()" class="absolute top-2 right-2 bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-1 rounded-lg">
 				Copy
