@@ -1014,7 +1014,6 @@ function playRedeemCinematic(callback) {
 
     }, 2450);
 
-    // FADE OUT
     setTimeout(() => {
         cinematic.style.transition = "opacity 0.8s ease";
         cinematic.style.opacity = "0";
@@ -1243,7 +1242,7 @@ function updateStats() {
     document.getElementById("stat-characters").innerText = totalChars;
     document.getElementById("stat-admin").innerText = adminAttended;
 }
-const targetDate = new Date("2026-05-01T00:00:00+04:00").getTime(); 
+const targetDate = new Date("2026-06-01T00:00:00+04:00").getTime(); 
 function updateCountdown() {
     const now = new Date().getTime();
     const diff = targetDate - now;
@@ -1366,7 +1365,7 @@ function showAdPopup() {
   const randomAd = ads[Math.floor(Math.random() * ads.length)];
   setTimeout(() => {
 	container.innerHTML = `<img src="${randomAd}" class="w-full rounded-xl shadow-lg" />`;
-  }, 5000);
+  }, 4000);
 
 }
 function closeAdPopup() {
