@@ -1264,7 +1264,7 @@ function updateStats() {
     document.getElementById("stat-characters").innerText = totalChars;
     document.getElementById("stat-admin").innerText = adminAttended;
 }
-const targetDate = new Date("2026-06-01T00:00:00+04:00").getTime(); 
+const targetDate = new Date("2026-05-01T00:00:00+04:00").getTime(); 
 function updateCountdown() {
     const now = new Date().getTime();
     const diff = targetDate - now;
