@@ -541,7 +541,8 @@ END:VCALENDAR`;
 
     		const allCitations = projects.flatMap(p => p.citations.map(c => ({
         		projectName: p.name,
-        		formatted: c.formatted
+				formatted: c.formatted,
+        		textOnly: c.textOnly,
     		})));
 
    			const results = allCitations.filter(c => c.textOnly.toLowerCase().includes(query));
