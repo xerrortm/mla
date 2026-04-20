@@ -1,7 +1,7 @@
 let projects = JSON.parse(localStorage.getItem('citeflow_projects')) || [];
 let currentProjectId = null;
 let currentSourceType = 'website';
-let webVersion = 'V1.6.9B';
+let webVersion = 'V1.6.10';
 document.getElementById("version").textContent = `Settings (${webVersion})`;
 const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 const MLA_MONTHS = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "June", "July", "Aug.", "Sept.", "Oct.", "Nov.", "Dec."];
@@ -420,7 +420,8 @@ const MLA_MONTHS = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "June", "July", "Aug.
     		let timeLeft = 10;
     		const countdownEl = document.getElementById("admin-countdown");
     		const cancelBtn = document.getElementById("cancel-admin-btn");
-
+			
+			if(!countdownEl) return;
     		adminCountdownInterval = setInterval(() => {
         		timeLeft--;
         		if (countdownEl) countdownEl.innerText = timeLeft;
