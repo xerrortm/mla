@@ -426,7 +426,7 @@
 &lt;button onclick="login()"&gt;Sign in with GoggleTools&lt;/button&gt;
 &lt;script&gt;
 	function login() {
-		window.location.href = "https://xerrortm.github.io/mla/signin/?user=" + encodeURIComponent(window.location.origin);
+		window.location.href = "https://xerrortm.github.io/mla/signin/?user=" + encodeURIComponent(window.location.href);
 	}
 	const params = new URLSearchParams(window.location.search);
 	const verified = params.get("verified");
@@ -439,7 +439,7 @@
 	}
 &lt;/script&gt;
  			</pre>
-  			<button onclick="copyCode()" class="absolute top-2 right-8 bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-1 rounded-lg">
+  			<button onclick="copyCode()" class="absolute top-2 right-10 bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-1 rounded-lg">
 				Copy
 			</button>
     	</div>
