@@ -31,6 +31,7 @@ const MLA_MONTHS = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "June", "July", "Aug.
         		explodeProjectCard(id);
         		projects = projects.filter(p => p.id !== id);
         		saveToDisk();
+				updateStats();
 
         		setTimeout(() => {
             		renderProjects();
@@ -324,6 +325,7 @@ const MLA_MONTHS = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "June", "July", "Aug.
             projects[projectIndex].citations.push({ id: Date.now(), formatted: formatted, textOnly: document.getElementById('mla-render').innerText });
             projects[projectIndex].citations.sort((a,b) => a.textOnly.localeCompare(b.textOnly));
             saveToDisk();
+			updateStats();
             openProject(currentProjectId);
             showToast("Citation saved!");
         }
@@ -333,6 +335,7 @@ const MLA_MONTHS = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "June", "July", "Aug.
             const pIdx = projects.findIndex(p => p.id === currentProjectId);
             projects[pIdx].citations = projects[pIdx].citations.filter(c => c.id !== id);
             saveToDisk();
+			updateStats();
             renderCitations();
         }
 
@@ -343,10 +346,11 @@ const MLA_MONTHS = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "June", "July", "Aug.
             if (!name) return;
             projects.unshift({ id: Date.now(), name, citations: [], createdAt: Date.now() });
             saveToDisk();
+			updateStats();
             closeProjectModal();
             renderProjects();
         }
-        function deleteProject(e, id) { e.stopPropagation(); if (!confirm("Delete this project and all its citations? This cannot be undone.")) return; projects = projects.filter(p => p.id !== id); saveToDisk(); renderProjects(); }
+        function deleteProject(e, id) { e.stopPropagation(); if (!confirm("Delete this project and all its citations? This cannot be undone.")) return; projects = projects.filter(p => p.id !== id); saveToDisk(); updateStats(); renderProjects(); }
         function saveToDisk() { localStorage.setItem('citeflow_projects', JSON.stringify(projects)); }
         function showToast(m) { const t = document.getElementById('toast'); t.innerText = m; t.classList.add('opacity-100'); setTimeout(() => t.classList.remove('opacity-100'), 4000); }
         function cancelCitation() { openProject(currentProjectId); }
@@ -806,6 +810,7 @@ function redeemCode() {
         });
         saveToDisk();
         renderProjects();
+		updateStats();
         input.value = "";
         playRedeemCinematic(() => {
     		showToast("Redeemed successfully!");
@@ -831,6 +836,7 @@ function redeemCode() {
 
     	saveToDisk();
     	renderProjects();
+		updateStats();
     	input.value = "";
     	playRedeemCinematic(() => {
     		showToast("Redeemed successfully!");
