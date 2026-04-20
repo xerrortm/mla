@@ -544,7 +544,7 @@ END:VCALENDAR`;
         		formatted: c.formatted
     		})));
 
-   			const results = allCitations.filter(c => c.formatted.toLowerCase().includes(query));
+   			const results = allCitations.filter(c => c.textOnly.toLowerCase().includes(query));
 
     		if (results.length === 0) {
         		container.innerHTML = `<div class="p-4 text-center text-slate-400 italic">No citations found.</div>`;
