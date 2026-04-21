@@ -67,19 +67,29 @@
 	</div>
 	<div id="tutorialIntro" class="fixed inset-0 z-[9998] flex items-center justify-center bg-blue-600 text-white transition-opacity duration-500 hidden">
     	<div class="text-center max-w-md px-6">
-        	<h1 class="text-4xl font-black mb-4 tracking-tight">
-            	Welcome 👋
-        	</h1>
-        	<p class="text-blue-100 mb-8 text-lg leading-relaxed">
-            	Let’s quickly show you how everything works.  
-            	You’ll be creating projects in seconds.
-        	</p>
-        	<button onclick="startIntroTutorial()" 
-            	class="px-8 py-4 bg-white text-blue-600 font-black rounded-2xl shadow-lg hover:scale-105 active:scale-95 transition">
-            	CONTINUE
-        	</button>
-    	</div>
-	</div>
+			<div id="introStep1">
+        		<h1 class="text-4xl font-black mb-4 tracking-tight">
+            		Welcome 👋
+        		</h1>
+        		<p class="text-blue-100 mb-8 text-lg leading-relaxed">
+            		Let’s quickly show you how everything works.  
+            		You’ll be creating citations in seconds.
+        		</p>
+        		<button onclick="nextIntroStep(2)" class="bg-white text-blue-600 px-6 py-3 rounded-xl font-bold flex items-center gap-2 hover:scale-105 active:scale-95 transition">
+            		CONTINUE
+        		</button>
+    		</div>
+        	<div id="introStep2" class="hidden">
+            	<h1 class="text-4xl font-black mb-4">What should we call you?</h1>
+            	<input id="userNameInput" type="text" placeholder="Your name..." class="w-full px-5 py-3 rounded-2xl text-black outline-none mb-6">
+            	<button onclick="finishIntroFlow()" class="bg-white text-blue-600 px-6 py-3 rounded-xl font-bold flex items-center gap-2 hover:scale-105 active:scale-95 transition">
+                	CONTINUE
+            	</button>
+           		<button onclick="finishIntroFlow(true)" class="text-blue-200 text-sm underline">
+               		Skip
+            	</button>
+        	</div>
+		</div>
     <!-- Navigation -->
     <nav class="sticky top-0 z-50 glass-panel border-b border-slate-200 px-6 py-3 flex justify-between items-center">
         <div class="flex items-center gap-2 cursor-pointer" onclick="showDashboard()">
