@@ -37,14 +37,13 @@ function highlightElement(el) {
     highlightOverlay.style.border = '3px solid rgba(59,130,246,0.9)';
     highlightOverlay.style.borderRadius = '16px';
     highlightOverlay.style.boxShadow = '0 0 0 6px rgba(59,130,246,0.2), 0 0 30px rgba(59,130,246,0.6)';
-    highlightOverlay.style.backdropFilter = 'blur(2px)';
     highlightOverlay.style.borderRadius = '8px';
     highlightOverlay.style.pointerEvents = 'none';
     highlightOverlay.style.zIndex = '9999';
     highlightOverlay.style.transition = 'all 0.1s ease';
     highlightOverlay.style.animation = 'pulseHighlight 2s infinite';
 
-    highlightOverlay.style.background = 'linear-gradient(45deg, rgba(255,255,255,0.2), rgba(255,255,0,0.1))';
+    highlightOverlay.style.background = 'linear-gradient(45deg, rgba(59,130,246,0.2), rgba(59,130,246,0.1))';
     highlightOverlay.style.backgroundSize = '200% 200%';
     highlightOverlay.style.animation += ', shine 2s infinite linear';
 
@@ -67,9 +66,9 @@ function highlightElement(el) {
         style.id = 'highlight-animations';
         style.innerHTML = `
         @keyframes pulseHighlight {
-            0% { box-shadow: 0 0 10px 2px rgba(255,255,0,0.4); }
-            50% { box-shadow: 0 0 25px 8px rgba(255,255,0,0.7); }
-            100% { box-shadow: 0 0 10px 2px rgba(255,255,0,0.4); }
+            0% { box-shadow: 0 0 10px 2px rgba(59,130,246,0.4); }
+            50% { box-shadow: 0 0 25px 8px rgba(59,130,246,0.7); }
+            100% { box-shadow: 0 0 10px 2px rgba(59,130,246,0.4); }
         }
         @keyframes shine {
             0% { background-position: 200% 0; }
@@ -93,10 +92,6 @@ function showTooltip(el, text) {
     tutorialTooltip.innerHTML = `
         <div class="bg-white text-slate-900 px-5 py-4 rounded-2xl shadow-xl border border-blue-100 max-w-xs">
             <p class="text-sm font-semibold">${text}</p>
-            <button id="tutorialNextBtn" 
-                class="mt-3 w-full bg-blue-600 text-white py-2 rounded-xl font-bold hover:scale-105 active:scale-95 transition">
-                Got it
-            </button>
         </div>
     `;
     tutorialTooltip.style.position = 'absolute';
