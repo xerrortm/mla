@@ -4,10 +4,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (localStorage.getItem('newUser') === 'true') {
-        setTimeout(() => startTutorial(), 500);
+        document.getElementById('tutorialIntro').classList.remove("hidden")
+        document.getElementById('tutorialIntro').style.display = 'flex';
     }
 });
-
+function startIntroTutorial() {
+    const intro = document.getElementById('tutorialIntro');
+    intro.style.opacity = '0';
+    setTimeout(() => {
+        intro.style.display = 'none';
+        startTutorial();
+    }, 500);
+}
 let highlightOverlay;
 let highlightedElement;
 let highlightInterval;
