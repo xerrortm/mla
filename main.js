@@ -1306,14 +1306,19 @@ function handlePasscodeInput() {
 function checkPasscode(value) {
     const saved = localStorage.getItem("passcode");
     if (value === saved) {
-        document.getElementById("passcode-lock").classList.add("hidden");
+        const lock = document.getElementById("passcode-lock")
+		lock.style.transition = "opacity 0.5s ease-in-out";
+    	lock.style.opacity = 0;
+    	setTimeout(() => {
+        	lock.style.display = "none";
+    	}, 500);
     } else {
         const input = document.getElementById("passcode-input");
         input.value = "";
         input.animate([
             { transform: "translateX(0)" },
-            { transform: "translateX(-6px)" },
-            { transform: "translateX(6px)" },
+            { transform: "translateX(-10px)" },
+            { transform: "translateX(10px)" },
             { transform: "translateX(0)" }
         ], { duration: 200 });
     }
