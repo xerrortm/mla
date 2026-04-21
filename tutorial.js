@@ -8,8 +8,16 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('tutorialIntro').style.display = 'flex';
     }
 });
-function startIntroTutorial() {
+function nextIntroStep(step) {
+    document.getElementById('introStep1').classList.add('hidden');
+    document.getElementById('introStep2').classList.remove('hidden');
+}
+function finishIntroFlow(skip = false) {
     const intro = document.getElementById('tutorialIntro');
+    if (!skip) {
+        const name = document.getElementById('userNameInput').value.trim();
+        if (name) localStorage.setItem('profileUsername', name);
+    }
     intro.style.opacity = '0';
     setTimeout(() => {
         intro.style.display = 'none';
