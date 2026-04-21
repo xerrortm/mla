@@ -27,7 +27,6 @@ function finishIntroFlow(skip = false) {
 let highlightOverlay;
 let highlightedElement;
 let highlightInterval;
-
 function highlightElement(el) {
     removeHighlight();
     if (!el) return;
@@ -35,12 +34,14 @@ function highlightElement(el) {
 
     highlightOverlay = document.createElement('div');
     highlightOverlay.style.position = 'absolute';
-    highlightOverlay.style.border = '6px solid orange';
+    highlightOverlay.style.border = '3px solid rgba(59,130,246,0.9)';
+    highlightOverlay.style.borderRadius = '16px';
+    highlightOverlay.style.boxShadow = '0 0 0 6px rgba(59,130,246,0.2), 0 0 30px rgba(59,130,246,0.6)';
+    highlightOverlay.style.backdropFilter = 'blur(2px)';
     highlightOverlay.style.borderRadius = '8px';
     highlightOverlay.style.pointerEvents = 'none';
     highlightOverlay.style.zIndex = '9999';
     highlightOverlay.style.transition = 'all 0.1s ease';
-    highlightOverlay.style.boxShadow = '0 0 20px 5px rgba(255,255,0,0.5)';
     highlightOverlay.style.animation = 'pulseHighlight 2s infinite';
 
     highlightOverlay.style.background = 'linear-gradient(45deg, rgba(255,255,255,0.2), rgba(255,255,0,0.1))';
@@ -78,7 +79,6 @@ function highlightElement(el) {
         document.head.appendChild(style);
     }
 }
-
 function removeHighlight() {
     if (highlightOverlay) highlightOverlay.remove();
     highlightOverlay = null;
@@ -86,37 +86,31 @@ function removeHighlight() {
     if (highlightInterval) clearInterval(highlightInterval);
 }
 let tutorialTooltip;
-
 function showTooltip(el, text) {
     removeTooltip();
 
     tutorialTooltip = document.createElement('div');
-    tutorialTooltip.innerText = text;
+    tutorialTooltip.innerHTML = `
+        <div class="bg-white text-slate-900 px-5 py-4 rounded-2xl shadow-xl border border-blue-100 max-w-xs">
+            <p class="text-sm font-semibold">${text}</p>
+            <button id="tutorialNextBtn" 
+                class="mt-3 w-full bg-blue-600 text-white py-2 rounded-xl font-bold hover:scale-105 active:scale-95 transition">
+                Got it
+            </button>
+        </div>
+    `;
     tutorialTooltip.style.position = 'absolute';
-    tutorialTooltip.style.background = 'rgba(0,0,0,0.85)';
-    tutorialTooltip.style.color = '#fff';
-    tutorialTooltip.style.padding = '10px 14px';
-    tutorialTooltip.style.borderRadius = '10px';
-    tutorialTooltip.style.fontSize = '14px';
-    tutorialTooltip.style.maxWidth = '250px';
-    tutorialTooltip.style.pointerEvents = 'none';
     tutorialTooltip.style.zIndex = 10000;
-    tutorialTooltip.style.boxShadow = '0 4px 15px rgba(0,0,0,0.3)';
-    tutorialTooltip.style.transition = 'all 0.2s ease';
-
     document.body.appendChild(tutorialTooltip);
-
     function updateTooltip() {
         const rect = el.getBoundingClientRect();
-        tutorialTooltip.style.top = `${window.scrollY + rect.top - tutorialTooltip.offsetHeight - 10}px`;
+        tutorialTooltip.style.top = `${window.scrollY + rect.bottom + 12}px`;
         tutorialTooltip.style.left = `${window.scrollX + rect.left + rect.width/2 - tutorialTooltip.offsetWidth/2}px`;
     }
-
     updateTooltip();
-    const tooltipInterval = setInterval(updateTooltip, 50);
-    tutorialTooltip.dataset.interval = tooltipInterval;
+    const interval = setInterval(updateTooltip, 50);
+    tutorialTooltip.dataset.interval = interval;
 }
-
 function removeTooltip() {
     if (tutorialTooltip) {
         clearInterval(tutorialTooltip.dataset.interval);
@@ -124,7 +118,6 @@ function removeTooltip() {
         tutorialTooltip = null;
     }
 }
-
 function startTutorial() {
     const newProjectBtn = document.querySelector("button[onclick='openNewProjectModal()']");
     if (!newProjectBtn) return console.warn("New Project button not found!");
@@ -133,7 +126,6 @@ function startTutorial() {
     showTooltip(newProjectBtn, "Click here to create your first project!");
     newProjectBtn.addEventListener('click', step2NewProjectInput, { once: true });
 }
-
 function step2NewProjectInput() {
     removeHighlight();
     removeTooltip();
@@ -144,7 +136,6 @@ function step2NewProjectInput() {
     const createBtn = document.querySelector("#modal-project button[onclick='createNewProject()']");
     createBtn.addEventListener('click',step3ProjectCard, { once: true });
 }
-
 function step3ProjectCard() {
     removeHighlight();
     removeTooltip();
@@ -155,7 +146,6 @@ function step3ProjectCard() {
     showTooltip(firstCard, "Double click your project card to open it.");
     firstCard.addEventListener('click', step4AddCitation, { once: true });
 }
-
 function step4AddCitation() {
     removeHighlight();
     removeTooltip();
@@ -166,7 +156,6 @@ function step4AddCitation() {
 
     addCitationBtn.addEventListener('click', step5SaveCitation, { once: true });
 }
-
 function step5SaveCitation() {
     removeHighlight();
     removeTooltip();
@@ -177,7 +166,6 @@ function step5SaveCitation() {
 
     saveCitationBtn.addEventListener('click', finishTutorial, { once: true });
 }
-
 function finishTutorial() {
     removeHighlight();
     removeTooltip();
@@ -205,7 +193,6 @@ function showConfetti(x = window.innerWidth / 2, y = window.innerHeight / 2) {
 
         document.body.appendChild(confetti);
 
-        // Burst direction and distance
         const angle = Math.random() * 2 * Math.PI;
         const distance = Math.random() * 300 + 150; // bigger spread
         const rotate = (Math.random() - 0.5) * 1080; // more rotation
