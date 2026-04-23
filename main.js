@@ -1276,163 +1276,59 @@ function closeLaunchPopup() {
     document.getElementById("launch-popup").classList.add("hidden");
     document.getElementById("launch-popup").classList.remove("flex");
 }
-// =========================
-// FIREBASE + PASSKEY SETUP
-// =========================
-
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
-
-import {
-    initializeAppCheck,
-    ReCaptchaV3Provider
-} from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app-check.js";
-
-const firebaseConfig = {
-    apiKey: "AIzaSyA_XrD0M2R-V0IvU_lrxlZ82wIp_K7QoCg",
-    authDomain: "error-inc.firebaseapp.com",
-    databaseURL: "https://error-inc-default-rtdb.firebaseio.com",
-    projectId: "error-inc",
-    storageBucket: "error-inc.firebasestorage.app",
-    messagingSenderId: "876188868410",
-    appId: "1:876188868410:web:95e283ccefac52d15c7a03"
-};
-
-const app = initializeApp(firebaseConfig);
-
-initializeAppCheck(app, {
-    provider: new ReCaptchaV3Provider("6LfOZ8YsAAAAANopaGCY2r20_F3w5yfP94KkSTIT"),
-    isTokenAutoRefreshEnabled: true
-});
-
-async function setPass() {
+function setPass() {
     const btn = document.getElementById("pass-btn");
-    const existing = localStorage.getItem("passkeyId");
-
-    if (existing) {
-        localStorage.removeItem("passkeyId");
-        showToast("Passkey removed!");
-        btn.textContent = "Enable";
-        return;
-    }
-
-    try {
-        const userId = crypto.randomUUID();
-        const publicKey = {
-            challenge: crypto.getRandomValues(
-                new Uint8Array(32)
-            ),
-            rp: {
-                name: "GoggleTools"
-            },
-            user: {
-                id: new TextEncoder().encode(userId),
-                name: userId,
-                displayName: "GoggleTools User"
-            },
-            pubKeyCredParams: [
-                {
-                    type: "public-key",
-                    alg: -7
-                }
-            ],
-            authenticatorSelection: {
-                residentKey: "required",
-                userVerification: "preferred"
-            },
-            timeout: 60000,
-            attestation: "none"
-        };
-        const credential =
-            await navigator.credentials.create({
-                publicKey
-            });
-        const encodedId = btoa(
-            String.fromCharCode(
-                ...new Uint8Array(
-                    credential.rawId
-                )
-            )
-        );
-        localStorage.setItem(
-            "passkeyId",
-            encodedId
-        );
-        showToast("Passkey created!");
-        btn.textContent = "Disable";
-    } catch (err) {
-        console.error(err);
-        showToast("Failed to create passkey");
-    }
-}
-async function loginWithPasskey() {
-    try {
-        const savedId =
-            localStorage.getItem("passkeyId");
-
-        if (!savedId) {
-            return;
+    const local = localStorage.getItem("passcode");
+    if (!local) {
+        const code = prompt("Enter 4-digit passcode:");
+        if (code && /^\d{4}$/.test(code)) {
+            localStorage.setItem("passcode", code);
+            showToast("Passcode set!");
+            btn.textContent = "Disable";
+        } else {
+            alert("Must be exactly 4 numbers");
         }
-        const credentialId =
-            Uint8Array.from(
-                atob(savedId),
-                c => c.charCodeAt(0)
-            );
-        const publicKey = {
-            challenge:
-                crypto.getRandomValues(
-                    new Uint8Array(32)
-                ),
-            allowCredentials: [
-                {
-                    id: credentialId,
-                    type: "public-key"
-                }
-            ],
-            userVerification: "preferred",
-            timeout: 60000
-        };
 
-        await navigator.credentials.get({
-            publicKey
-        });
-
-        const lock =
-            document.getElementById(
-                "passcode-lock"
-            );
-
-        lock.style.transition =
-            "opacity 0.5s ease-in-out";
-
-        lock.style.opacity = 0;
-
-        setTimeout(() => {
-            lock.style.display = "none";
-        }, 500);
-        showToast("Success!");
-    } catch (err) {
-        console.error(err);
-        showToast("Authentication failed");
-
+    } else {
+        localStorage.removeItem("passcode");
+        showToast("Passcode removed!");
+        btn.textContent = "Enable";
     }
 }
 
+function handlePasscodeInput() {
+    const input = document.getElementById("passcode-input");
+    input.value = input.value.replace(/\D/g, "");
+    if (input.value.length === 4) {
+        checkPasscode(input.value);
+    }
+}
+function checkPasscode(value) {
+    const saved = localStorage.getItem("passcode");
+    if (value === saved) {
+        const lock = document.getElementById("passcode-lock")
+		lock.style.transition = "opacity 0.5s ease-in-out";
+    	lock.style.opacity = 0;
+    	setTimeout(() => {
+        	lock.style.display = "none";
+    	}, 500);
+    } else {
+        const input = document.getElementById("passcode-input");
+        input.value = "";
+        input.animate([
+            { transform: "translateX(0)" },
+            { transform: "translateX(-10px)" },
+            { transform: "translateX(10px)" },
+            { transform: "translateX(0)" }
+        ], { duration: 200 });
+    }
+}
 window.addEventListener("load", () => {
-    if (
-        localStorage.getItem("passkeyId")
-    ) {
-        document
-            .getElementById("passcode-lock")
-            .classList.remove("hidden");
-        document
-            .getElementById("pass-btn")
-            .textContent = "Disable";
-        setTimeout(() => {
-            loginWithPasskey();
-        }, 500);
+    if (localStorage.getItem("passcode")) {
+        document.getElementById("passcode-lock").classList.remove("hidden");
+		document.getElementById("pass-btn").textContent="Disable";
     }
 });
-
 async function forgotPasscode() {
 	const SERVICE_ID = "service_zjz7o0t";
 	const TEMPLATE_ID = "template_hyhsf5n";
