@@ -27,11 +27,7 @@
     </div>
     <div class="g-recaptcha" data-sitekey="6LfLtscsAAAAADXKPtdcQyKZZ14ZczLSgp4zeK-i" data-callback="enableBtn"></div>
     <br>
-    <button
-      onclick="confirmLogin()"
-      class="w-full bg-blue-600 hover:bg-blue-700 transition px-4 py-3 rounded-xl font-bold shadow-lg flex items-center justify-center gap-2"
-      disabled
-    >
+    <button id="submitBtn" onclick="confirmLogin()" class="w-full bg-blue-600 hover:bg-blue-700 transition px-4 py-3 rounded-xl font-bold shadow-lg flex items-center justify-center gap-2" disabled>
       <i class="fas fa-check"></i>
       Confirm Sign In
     </button>
@@ -47,7 +43,7 @@
     function confirmLogin() {
       window.location.href = param + "?user=" + encodeURIComponent(user) + "&verified=true";
     }
-    function enableButton() {
+    function enableBtn() {
       document.getElementById("submitBtn").disabled = false;
     }
   </script>
