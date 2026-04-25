@@ -1,7 +1,7 @@
 let projects = JSON.parse(localStorage.getItem('citeflow_projects')) || [];
 let currentProjectId = null;
 let currentSourceType = 'website';
-let webVersion = 'V1.6.10';
+let webVersion = 'V1.7.1A';
 document.getElementById("version").textContent = `Settings (${webVersion})`;
 const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 const MLA_MONTHS = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "June", "July", "Aug.", "Sept.", "Oct.", "Nov.", "Dec."];
@@ -1250,23 +1250,6 @@ function updateStats() {
     document.getElementById("stat-characters").innerText = totalChars;
     document.getElementById("stat-admin").innerText = adminAttended;
 }
-const targetDate = new Date("2026-06-01T00:00:00+04:00").getTime(); 
-function updateCountdown() {
-    const now = new Date().getTime();
-    const diff = targetDate - now;
-    if (diff <= 0) {
-        document.getElementById("countdown-display").innerHTML = "NOW PUBLIC";
-        return;
-    }
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-    const mins = Math.floor((diff / (1000 * 60)) % 60);
-    const secs = Math.floor((diff / 1000) % 60);
-    document.getElementById("countdown-display").innerHTML =
-        `${days} Day ${hours} Hour ${mins} Min ${secs} Sec`;
-}
-setInterval(updateCountdown, 500);
-updateCountdown();
 function openLaunchPopup() {
     document.getElementById("launch-popup").classList.remove("hidden");
     document.getElementById("launch-popup").classList.add("flex");
