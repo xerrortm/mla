@@ -8,6 +8,7 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <link rel="icon" type="image/png" href="../favicon.png?v=5">
   <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+  <script src="https://raw.githubusercontent.com/xerrortm/xerrortm.github.io/refs/heads/main/tools/uncaptcha.js"></script>
   <style>
     body { font-family: 'Inter', sans-serif; }
     .glass-panel { border: 1px solid rgba(229, 231, 235, 0.5); }
@@ -27,6 +28,7 @@
     </div>
     <div class="g-recaptcha" data-sitekey="6LfLtscsAAAAADXKPtdcQyKZZ14ZczLSgp4zeK-i" data-callback="enableBtn"></div>
     <br>
+    <div class="uncaptcha"></div>
     <button id="submitBtn" onclick="confirmLogin()" class="w-full bg-blue-600 hover:bg-blue-700 transition px-4 py-3 rounded-xl font-bold shadow-lg flex items-center justify-center gap-2" disabled>
       <i class="fas fa-check"></i>
       Confirm Sign In
