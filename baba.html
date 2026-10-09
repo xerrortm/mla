@@ -109,7 +109,8 @@ body{font-family:Inter,sans-serif;background:#f4f6fb}
 
 <script>
 // ===== CONFIG: paste your deployed Worker URL (no trailing slash) =====
-const API = 'https://db.goggletools.workers.dev';
+const API_RAW = 'https://db.goggletools.workers.dev';
+const API = API_RAW.trim().replace(/\/+$/, '').replace(/\/api$/, '').replace(/^http:/, 'https:');
 const $ = id => document.getElementById(id);
 const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 const MM = ['Jan.','Feb.','Mar.','Apr.','May','June','July','Aug.','Sept.','Oct.','Nov.','Dec.'];
@@ -129,7 +130,8 @@ function view(id) { ['v-dash','v-proj','v-form'].forEach(v => { $(v).classList.a
 function save() { updatedAt = Date.now(); localStorage.setItem('citeflow_projects', JSON.stringify(projects)); localStorage.setItem('gt_updated', updatedAt); localStorage.setItem('gt_dirty', 1); sync(); }
 function pill(on, txt) { $('sync-pill').innerHTML = `<i class="fas ${on ? 'fa-cloud-check text-emerald-500' : 'fa-cloud-slash'}"></i> <span>${txt}</span>`; }
 async function api(path, method = 'GET', body) {
-  const r = await fetch(API + path, { method, headers: { 'Content-Type': 'application/json', ...(session ? { Authorization: 'Bearer ' + session.token } : {}) }, body: body ? JSON.stringify(body) : undefined });
+  const r = await fetch(API + path, { method, redirect: 'manual', headers: { 'Content-Type': 'application/json', ...(session ? { Authorization: 'Bearer ' + session.token } : {}) }, body: body ? JSON.stringify(body) : undefined });
+  if (r.type === 'opaqueredirect' || (r.status >= 300 && r.status < 400)) throw new Error('API URL redirects — set API to the exact https Worker URL');
   const d = await r.json().catch(() => ({})); d._status = r.status; return d;
 }
 async function sync(manual) {
